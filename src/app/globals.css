@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/**
+ * CASC design tokens.
+ *
+ * Brand palette confirmed against the official brand manual (Marca/).
+ * Institutional blue is the product primary; the classic black/gray/white
+ * triad rounds out the neutrals. Semantic tokens derive from these — never
+ * hardcode raw hex in components, use the semantic Tailwind utilities
+ * (bg-primary, text-ink, border-border, etc.).
+ */
+
+:root {
+  /* Institutional blue palette — scale derived from the web's #0B2535 (H:203) */
+  --casc-navy-900: #0b2535; /* dark base, sidebar, text on light */
+  --casc-navy-700: #113b55; /* secondary dark surfaces */
+  --casc-navy-500: #19557b; /* primary institutional blue / actions */
+  --casc-blue-300: #8da9c4; /* light accent, hover, badges */
+  --casc-gray-100: #ebe9e9; /* light surfaces, section backgrounds */
+
+  /* Brand-manual neutrals */
+  --casc-black: #000000;
+  --casc-gray: #dbdad7;
+  --casc-white: #ffffff;
+
+  /* Semantic tokens */
+  --bg: var(--casc-white);
+  --surface: #f7f8fa;
+  --border: #e6e8ec;
+  --ink: var(--casc-navy-900);
+  --ink-muted: #5b6b7f;
+  --primary: var(--casc-navy-500);
+  --primary-hover: var(--casc-navy-700);
+  --accent: var(--casc-blue-300);
+}
+
+/**
+ * Expose tokens to Tailwind v4 as theme values so utilities like
+ * `bg-primary`, `text-ink`, `border-border` generate correctly.
+ */
+@theme inline {
+  --color-casc-navy-900: var(--casc-navy-900);
+  --color-casc-navy-700: var(--casc-navy-700);
+  --color-casc-navy-500: var(--casc-navy-500);
+  --color-casc-blue-300: var(--casc-blue-300);
+  --color-casc-gray-100: var(--casc-gray-100);
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/**
+ * Tailwind v4 removed the default `cursor: pointer` on buttons (it uses the
+ * CSS default `cursor: default`). Restore the expected pointer on all
+ * enabled actionable elements; disabled ones keep the not-allowed cursor.
+ */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+label[for],
+summary {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* Brand motif: bracket accent used on section headers and empty states. */
+.casc-bracket::before {
+  content: "[";
+  color: var(--accent);
+  font-weight: 300;
+  margin-right: 0.25rem;
+}
+.casc-bracket::after {
+  content: "]";
+  color: var(--accent);
+  font-weight: 300;
+  margin-left: 0.25rem;
+}
