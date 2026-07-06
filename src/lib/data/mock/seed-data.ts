@@ -24,7 +24,7 @@ export const webinars: Webinar[] = [
     descripcion:
       "Análisis del comportamiento del consumidor argentino y proyecciones para el sector shopping.",
     fecha: iso(2026, 5, 20),
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoUrl: "https://www.youtube.com/embed/_O6MYU4vgQQ",
     categoria: "Retail",
     materialAdjuntoUrl: "/mock/tendencias-2026.pdf",
     status: "publicado",
@@ -37,7 +37,7 @@ export const webinars: Webinar[] = [
     descripcion:
       "Protocolos actualizados y normativa vigente para espacios de alta circulación.",
     fecha: iso(2026, 6, 12),
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoUrl: "https://www.youtube.com/embed/_O6MYU4vgQQ",
     categoria: "Operaciones",
     status: "publicado",
     createdAt: iso(2026, 6, 1),
@@ -49,7 +49,7 @@ export const webinars: Webinar[] = [
     descripcion:
       "Estrategias omnicanal y fidelización a través de apps y programas de puntos.",
     fecha: iso(2026, 7, 8),
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoUrl: "https://www.youtube.com/embed/_O6MYU4vgQQ",
     categoria: "Marketing",
     status: "borrador",
     createdAt: iso(2026, 6, 25),
