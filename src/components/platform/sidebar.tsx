@@ -18,11 +18,15 @@ interface SidebarProps {
 export function Sidebar({ user, open, onNavigate }: SidebarProps) {
   const pathname = usePathname();
   const items = getNavForRole(user.role);
+  const isAdmin = user.role === "admin";
 
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-casc-navy-900 text-white transition-transform lg:translate-x-0",
+        "fixed inset-y-0 left-0 z-40 flex w-64 flex-col text-white transition-transform lg:translate-x-0",
+        // Admin gets the near-black surface, socio the institutional navy.
+        // Same brand palette — a glance tells the two panels apart.
+        isAdmin ? "bg-casc-black" : "bg-casc-navy-900",
         open ? "translate-x-0" : "-translate-x-full",
       )}
     >

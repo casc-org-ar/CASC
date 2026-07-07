@@ -88,6 +88,18 @@ export function InformeForm({ informe, onDone }: InformeFormProps) {
         )}
       </FormField>
 
+      <FormField
+        label="Imagen de portada (URL, opcional)"
+        htmlFor="portadaUrl"
+      >
+        <Input
+          id="portadaUrl"
+          name="portadaUrl"
+          defaultValue={informe?.portadaUrl}
+          placeholder="/assets/banners/banner-2.webp"
+        />
+      </FormField>
+
       <FormField label="Estado" htmlFor="status">
         <Select
           id="status"

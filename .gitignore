@@ -48,3 +48,7 @@ next-env.d.ts
 /.atl
 CASC_Prompt_Base_Plataforma.md
 *.code-workspace
+
+# transient/junk
+*.stackdump
+/scaffold-tmp

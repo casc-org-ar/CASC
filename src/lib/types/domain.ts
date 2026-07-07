@@ -29,6 +29,7 @@ export interface Webinar extends BaseEntity {
   descripcion: string;
   fecha: string; // ISO date of the webinar
   videoUrl: string; // YouTube/Vimeo embed URL — never a stored file
+  portadaUrl?: string; // cover image for the listing card
   categoria: string;
   materialAdjuntoUrl?: string;
   status: PublicationStatus;
@@ -39,6 +40,7 @@ export interface Informe extends BaseEntity {
   descripcion: string;
   categoria: string;
   archivoUrl: string; // PDF URL (Vercel Blob later)
+  portadaUrl?: string; // cover image for the listing card
   fecha: string;
   status: PublicationStatus;
 }

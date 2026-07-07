@@ -79,6 +79,18 @@ export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
       </FormField>
 
       <FormField
+        label="Imagen de portada (URL, opcional)"
+        htmlFor="portadaUrl"
+      >
+        <Input
+          id="portadaUrl"
+          name="portadaUrl"
+          defaultValue={webinar?.portadaUrl}
+          placeholder="/assets/banners/banner-1.webp"
+        />
+      </FormField>
+
+      <FormField
         label="Material adjunto (URL, opcional)"
         htmlFor="materialAdjuntoUrl"
       >

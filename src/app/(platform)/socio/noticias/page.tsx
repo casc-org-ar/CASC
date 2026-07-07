@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { CardCover } from "@/components/shared/card-cover";
 import { EmptyState } from "@/components/shared/empty-state";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
@@ -18,10 +19,11 @@ export default async function SocioNoticiasPage() {
       {noticias.length === 0 ? (
         <EmptyState message="No hay noticias publicadas por el momento." />
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {noticias.map((n) => (
             <Link key={n.id} href={`/socio/noticias/${n.id}`} className="block">
-              <Card className="transition-colors hover:border-accent">
+              <Card className="flex h-full flex-col overflow-hidden transition-colors hover:border-accent">
+                <CardCover src={n.imagenUrl} alt={n.titulo} />
                 <div className="mb-2 text-xs text-ink-muted">
                   {new Date(n.fecha).toLocaleDateString("es-AR", {
                     day: "numeric",
@@ -30,10 +32,10 @@ export default async function SocioNoticiasPage() {
                   })}
                 </div>
                 <CardTitle className="text-lg">{n.titulo}</CardTitle>
-                <CardDescription className="mt-1 font-medium text-ink">
+                <CardDescription className="mt-1 flex-1 font-medium text-ink">
                   {n.bajada}
                 </CardDescription>
-                <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary">
+                <span className="mt-3 inline-flex items-center gap-1 self-start text-sm font-medium text-primary">
                   Leer nota
                   <ArrowRight className="h-4 w-4" />
                 </span>

@@ -17,6 +17,8 @@ function parseInformeForm(formData: FormData) {
     descripcion: String(formData.get("descripcion") ?? "").trim(),
     categoria: String(formData.get("categoria") ?? "").trim(),
     archivoUrl: String(formData.get("archivoUrl") ?? "").trim(),
+    portadaUrl:
+      String(formData.get("portadaUrl") ?? "").trim() || undefined,
     fecha: String(formData.get("fecha") ?? ""),
     status: (String(formData.get("status") ?? "borrador") === "publicado"
       ? "publicado"

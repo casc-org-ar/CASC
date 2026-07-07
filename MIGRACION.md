@@ -212,3 +212,36 @@ Footer (contacto real, redes, legales). Componentes en `components/public/`.
 - Formularios (asociarse, contacto) con campos reales pero submit sin cablear
   (el original era Livewire/PHP; el backend es fuera de alcance de la parидад).
 - Textos legales inyectados desde HTML extraído para no re-tipear (fidelidad legal).
+
+---
+
+## 8. Ajustes de prototipo — feedback clienta (Victoria)
+
+### ✅ Punto 1 — Imagen de portada en Novedades
+Noticias, Webinars e Informes muestran imagen de portada tipo card/posteo en el
+listado del Socio, con click al detalle. Componente `CardCover` con fallback al
+motivo `[ ]` cuando no hay imagen. Campo de portada agregado a los forms del
+Admin (webinar/informe; noticia ya lo tenía). Tipos: `portadaUrl?` en `Webinar`
+e `Informe`.
+
+### ✅ Punto 3 — Diferencial visual Admin/Socio
+Misma marca CASC, distinta jerarquía: sidebar **negro** (`casc-black`) en Admin
+vs **navy** en Socio, más un badge persistente **"Panel de administración"** en
+el topbar del Admin. Un vistazo alcanza para saber en qué panel se está.
+
+### ⬜ Punto 2 — Newsletter (DECISIÓN DE PRODUCTO PENDIENTE)
+**No se programó**: requiere que Victoria defina el enfoque antes de tocar código.
+
+El envío real se hace por un proveedor externo (Brevo/Mailchimp). La pregunta es
+qué rol cumple la sección Newsletter de la plataforma:
+
+- **Opción A (recomendada) — Repositorio de ediciones:** el admin sube el
+  contenido o un link/embed de cada edición YA enviada por la herramienta
+  externa; los socios acceden al historial. Menor alcance, encaja con el proyecto
+  actual (la sección hoy ya es tipo archivo con `adjuntoUrl`).
+- **Opción B — Editor propio + envío:** diseñar el newsletter en la plataforma y
+  disparar el envío desde ahí. Es construir una herramienta de email marketing
+  completa: mucho mayor alcance y complejidad, no contemplado hoy.
+
+**Acción:** confirmar A o B con Victoria. Si es A, el trabajo es menor (la
+estructura ya existe). Si es B, hay que replantear alcance y presupuesto.

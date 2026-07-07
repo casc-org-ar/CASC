@@ -1,5 +1,6 @@
 import { Play } from "lucide-react";
 import Link from "next/link";
+import { CardCover } from "@/components/shared/card-cover";
 import { EmptyState } from "@/components/shared/empty-state";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Badge } from "@/components/ui/badge";
@@ -27,7 +28,8 @@ export default async function SocioWebinarsPage() {
               href={`/socio/webinars/${w.id}`}
               className="block"
             >
-              <Card className="flex h-full flex-col transition-colors hover:border-accent">
+              <Card className="flex h-full flex-col overflow-hidden transition-colors hover:border-accent">
+                <CardCover src={w.portadaUrl} alt={w.titulo} />
                 <div className="mb-3 flex items-center justify-between">
                   <Badge tone="accent">{w.categoria}</Badge>
                   <span className="text-xs text-ink-muted">
