@@ -235,16 +235,18 @@ plataforma archiva las ediciones ya enviadas por el proveedor externo
 (Mailchimp/emBlue) y les da acceso a los socios.
 
 **Implementado:**
-- Admin: el campo pasó de "Adjunto PDF" a **"Link de la edición (URL)"** —
-  acepta el link de la campaña ya enviada (Mailchimp/emBlue) o un link a PDF.
-- Socio: el detalle detecta el tipo — un `.pdf` se ofrece como **descarga**; un
-  link de campaña abre en pestaña nueva como **"Ver edición completa"**. Campo
-  agnóstico al proveedor: no hay que rehacer nada si cambia la herramienta.
+- Admin: **sube el archivo** de la edición ya enviada (PDF exportado desde
+  Mailchimp/emBlue, o el archivo que sea). Mismo patrón que Informes/Noticias
+  (upload mockeado ahora → **Vercel Blob** en producción). El upload es el camino
+  principal porque NO dependemos de que el proveedor genere un link público.
+- Socio: descarga la edición desde el archivo. El detalle también detecta si el
+  `adjuntoUrl` fuera un link externo (abre en pestaña nueva) — pero eso es un
+  extra opcional; el flujo real es descargar el archivo subido.
 
-**Pendiente (no bloquea):** confirmar con soporte de **emBlue** que su link de
-"ver en navegador" sea **público y permanente** (Mailchimp ya está confirmado:
-genera campaign page pública). Si emBlue no lo diera, se usa el PDF — el campo ya
-lo soporta.
+**Nota:** se descartó depender del "link de campaña" del proveedor — no está
+garantizado que emBlue/Mailchimp expongan un link público y permanente. Subir el
+archivo funciona siempre. Si a futuro se confirma un link usable, el campo ya lo
+soporta sin rehacer nada.
 
 **Descartado:** editor propio + envío (Opción B) = reconstruir una herramienta de
 email marketing completa. Fuera de alcance; el proveedor externo ya lo resuelve.

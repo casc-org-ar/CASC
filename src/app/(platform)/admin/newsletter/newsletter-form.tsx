@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select, Textarea } from "@/components/ui/field";
 import type { Newsletter } from "@/lib/types/domain";
@@ -13,6 +13,11 @@ interface NewsletterFormProps {
 
 export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
   const [pending, startTransition] = useTransition();
+  // Mocked upload: picking a file fills adjuntoUrl with a fake path, simulating
+  // what Vercel Blob will return once wired up. Uploading the file is the
+  // primary path — the email provider may not expose a public campaign link,
+  // so the admin always uploads the sent edition (PDF or any file).
+  const [adjuntoUrl, setAdjuntoUrl] = useState(newsletter?.adjuntoUrl ?? "");
 
   const action = (formData: FormData) =>
     startTransition(async () => {
@@ -23,6 +28,14 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
       }
       onDone();
     });
+
+  const onFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // In production this URL comes from the Blob upload response.
+      setAdjuntoUrl(`/mock/${file.name}`);
+    }
+  };
 
   return (
     <form action={action} className="space-y-4">
@@ -56,17 +69,23 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
         />
       </FormField>
 
-      <FormField label="Link de la edición (URL)" htmlFor="adjuntoUrl">
+      <FormField label="Archivo de la edición (PDF)" htmlFor="adjunto">
         <Input
-          id="adjuntoUrl"
-          name="adjuntoUrl"
-          type="url"
-          defaultValue={newsletter?.adjuntoUrl}
-          placeholder="https://mailchimp.com/... o link a PDF"
+          id="adjunto"
+          type="file"
+          accept=".pdf,.doc,.docx,image/*"
+          onChange={onFilePick}
         />
+        {/* Carries the mocked/real upload URL into the submitted form data. */}
+        <input type="hidden" name="adjuntoUrl" value={adjuntoUrl} />
+        {adjuntoUrl && (
+          <p className="mt-1.5 text-xs text-ink-muted">
+            Archivo actual: {adjuntoUrl}
+          </p>
+        )}
         <p className="mt-1.5 text-xs text-ink-muted">
-          Pegá el link de la campaña ya enviada (Mailchimp/emBlue), o un link a
-          la edición en PDF. Los socios lo abren desde el archivo.
+          Subí la edición ya enviada (el PDF exportado desde Mailchimp/emBlue, o
+          el archivo que sea). Los socios la descargan desde el archivo.
         </p>
       </FormField>
 
