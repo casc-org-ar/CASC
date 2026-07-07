@@ -134,7 +134,9 @@ export const newsletters: Newsletter[] = [
     contenido:
       "Resumen mensual de actividades, informes publicados y próximos eventos de la cámara.",
     fecha: iso(2026, 6, 30),
-    adjuntoUrl: "/mock/newsletter-42.pdf",
+    // Archive model: link to the edition already sent via the email provider
+    // (e.g. Mailchimp campaign page). Opens in a new tab, seen as it was sent.
+    adjuntoUrl: "https://mailchi.mp/casc/novedades-junio-2026",
     status: "publicado",
     createdAt: iso(2026, 6, 30),
     updatedAt: iso(2026, 6, 30),

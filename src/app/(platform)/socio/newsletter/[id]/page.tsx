@@ -1,11 +1,14 @@
-import { ArrowLeft, FileDown } from "lucide-react";
+import { ArrowLeft, ExternalLink, FileDown } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDataLayer } from "@/lib/data";
 
 /**
  * Individual newsletter edition — reads like an opened email: header with
- * edition/date, then the body. Optional PDF download (published only).
+ * edition/date, then the body. The platform is an archive: `adjuntoUrl` holds
+ * the link to the edition already sent (a Mailchimp/emBlue campaign page) or a
+ * PDF. A PDF is offered as a download; an external campaign link opens in a new
+ * tab so the socio sees the edition exactly as it was sent.
  */
 export default async function NewsletterDetailPage({
   params,
@@ -54,18 +57,33 @@ export default async function NewsletterDetailPage({
           {edicion.contenido}
         </div>
 
-        {edicion.adjuntoUrl && (
-          <div className="border-t border-border px-6 py-4">
-            <a
-              href={edicion.adjuntoUrl}
-              download
-              className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium text-ink transition-colors hover:bg-surface"
-            >
-              <FileDown className="h-4 w-4 text-primary" />
-              Descargar edición en PDF
-            </a>
-          </div>
-        )}
+        {edicion.adjuntoUrl &&
+          (() => {
+            const esPdf = /\.pdf($|\?)/i.test(edicion.adjuntoUrl);
+            return (
+              <div className="border-t border-border px-6 py-4">
+                <a
+                  href={edicion.adjuntoUrl}
+                  {...(esPdf
+                    ? { download: true }
+                    : { target: "_blank", rel: "noreferrer" })}
+                  className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium text-ink transition-colors hover:bg-surface"
+                >
+                  {esPdf ? (
+                    <>
+                      <FileDown className="h-4 w-4 text-primary" />
+                      Descargar edición en PDF
+                    </>
+                  ) : (
+                    <>
+                      <ExternalLink className="h-4 w-4 text-primary" />
+                      Ver edición completa
+                    </>
+                  )}
+                </a>
+              </div>
+            );
+          })()}
       </div>
     </div>
   );

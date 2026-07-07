@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select, Textarea } from "@/components/ui/field";
 import type { Newsletter } from "@/lib/types/domain";
@@ -13,7 +13,6 @@ interface NewsletterFormProps {
 
 export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
   const [pending, startTransition] = useTransition();
-  const [adjuntoUrl, setAdjuntoUrl] = useState(newsletter?.adjuntoUrl ?? "");
 
   const action = (formData: FormData) =>
     startTransition(async () => {
@@ -24,11 +23,6 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
       }
       onDone();
     });
-
-  const onFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setAdjuntoUrl(`/mock/${file.name}`);
-  };
 
   return (
     <form action={action} className="space-y-4">
@@ -62,12 +56,18 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
         />
       </FormField>
 
-      <FormField label="Adjunto (PDF, opcional)" htmlFor="adjunto">
-        <Input id="adjunto" type="file" accept=".pdf" onChange={onFilePick} />
-        <input type="hidden" name="adjuntoUrl" value={adjuntoUrl} />
-        {adjuntoUrl && (
-          <p className="mt-1.5 text-xs text-ink-muted">Adjunto: {adjuntoUrl}</p>
-        )}
+      <FormField label="Link de la edición (URL)" htmlFor="adjuntoUrl">
+        <Input
+          id="adjuntoUrl"
+          name="adjuntoUrl"
+          type="url"
+          defaultValue={newsletter?.adjuntoUrl}
+          placeholder="https://mailchimp.com/... o link a PDF"
+        />
+        <p className="mt-1.5 text-xs text-ink-muted">
+          Pegá el link de la campaña ya enviada (Mailchimp/emBlue), o un link a
+          la edición en PDF. Los socios lo abren desde el archivo.
+        </p>
       </FormField>
 
       <div className="grid grid-cols-2 gap-4">

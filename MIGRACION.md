@@ -229,19 +229,22 @@ Misma marca CASC, distinta jerarquía: sidebar **negro** (`casc-black`) en Admin
 vs **navy** en Socio, más un badge persistente **"Panel de administración"** en
 el topbar del Admin. Un vistazo alcanza para saber en qué panel se está.
 
-### ⬜ Punto 2 — Newsletter (DECISIÓN DE PRODUCTO PENDIENTE)
-**No se programó**: requiere que Victoria defina el enfoque antes de tocar código.
+### 🔵 Punto 2 — Newsletter (Opción A implementada, pendiente confirmación proveedor)
+**Enfoque confirmado:** repositorio de ediciones (NO editor, NO envío). La
+plataforma archiva las ediciones ya enviadas por el proveedor externo
+(Mailchimp/emBlue) y les da acceso a los socios.
 
-El envío real se hace por un proveedor externo (Brevo/Mailchimp). La pregunta es
-qué rol cumple la sección Newsletter de la plataforma:
+**Implementado:**
+- Admin: el campo pasó de "Adjunto PDF" a **"Link de la edición (URL)"** —
+  acepta el link de la campaña ya enviada (Mailchimp/emBlue) o un link a PDF.
+- Socio: el detalle detecta el tipo — un `.pdf` se ofrece como **descarga**; un
+  link de campaña abre en pestaña nueva como **"Ver edición completa"**. Campo
+  agnóstico al proveedor: no hay que rehacer nada si cambia la herramienta.
 
-- **Opción A (recomendada) — Repositorio de ediciones:** el admin sube el
-  contenido o un link/embed de cada edición YA enviada por la herramienta
-  externa; los socios acceden al historial. Menor alcance, encaja con el proyecto
-  actual (la sección hoy ya es tipo archivo con `adjuntoUrl`).
-- **Opción B — Editor propio + envío:** diseñar el newsletter en la plataforma y
-  disparar el envío desde ahí. Es construir una herramienta de email marketing
-  completa: mucho mayor alcance y complejidad, no contemplado hoy.
+**Pendiente (no bloquea):** confirmar con soporte de **emBlue** que su link de
+"ver en navegador" sea **público y permanente** (Mailchimp ya está confirmado:
+genera campaign page pública). Si emBlue no lo diera, se usa el PDF — el campo ya
+lo soporta.
 
-**Acción:** confirmar A o B con Victoria. Si es A, el trabajo es menor (la
-estructura ya existe). Si es B, hay que replantear alcance y presupuesto.
+**Descartado:** editor propio + envío (Opción B) = reconstruir una herramienta de
+email marketing completa. Fuera de alcance; el proveedor externo ya lo resuelve.
