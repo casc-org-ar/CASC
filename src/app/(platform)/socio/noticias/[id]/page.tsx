@@ -1,6 +1,8 @@
 import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 import { getDataLayer } from "@/lib/data";
 
 /** Individual news article page (read-only, published only). */
@@ -25,13 +27,29 @@ export default async function NoticiaDetailPage({
         Volver a noticias
       </Link>
 
-      <p className="text-sm text-ink-muted">
-        {new Date(noticia.fecha).toLocaleDateString("es-AR", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}
-      </p>
+      {noticia.imagenUrl && (
+        <div className="relative mb-6 h-64 w-full overflow-hidden rounded-xl bg-surface md:h-80">
+          <Image
+            src={noticia.imagenUrl}
+            alt={noticia.titulo}
+            fill
+            sizes="(max-width: 768px) 100vw, 800px"
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
+
+      <div className="flex items-center gap-3">
+        {noticia.categoria && <Badge tone="accent">{noticia.categoria}</Badge>}
+        <p className="text-sm text-ink-muted">
+          {new Date(noticia.fecha).toLocaleDateString("es-AR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </p>
+      </div>
       <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink">
         {noticia.titulo}
       </h1>

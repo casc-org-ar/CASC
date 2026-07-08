@@ -1,10 +1,12 @@
+import { ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /**
- * Cover image for a listing card (Noticias, Webinars, Informes). Bleeds to the
- * card edges by cancelling the Card's padding. When no image is set, falls back
- * to the brand bracket motif so the card still reads as a visual post.
+ * Cover image for a listing card (Noticias, Webinars, Informes, home feed).
+ * Bleeds to the card edges by cancelling the Card's padding. When no image is
+ * set, shows a neutral placeholder (soft gray + image icon) so the card still
+ * reads as a visual post and the user understands an image belongs there.
  */
 export function CardCover({
   src,
@@ -28,11 +30,12 @@ export function CardCover({
           alt={alt}
           fill
           sizes="(max-width: 768px) 100vw, 400px"
-          className="object-cover"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
       ) : (
-        <div className="flex h-full items-center justify-center bg-casc-navy-900">
-          <span className="text-4xl font-bold text-accent">[ ]</span>
+        <div className="flex h-full flex-col items-center justify-center gap-2 bg-casc-gray-100 text-ink-muted/60">
+          <ImageIcon className="h-8 w-8" strokeWidth={1.5} />
+          <span className="text-xs font-medium">Sin imagen</span>
         </div>
       )}
     </div>

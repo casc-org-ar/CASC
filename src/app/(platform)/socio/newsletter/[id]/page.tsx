@@ -53,30 +53,35 @@ export default async function NewsletterDetailPage({
           </p>
         </div>
 
-        <div className="whitespace-pre-line px-6 py-6 text-base leading-relaxed text-ink">
-          {edicion.contenido}
-        </div>
+        {edicion.contenido && (
+          <div className="whitespace-pre-line px-6 py-6 text-base leading-relaxed text-ink">
+            {edicion.contenido}
+          </div>
+        )}
 
         {edicion.adjuntoUrl &&
           (() => {
             const esPdf = /\.pdf($|\?)/i.test(edicion.adjuntoUrl);
             return (
-              <div className="border-t border-border px-6 py-4">
+              <div className="border-t border-border px-6 py-6">
+                <p className="mb-3 text-sm text-ink-muted">
+                  Accedé a la edición completa tal como fue enviada:
+                </p>
                 <a
                   href={edicion.adjuntoUrl}
                   {...(esPdf
                     ? { download: true }
                     : { target: "_blank", rel: "noreferrer" })}
-                  className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium text-ink transition-colors hover:bg-surface"
+                  className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
                 >
                   {esPdf ? (
                     <>
-                      <FileDown className="h-4 w-4 text-primary" />
-                      Descargar edición en PDF
+                      <FileDown className="h-4 w-4" />
+                      Descargar edición
                     </>
                   ) : (
                     <>
-                      <ExternalLink className="h-4 w-4 text-primary" />
+                      <ExternalLink className="h-4 w-4" />
                       Ver edición completa
                     </>
                   )}
