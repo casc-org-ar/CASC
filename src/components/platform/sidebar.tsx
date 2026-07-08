@@ -30,7 +30,7 @@ export function Sidebar({ user, open, onNavigate }: SidebarProps) {
         open ? "translate-x-0" : "-translate-x-full",
       )}
     >
-      <div className="flex h-24 items-center border-b border-white/10 px-6">
+      <div className="flex h-20 items-center border-b border-white/10 px-6">
         <Link
           href={`/${user.role}`}
           onClick={onNavigate}
@@ -39,8 +39,8 @@ export function Sidebar({ user, open, onNavigate }: SidebarProps) {
           <Image
             src="/brand/casc-logo-full-white.png"
             alt="CASC — Cámara Argentina de Shopping Centers"
-            width={300}
-            height={212}
+            width={176}
+            height={80}
             priority
             className="h-12 w-auto"
           />
@@ -59,13 +59,13 @@ export function Sidebar({ user, open, onNavigate }: SidebarProps) {
               href={item.href}
               onClick={onNavigate}
               className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 active
                   ? "bg-primary text-white"
                   : "text-blue-100 hover:bg-white/10",
               )}
             >
-              <Icon className="h-4 w-4 shrink-0" />
+              <Icon className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
               {item.label}
             </Link>
           );
