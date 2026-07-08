@@ -14,8 +14,17 @@ export type PublicationStatus = "borrador" | "publicado";
 /** Roles resolved by the auth layer. */
 export type UserRole = "admin" | "socio";
 
-/** Active/inactive state for member accounts. */
+/** Active/inactive state for member accounts (membership eje). */
 export type MemberState = "activo" | "inactivo";
+
+/**
+ * Onboarding state of a member's account invitation (registration eje).
+ * Independent from `MemberState`: a member can be an active membership while
+ * their invitation is still pending. Driven by the invitation flow (Clerk
+ * later): "pendiente" before an invite is sent, "enviada" once the link goes
+ * out, "aceptada" once the member completes registration.
+ */
+export type InvitationStatus = "pendiente" | "enviada" | "aceptada";
 
 /** Fields shared by every stored entity. */
 export interface BaseEntity {
@@ -50,6 +59,7 @@ export interface Noticia extends BaseEntity {
   bajada: string;
   cuerpo: string;
   imagenUrl?: string;
+  categoria?: string; // optional free-text tag; powers the socio-side filter
   fecha: string;
   status: PublicationStatus;
 }
@@ -57,9 +67,10 @@ export interface Noticia extends BaseEntity {
 export interface Newsletter extends BaseEntity {
   titulo: string;
   edicion: string;
-  contenido: string;
+  /** Optional short summary shown on the card; the sent edition lives in the file. */
+  contenido?: string;
   fecha: string;
-  adjuntoUrl?: string;
+  adjuntoUrl?: string; // uploaded file of the edition already sent (Vercel Blob later)
   status: PublicationStatus;
 }
 
@@ -69,6 +80,7 @@ export interface BlogPost extends BaseEntity {
   bajada: string;
   cuerpo: string; // rich body (markdown/plain for now)
   portadaUrl?: string; // cover image
+  imagenes?: string[]; // gallery images shown in the article body
   autor: string;
   tags: string[];
   fecha: string;
@@ -82,6 +94,10 @@ export interface Socio extends BaseEntity {
   cargo?: string;
   estado: MemberState;
   role: UserRole;
+  /** Registration onboarding state (see InvitationStatus). Defaults to "pendiente". */
+  invitacionStatus: InvitationStatus;
+  /** ISO timestamp of the last invitation send; undefined until first sent. */
+  invitacionEnviadaAt?: string;
 }
 
 /** The shape of the currently authenticated user. */

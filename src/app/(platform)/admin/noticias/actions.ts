@@ -9,11 +9,13 @@ import type { PublicationStatus } from "@/lib/types/domain";
 
 function parseNoticiaForm(formData: FormData) {
   const imagenUrl = String(formData.get("imagenUrl") ?? "").trim();
+  const categoria = String(formData.get("categoria") ?? "").trim();
   return {
     titulo: String(formData.get("titulo") ?? "").trim(),
     bajada: String(formData.get("bajada") ?? "").trim(),
     cuerpo: String(formData.get("cuerpo") ?? "").trim(),
     imagenUrl: imagenUrl || undefined,
+    categoria: categoria || undefined,
     fecha: String(formData.get("fecha") ?? ""),
     status: (String(formData.get("status") ?? "borrador") === "publicado"
       ? "publicado"

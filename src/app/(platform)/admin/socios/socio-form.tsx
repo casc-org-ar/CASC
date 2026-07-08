@@ -3,25 +3,36 @@
 import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select } from "@/components/ui/field";
+import { useToast } from "@/components/ui/toast";
 import type { Socio } from "@/lib/types/domain";
 import { createSocio, updateSocio } from "./actions";
 
 interface SocioFormProps {
   socio?: Socio;
   onDone: () => void;
+  /** Called after a successful alta with the invited email, so the parent can notify the admin. */
+  onAlta?: (email: string) => void;
 }
 
-export function SocioForm({ socio, onDone }: SocioFormProps) {
+export function SocioForm({ socio, onDone, onAlta }: SocioFormProps) {
   const [pending, startTransition] = useTransition();
+  const toast = useToast();
 
   const action = (formData: FormData) =>
     startTransition(async () => {
-      if (socio) {
-        await updateSocio(socio.id, formData);
-      } else {
-        await createSocio(formData);
+      try {
+        if (socio) {
+          await updateSocio(socio.id, formData);
+          toast.success("Socio actualizado.");
+        } else {
+          const result = await createSocio(formData);
+          toast.success("Socio dado de alta.");
+          if (result.invitacionEnviada) onAlta?.(result.email);
+        }
+        onDone();
+      } catch {
+        toast.error("No se pudo guardar el socio. Intentá de nuevo.");
       }
-      onDone();
     });
 
   return (
@@ -73,6 +84,13 @@ export function SocioForm({ socio, onDone }: SocioFormProps) {
           </Select>
         </FormField>
       </div>
+
+      {!socio && (
+        <p className="rounded-md border border-border bg-surface px-3 py-2 text-xs text-ink-muted">
+          Al dar de alta, se enviará automáticamente una invitación por email
+          para que el socio complete su registro.
+        </p>
+      )}
 
       <div className="flex justify-end gap-2 pt-2">
         <Button type="button" variant="secondary" onClick={onDone}>

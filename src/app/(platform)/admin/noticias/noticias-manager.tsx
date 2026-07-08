@@ -6,6 +6,7 @@ import { DataTable, type Column } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
 import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/toast";
 import type { Noticia } from "@/lib/types/domain";
 import { deleteNoticia } from "./actions";
 import { NoticiaForm } from "./noticia-form";
@@ -20,6 +21,15 @@ const columns: Column<Noticia>[] = [
     cell: (n) => (
       <span className="line-clamp-1 max-w-md text-ink-muted">{n.bajada}</span>
     ),
+  },
+  {
+    header: "Categoría",
+    cell: (n) =>
+      n.categoria ? (
+        <span className="text-ink-muted">{n.categoria}</span>
+      ) : (
+        <span className="text-ink-muted/50">—</span>
+      ),
   },
   {
     header: "Fecha",
@@ -37,6 +47,7 @@ export function NoticiasManager({ noticias }: { noticias: Noticia[] }) {
   const [editing, setEditing] = useState<Noticia | null>(null);
   const [creating, setCreating] = useState(false);
   const [, startTransition] = useTransition();
+  const toast = useToast();
 
   const closeModal = () => {
     setCreating(false);
@@ -45,7 +56,14 @@ export function NoticiasManager({ noticias }: { noticias: Noticia[] }) {
 
   const onDelete = (n: Noticia) => {
     if (!confirm(`¿Eliminar "${n.titulo}"?`)) return;
-    startTransition(() => void deleteNoticia(n.id));
+    startTransition(async () => {
+      try {
+        await deleteNoticia(n.id);
+        toast.success("Noticia eliminada.");
+      } catch {
+        toast.error("No se pudo eliminar la noticia.");
+      }
+    });
   };
 
   return (
@@ -70,6 +88,7 @@ export function NoticiasManager({ noticias }: { noticias: Noticia[] }) {
         open={creating || editing !== null}
         onClose={closeModal}
         title={editing ? "Editar noticia" : "Nueva noticia"}
+        size="lg"
       >
         <NoticiaForm noticia={editing ?? undefined} onDone={closeModal} />
       </Modal>
