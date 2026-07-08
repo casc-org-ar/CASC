@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Sidebar } from "@/components/platform/sidebar";
 import { Topbar } from "@/components/platform/topbar";
+import { ToastProvider, ToastViewport } from "@/components/ui/toast";
 import type { CurrentUser } from "@/lib/types/domain";
 
 interface PlatformShellProps {
@@ -24,32 +25,35 @@ export function PlatformShell({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-surface">
-      <Sidebar
-        user={user}
-        open={sidebarOpen}
-        onNavigate={() => setSidebarOpen(false)}
-      />
-
-      {/* Mobile backdrop */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-          aria-hidden
+    <ToastProvider>
+      <div className="min-h-screen bg-surface">
+        <Sidebar
+          user={user}
+          open={sidebarOpen}
+          onNavigate={() => setSidebarOpen(false)}
         />
-      )}
 
-      <div className="lg:pl-64">
-        <Topbar
-          role={user.role}
-          showDevSwitcher={showDevSwitcher}
-          onMenuClick={() => setSidebarOpen(true)}
-        />
-        <main className="mx-auto max-w-[1600px] px-4 py-8 lg:px-10 xl:px-12">
-          {children}
-        </main>
+        {/* Mobile backdrop */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-30 bg-black/40 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden
+          />
+        )}
+
+        <div className="lg:pl-64">
+          <Topbar
+            role={user.role}
+            showDevSwitcher={showDevSwitcher}
+            onMenuClick={() => setSidebarOpen(true)}
+          />
+          <main className="mx-auto max-w-[1600px] px-4 py-8 lg:px-10 xl:px-12">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+      <ToastViewport />
+    </ToastProvider>
   );
 }

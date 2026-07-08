@@ -12,7 +12,7 @@ function parseNewsletterForm(formData: FormData) {
   return {
     titulo: String(formData.get("titulo") ?? "").trim(),
     edicion: String(formData.get("edicion") ?? "").trim(),
-    contenido: String(formData.get("contenido") ?? "").trim(),
+    contenido: String(formData.get("contenido") ?? "").trim() || undefined,
     adjuntoUrl: adjuntoUrl || undefined,
     fecha: String(formData.get("fecha") ?? ""),
     status: (String(formData.get("status") ?? "borrador") === "publicado"

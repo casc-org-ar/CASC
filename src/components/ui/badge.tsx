@@ -38,3 +38,14 @@ export function StatusBadge({ status }: { status: string }) {
   const entry = map[status] ?? { tone: "neutral" as Tone, label: status };
   return <Badge tone={entry.tone}>{entry.label}</Badge>;
 }
+
+/** Maps an invitation onboarding status to a badge tone + label. */
+export function InvitationBadge({ status }: { status: string }) {
+  const map: Record<string, { tone: Tone; label: string }> = {
+    pendiente: { tone: "muted", label: "Pendiente" },
+    enviada: { tone: "accent", label: "Invitación enviada" },
+    aceptada: { tone: "success", label: "Registrado" },
+  };
+  const entry = map[status] ?? { tone: "neutral" as Tone, label: status };
+  return <Badge tone={entry.tone}>{entry.label}</Badge>;
+}

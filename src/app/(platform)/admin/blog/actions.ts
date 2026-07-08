@@ -21,6 +21,22 @@ function slugify(value: string): string {
     .replace(/\s+/g, "-");
 }
 
+/** Parse the gallery, submitted as a JSON array of image URLs. */
+function parseImagenes(formData: FormData): string[] | undefined {
+  const raw = String(formData.get("imagenes") ?? "").trim();
+  if (!raw) return undefined;
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      const urls = parsed.filter((x): x is string => typeof x === "string");
+      return urls.length ? urls : undefined;
+    }
+  } catch {
+    // Malformed input — ignore rather than fail the whole save.
+  }
+  return undefined;
+}
+
 function parseBlogForm(formData: FormData) {
   const titulo = String(formData.get("titulo") ?? "").trim();
   const slugInput = String(formData.get("slug") ?? "").trim();
@@ -32,6 +48,7 @@ function parseBlogForm(formData: FormData) {
     bajada: String(formData.get("bajada") ?? "").trim(),
     cuerpo: String(formData.get("cuerpo") ?? "").trim(),
     portadaUrl: portadaUrl || undefined,
+    imagenes: parseImagenes(formData),
     autor: String(formData.get("autor") ?? "").trim(),
     tags: tagsRaw
       ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean)

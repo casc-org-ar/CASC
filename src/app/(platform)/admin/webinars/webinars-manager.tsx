@@ -6,6 +6,7 @@ import { DataTable, type Column } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
 import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/toast";
 import type { Webinar } from "@/lib/types/domain";
 import { deleteWebinar } from "./actions";
 import { WebinarForm } from "./webinar-form";
@@ -32,6 +33,7 @@ export function WebinarsManager({ webinars }: { webinars: Webinar[] }) {
   const [editing, setEditing] = useState<Webinar | null>(null);
   const [creating, setCreating] = useState(false);
   const [, startTransition] = useTransition();
+  const toast = useToast();
 
   const closeModal = () => {
     setCreating(false);
@@ -40,7 +42,14 @@ export function WebinarsManager({ webinars }: { webinars: Webinar[] }) {
 
   const onDelete = (w: Webinar) => {
     if (!confirm(`¿Eliminar "${w.titulo}"?`)) return;
-    startTransition(() => void deleteWebinar(w.id));
+    startTransition(async () => {
+      try {
+        await deleteWebinar(w.id);
+        toast.success("Webinar eliminado.");
+      } catch {
+        toast.error("No se pudo eliminar el webinar.");
+      }
+    });
   };
 
   return (
@@ -65,6 +74,7 @@ export function WebinarsManager({ webinars }: { webinars: Webinar[] }) {
         open={creating || editing !== null}
         onClose={closeModal}
         title={editing ? "Editar webinar" : "Nuevo webinar"}
+        size="lg"
       >
         <WebinarForm webinar={editing ?? undefined} onDone={closeModal} />
       </Modal>

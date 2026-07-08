@@ -6,6 +6,7 @@ import { DataTable, type Column } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
 import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/toast";
 import type { Informe } from "@/lib/types/domain";
 import { deleteInforme } from "./actions";
 import { InformeForm } from "./informe-form";
@@ -32,6 +33,7 @@ export function InformesManager({ informes }: { informes: Informe[] }) {
   const [editing, setEditing] = useState<Informe | null>(null);
   const [creating, setCreating] = useState(false);
   const [, startTransition] = useTransition();
+  const toast = useToast();
 
   const closeModal = () => {
     setCreating(false);
@@ -40,7 +42,14 @@ export function InformesManager({ informes }: { informes: Informe[] }) {
 
   const onDelete = (i: Informe) => {
     if (!confirm(`¿Eliminar "${i.titulo}"?`)) return;
-    startTransition(() => void deleteInforme(i.id));
+    startTransition(async () => {
+      try {
+        await deleteInforme(i.id);
+        toast.success("Informe eliminado.");
+      } catch {
+        toast.error("No se pudo eliminar el informe.");
+      }
+    });
   };
 
   return (
@@ -65,6 +74,7 @@ export function InformesManager({ informes }: { informes: Informe[] }) {
         open={creating || editing !== null}
         onClose={closeModal}
         title={editing ? "Editar informe" : "Nuevo informe"}
+        size="lg"
       >
         <InformeForm informe={editing ?? undefined} onDone={closeModal} />
       </Modal>

@@ -6,6 +6,7 @@ import { DataTable, type Column } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
 import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/toast";
 import type { Newsletter } from "@/lib/types/domain";
 import { deleteNewsletter } from "./actions";
 import { NewsletterForm } from "./newsletter-form";
@@ -36,6 +37,7 @@ export function NewsletterManager({
   const [editing, setEditing] = useState<Newsletter | null>(null);
   const [creating, setCreating] = useState(false);
   const [, startTransition] = useTransition();
+  const toast = useToast();
 
   const closeModal = () => {
     setCreating(false);
@@ -44,7 +46,14 @@ export function NewsletterManager({
 
   const onDelete = (n: Newsletter) => {
     if (!confirm(`¿Eliminar la edición "${n.edicion}"?`)) return;
-    startTransition(() => void deleteNewsletter(n.id));
+    startTransition(async () => {
+      try {
+        await deleteNewsletter(n.id);
+        toast.success("Edición eliminada.");
+      } catch {
+        toast.error("No se pudo eliminar la edición.");
+      }
+    });
   };
 
   return (
@@ -69,6 +78,7 @@ export function NewsletterManager({
         open={creating || editing !== null}
         onClose={closeModal}
         title={editing ? "Editar edición" : "Nueva edición"}
+        size="lg"
       >
         <NewsletterForm
           newsletter={editing ?? undefined}
