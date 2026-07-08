@@ -21,7 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${inter.variable} h-full`}>
-      <body className="min-h-full">{children}</body>
+      {/* Browser extensions (ColorZilla, password managers) inject attributes
+          on <body> before hydration; suppress the mismatch on this node only. */}
+      <body className="min-h-full" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }

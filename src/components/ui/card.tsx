@@ -3,12 +3,18 @@ import { cn } from "@/lib/utils";
 
 export function Card({
   className,
+  interactive,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.HTMLAttributes<HTMLDivElement> & {
+  /** When true, the card lifts on hover — use for clickable cards. */
+  interactive?: boolean;
+}) {
   return (
     <div
       className={cn(
-        "rounded-xl border border-border bg-white p-5 shadow-sm",
+        "rounded-xl border border-border bg-white p-5 shadow-sm transition-all duration-200",
+        interactive &&
+          "hover:-translate-y-0.5 hover:border-accent hover:shadow-md",
         className,
       )}
       {...props}

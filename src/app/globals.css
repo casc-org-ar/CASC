@@ -95,3 +95,88 @@ button:disabled,
   font-weight: 300;
   margin-left: 0.25rem;
 }
+
+/**
+ * Motion system — subtle, institutional. Short durations, small displacements.
+ * Every animation here is gated by `prefers-reduced-motion` below, so users who
+ * opt out get an instant, still interface with zero movement.
+ */
+@keyframes casc-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes casc-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes casc-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Fades content in on mount; the -up variant adds a small rise. */
+.animate-fade-in {
+  animation: casc-fade-in 0.3s ease-out both;
+}
+.animate-fade-in-up {
+  animation: casc-fade-in-up 0.35s ease-out both;
+}
+
+/**
+ * Staggered entrance for lists/grids: children rise in sequence. Apply
+ * `.stagger-children` on the container; each direct child animates with an
+ * increasing delay (capped so long lists don't wait forever).
+ */
+.stagger-children > * {
+  animation: casc-fade-in-up 0.35s ease-out both;
+}
+.stagger-children > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.stagger-children > *:nth-child(2) {
+  animation-delay: 40ms;
+}
+.stagger-children > *:nth-child(3) {
+  animation-delay: 80ms;
+}
+.stagger-children > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+.stagger-children > *:nth-child(5) {
+  animation-delay: 160ms;
+}
+.stagger-children > *:nth-child(6) {
+  animation-delay: 200ms;
+}
+.stagger-children > *:nth-child(n + 7) {
+  animation-delay: 240ms;
+}
+
+/**
+ * Accessibility: honor the OS "reduce motion" setting. Collapse every
+ * animation and transition to near-instant so the interface is still and
+ * comfortable for users who are motion-sensitive. This is non-negotiable.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
