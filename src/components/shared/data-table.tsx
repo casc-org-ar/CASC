@@ -13,6 +13,13 @@ export interface Column<T> {
   align?: "left" | "right";
 }
 
+/** An extra per-row action rendered before edit/delete (e.g. "preview"). */
+export interface RowAction<T> {
+  icon: ReactNode;
+  label: (row: T) => string;
+  onClick: (row: T) => void;
+}
+
 interface DataTableProps<T extends { id: string }> {
   rows: T[];
   columns: Column<T>[];
@@ -21,6 +28,8 @@ interface DataTableProps<T extends { id: string }> {
   onEdit: (row: T) => void;
   onDelete: (row: T) => void;
   emptyMessage: string;
+  /** Optional extra actions rendered before edit/delete on each row. */
+  extraActions?: RowAction<T>[];
 }
 
 /**
@@ -35,6 +44,7 @@ export function DataTable<T extends { id: string }>({
   onEdit,
   onDelete,
   emptyMessage,
+  extraActions,
 }: DataTableProps<T>) {
   if (rows.length === 0) {
     return <EmptyState message={emptyMessage} />;
@@ -60,7 +70,10 @@ export function DataTable<T extends { id: string }>({
         </thead>
         <tbody className="divide-y divide-border">
           {rows.map((row) => (
-            <tr key={row.id} className="hover:bg-surface/50">
+            <tr
+              key={row.id}
+              className="transition-colors duration-150 hover:bg-surface/50"
+            >
               {columns.map((col, idx) => (
                 <td
                   key={idx}
@@ -73,6 +86,17 @@ export function DataTable<T extends { id: string }>({
               ))}
               <td className="px-4 py-3">
                 <div className="flex justify-end gap-1">
+                  {extraActions?.map((action, idx) => (
+                    <Button
+                      key={idx}
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => action.onClick(row)}
+                      aria-label={action.label(row)}
+                    >
+                      {action.icon}
+                    </Button>
+                  ))}
                   <Button
                     variant="ghost"
                     size="sm"

@@ -1,14 +1,16 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { Eye, Plus } from "lucide-react";
 import { useState, useTransition } from "react";
 import { DataTable, type Column } from "@/components/shared/data-table";
 import { Badge, StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/toast";
 import type { BlogPost } from "@/lib/types/domain";
 import { deleteBlogPost } from "./actions";
 import { BlogForm } from "./blog-form";
+import { BlogPreview } from "./blog-preview";
 
 const columns: Column<BlogPost>[] = [
   {
@@ -46,7 +48,9 @@ const columns: Column<BlogPost>[] = [
 export function BlogManager({ posts }: { posts: BlogPost[] }) {
   const [editing, setEditing] = useState<BlogPost | null>(null);
   const [creating, setCreating] = useState(false);
+  const [previewing, setPreviewing] = useState<BlogPost | null>(null);
   const [, startTransition] = useTransition();
+  const toast = useToast();
 
   const closeModal = () => {
     setCreating(false);
@@ -55,7 +59,14 @@ export function BlogManager({ posts }: { posts: BlogPost[] }) {
 
   const onDelete = (p: BlogPost) => {
     if (!confirm(`¿Eliminar "${p.titulo}"?`)) return;
-    startTransition(() => void deleteBlogPost(p.id));
+    startTransition(async () => {
+      try {
+        await deleteBlogPost(p.id);
+        toast.success("Artículo eliminado.");
+      } catch {
+        toast.error("No se pudo eliminar el artículo.");
+      }
+    });
   };
 
   return (
@@ -74,14 +85,44 @@ export function BlogManager({ posts }: { posts: BlogPost[] }) {
         onEdit={setEditing}
         onDelete={onDelete}
         emptyMessage="Todavía no hay artículos de blog."
+        extraActions={[
+          {
+            icon: <Eye className="h-4 w-4" />,
+            label: (p) => `Previsualizar ${p.titulo}`,
+            onClick: setPreviewing,
+          },
+        ]}
       />
 
       <Modal
         open={creating || editing !== null}
         onClose={closeModal}
         title={editing ? "Editar artículo" : "Nuevo artículo"}
+        size="xl"
       >
         <BlogForm post={editing ?? undefined} onDone={closeModal} />
+      </Modal>
+
+      <Modal
+        open={previewing !== null}
+        onClose={() => setPreviewing(null)}
+        title="Vista previa del artículo"
+        size="xl"
+      >
+        {previewing && (
+          <BlogPreview
+            draft={{
+              titulo: previewing.titulo,
+              bajada: previewing.bajada,
+              cuerpo: previewing.cuerpo,
+              autor: previewing.autor,
+              fecha: previewing.fecha.slice(0, 10),
+            }}
+            portadaUrl={previewing.portadaUrl}
+            imagenes={previewing.imagenes ?? []}
+            onBack={() => setPreviewing(null)}
+          />
+        )}
       </Modal>
     </>
   );
