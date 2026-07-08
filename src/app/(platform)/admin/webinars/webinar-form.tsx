@@ -1,8 +1,11 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select, Textarea } from "@/components/ui/field";
+import { FileOrLinkField } from "@/components/ui/file-or-link-field";
+import { useToast } from "@/components/ui/toast";
+import { todayInBuenosAires } from "@/lib/utils";
 import type { Webinar } from "@/lib/types/domain";
 import { createWebinar, updateWebinar } from "./actions";
 
@@ -14,15 +17,26 @@ interface WebinarFormProps {
 
 export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
   const [pending, startTransition] = useTransition();
+  const [portadaUrl, setPortadaUrl] = useState(webinar?.portadaUrl ?? "");
+  const [materialAdjuntoUrl, setMaterialAdjuntoUrl] = useState(
+    webinar?.materialAdjuntoUrl ?? "",
+  );
+  const toast = useToast();
 
   const action = (formData: FormData) =>
     startTransition(async () => {
-      if (webinar) {
-        await updateWebinar(webinar.id, formData);
-      } else {
-        await createWebinar(formData);
+      try {
+        if (webinar) {
+          await updateWebinar(webinar.id, formData);
+          toast.success("Webinar actualizado.");
+        } else {
+          await createWebinar(formData);
+          toast.success("Webinar creado.");
+        }
+        onDone();
+      } catch {
+        toast.error("No se pudo guardar el webinar. Intentá de nuevo.");
       }
-      onDone();
     });
 
   return (
@@ -43,6 +57,7 @@ export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
           name="descripcion"
           required
           defaultValue={webinar?.descripcion}
+          placeholder="De qué trata el webinar, temas y expositores."
         />
       </FormField>
 
@@ -53,7 +68,7 @@ export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
             name="fecha"
             type="date"
             required
-            defaultValue={webinar?.fecha?.slice(0, 10)}
+            defaultValue={webinar?.fecha?.slice(0, 10) ?? todayInBuenosAires()}
           />
         </FormField>
         <FormField label="Categoría" htmlFor="categoria">
@@ -78,28 +93,28 @@ export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
         />
       </FormField>
 
-      <FormField
-        label="Imagen de portada (URL, opcional)"
-        htmlFor="portadaUrl"
-      >
-        <Input
-          id="portadaUrl"
+      <FormField label="Imagen de portada (opcional)" htmlFor="portadaUrl-file">
+        <FileOrLinkField
           name="portadaUrl"
-          defaultValue={webinar?.portadaUrl}
-          placeholder="/assets/banners/banner-1.webp"
+          value={portadaUrl}
+          onChange={setPortadaUrl}
+          accept="image/*"
+          uploadLabel="Subir imagen de portada"
+          linkPlaceholder="https://ejemplo.com/portada.jpg"
         />
       </FormField>
 
       <FormField
-        label="Material adjunto (URL, opcional)"
-        htmlFor="materialAdjuntoUrl"
+        label="Material adjunto (opcional)"
+        htmlFor="materialAdjuntoUrl-file"
       >
-        <Input
-          id="materialAdjuntoUrl"
+        <FileOrLinkField
           name="materialAdjuntoUrl"
-          type="url"
-          defaultValue={webinar?.materialAdjuntoUrl}
-          placeholder="/mock/material.pdf"
+          value={materialAdjuntoUrl}
+          onChange={setMaterialAdjuntoUrl}
+          accept=".pdf,.doc,.docx"
+          uploadLabel="Subir material (PDF)"
+          linkPlaceholder="https://ejemplo.com/material.pdf"
         />
       </FormField>
 

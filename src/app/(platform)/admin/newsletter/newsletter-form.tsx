@@ -3,6 +3,9 @@
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select, Textarea } from "@/components/ui/field";
+import { FileOrLinkField } from "@/components/ui/file-or-link-field";
+import { useToast } from "@/components/ui/toast";
+import { todayInBuenosAires } from "@/lib/utils";
 import type { Newsletter } from "@/lib/types/domain";
 import { createNewsletter, updateNewsletter } from "./actions";
 
@@ -13,29 +16,26 @@ interface NewsletterFormProps {
 
 export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
   const [pending, startTransition] = useTransition();
-  // Mocked upload: picking a file fills adjuntoUrl with a fake path, simulating
-  // what Vercel Blob will return once wired up. Uploading the file is the
-  // primary path — the email provider may not expose a public campaign link,
-  // so the admin always uploads the sent edition (PDF or any file).
+  // The edition lives in a file (PDF exported from the email provider) or, when
+  // the provider exposes a public campaign link, in that link.
   const [adjuntoUrl, setAdjuntoUrl] = useState(newsletter?.adjuntoUrl ?? "");
+  const toast = useToast();
 
   const action = (formData: FormData) =>
     startTransition(async () => {
-      if (newsletter) {
-        await updateNewsletter(newsletter.id, formData);
-      } else {
-        await createNewsletter(formData);
+      try {
+        if (newsletter) {
+          await updateNewsletter(newsletter.id, formData);
+          toast.success("Edición actualizada.");
+        } else {
+          await createNewsletter(formData);
+          toast.success("Edición creada.");
+        }
+        onDone();
+      } catch {
+        toast.error("No se pudo guardar la edición. Intentá de nuevo.");
       }
-      onDone();
     });
-
-  const onFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // In production this URL comes from the Blob upload response.
-      setAdjuntoUrl(`/mock/${file.name}`);
-    }
-  };
 
   return (
     <form action={action} className="space-y-4">
@@ -59,34 +59,26 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
         </FormField>
       </div>
 
-      <FormField label="Contenido" htmlFor="contenido">
+      <FormField label="Resumen breve (opcional)" htmlFor="contenido">
         <Textarea
           id="contenido"
           name="contenido"
-          required
           defaultValue={newsletter?.contenido}
-          className="min-h-32"
+          className="min-h-20"
+          placeholder="Ej: Resumen de actividades y novedades de junio (aparece en la tarjeta del listado)."
         />
       </FormField>
 
-      <FormField label="Archivo de la edición (PDF)" htmlFor="adjunto">
-        <Input
-          id="adjunto"
-          type="file"
+      <FormField label="Archivo de la edición" htmlFor="adjuntoUrl-file">
+        <FileOrLinkField
+          name="adjuntoUrl"
+          value={adjuntoUrl}
+          onChange={setAdjuntoUrl}
           accept=".pdf,.doc,.docx,image/*"
-          onChange={onFilePick}
+          uploadLabel="Subir archivo (PDF)"
+          linkPlaceholder="https://mailchi.mp/…"
+          hint="Subí la edición ya enviada (el PDF exportado desde Mailchimp/emBlue) o pegá el link público de la campaña. Los socios la abren desde el archivo."
         />
-        {/* Carries the mocked/real upload URL into the submitted form data. */}
-        <input type="hidden" name="adjuntoUrl" value={adjuntoUrl} />
-        {adjuntoUrl && (
-          <p className="mt-1.5 text-xs text-ink-muted">
-            Archivo actual: {adjuntoUrl}
-          </p>
-        )}
-        <p className="mt-1.5 text-xs text-ink-muted">
-          Subí la edición ya enviada (el PDF exportado desde Mailchimp/emBlue, o
-          el archivo que sea). Los socios la descargan desde el archivo.
-        </p>
       </FormField>
 
       <div className="grid grid-cols-2 gap-4">
@@ -96,7 +88,7 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
             name="fecha"
             type="date"
             required
-            defaultValue={newsletter?.fecha?.slice(0, 10)}
+            defaultValue={newsletter?.fecha?.slice(0, 10) ?? todayInBuenosAires()}
           />
         </FormField>
         <FormField label="Estado" htmlFor="status">

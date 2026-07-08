@@ -3,6 +3,9 @@
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select, Textarea } from "@/components/ui/field";
+import { FileOrLinkField } from "@/components/ui/file-or-link-field";
+import { useToast } from "@/components/ui/toast";
+import { todayInBuenosAires } from "@/lib/utils";
 import type { Informe } from "@/lib/types/domain";
 import { createInforme, updateInforme } from "./actions";
 
@@ -13,27 +16,25 @@ interface InformeFormProps {
 
 export function InformeForm({ informe, onDone }: InformeFormProps) {
   const [pending, startTransition] = useTransition();
-  // Mocked upload: picking a file just fills the archivoUrl with a fake path,
-  // simulating what Vercel Blob will return once wired up.
   const [archivoUrl, setArchivoUrl] = useState(informe?.archivoUrl ?? "");
+  const [portadaUrl, setPortadaUrl] = useState(informe?.portadaUrl ?? "");
+  const toast = useToast();
 
   const action = (formData: FormData) =>
     startTransition(async () => {
-      if (informe) {
-        await updateInforme(informe.id, formData);
-      } else {
-        await createInforme(formData);
+      try {
+        if (informe) {
+          await updateInforme(informe.id, formData);
+          toast.success("Informe actualizado.");
+        } else {
+          await createInforme(formData);
+          toast.success("Informe creado.");
+        }
+        onDone();
+      } catch {
+        toast.error("No se pudo guardar el informe. Intentá de nuevo.");
       }
-      onDone();
     });
-
-  const onFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // In production this URL comes from the Blob upload response.
-      setArchivoUrl(`/mock/${file.name}`);
-    }
-  };
 
   return (
     <form action={action} className="space-y-4">
@@ -53,6 +54,7 @@ export function InformeForm({ informe, onDone }: InformeFormProps) {
           name="descripcion"
           required
           defaultValue={informe?.descripcion}
+          placeholder="Qué contiene el informe y a qué período corresponde."
         />
       </FormField>
 
@@ -72,31 +74,30 @@ export function InformeForm({ informe, onDone }: InformeFormProps) {
             name="fecha"
             type="date"
             required
-            defaultValue={informe?.fecha?.slice(0, 10)}
+            defaultValue={informe?.fecha?.slice(0, 10) ?? todayInBuenosAires()}
           />
         </FormField>
       </div>
 
-      <FormField label="Archivo PDF" htmlFor="archivo">
-        <Input id="archivo" type="file" accept=".pdf" onChange={onFilePick} />
-        {/* Carries the mocked/real URL into the submitted form data. */}
-        <input type="hidden" name="archivoUrl" value={archivoUrl} />
-        {archivoUrl && (
-          <p className="mt-1.5 text-xs text-ink-muted">
-            Archivo actual: {archivoUrl}
-          </p>
-        )}
+      <FormField label="Archivo PDF" htmlFor="archivoUrl-file">
+        <FileOrLinkField
+          name="archivoUrl"
+          value={archivoUrl}
+          onChange={setArchivoUrl}
+          accept=".pdf"
+          uploadLabel="Subir PDF"
+          linkPlaceholder="https://ejemplo.com/informe.pdf"
+        />
       </FormField>
 
-      <FormField
-        label="Imagen de portada (URL, opcional)"
-        htmlFor="portadaUrl"
-      >
-        <Input
-          id="portadaUrl"
+      <FormField label="Imagen de portada (opcional)" htmlFor="portadaUrl-file">
+        <FileOrLinkField
           name="portadaUrl"
-          defaultValue={informe?.portadaUrl}
-          placeholder="/assets/banners/banner-2.webp"
+          value={portadaUrl}
+          onChange={setPortadaUrl}
+          accept="image/*"
+          uploadLabel="Subir imagen de portada"
+          linkPlaceholder="https://ejemplo.com/portada.jpg"
         />
       </FormField>
 
