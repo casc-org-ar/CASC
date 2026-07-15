@@ -1,11 +1,17 @@
 "use client";
 
+import { Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const fieldClass =
+  "min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15";
+
+const labelClass = "mb-2 block text-sm font-semibold text-ink";
+
 /**
  * Associate request form. Content parity phase: reproduces the original
- * Livewire form fields (Sector, Empresa, Contacto, Cargo, Teléfono, Email,
- * Mensaje). Submission is NOT wired yet — the original posted to a PHP/Livewire
- * backend that is out of scope for the content-parity phase. The submit handler
- * is a placeholder pending backend integration.
+ * Livewire form fields. Submission is NOT wired yet — the original posted to a
+ * PHP/Livewire backend that is out of scope for the content-parity phase.
  */
 export function AssociateForm() {
   return (
@@ -17,68 +23,73 @@ export function AssociateForm() {
       }}
     >
       <div>
-        <label htmlFor="sector" className="mb-1 block text-sm font-medium text-ink">
+        <label htmlFor="sector" className={labelClass}>
           Sector <span className="text-accent">*</span>
         </label>
-        <input
+        <select
           id="sector"
           name="sector"
           required
-          className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-        />
+          defaultValue=""
+          className={fieldClass}
+        >
+          <option value="" disabled>
+            Seleccionar
+          </option>
+          <option value="shopping-center">Shopping center</option>
+          <option value="proveedor-de-servicio">Proveedor de servicio</option>
+          <option value="retailer">Retailer</option>
+        </select>
       </div>
 
       <div>
-        <label htmlFor="empresa" className="mb-1 block text-sm font-medium text-ink">
-          Empresa <span className="text-accent">*</span>
+        <label htmlFor="empresa" className={labelClass}>
+          Empresa (Nombre Fantasía) / Razón Social{" "}
+          <span className="text-accent">*</span>
         </label>
         <input
           id="empresa"
           name="empresa"
           required
-          className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          className={fieldClass}
         />
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="contacto" className="mb-1 block text-sm font-medium text-ink">
-            Contacto <span className="text-accent">*</span>
+          <label htmlFor="contacto" className={labelClass}>
+            Nombre y apellido del contacto
           </label>
           <input
             id="contacto"
             name="contacto"
-            required
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className={fieldClass}
           />
         </div>
         <div>
-          <label htmlFor="cargo" className="mb-1 block text-sm font-medium text-ink">
+          <label htmlFor="cargo" className={labelClass}>
             Cargo
           </label>
-          <input
-            id="cargo"
-            name="cargo"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          />
+          <input id="cargo" name="cargo" className={fieldClass} />
         </div>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="telefono" className="mb-1 block text-sm font-medium text-ink">
-            Teléfono
+          <label htmlFor="telefono" className={labelClass}>
+            Telefono de contacto <span className="text-accent">*</span>
           </label>
           <input
             id="telefono"
             name="telefono"
             type="tel"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            required
+            className={fieldClass}
           />
         </div>
         <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-medium text-ink">
-            Email <span className="text-accent">*</span>
+          <label htmlFor="email" className={labelClass}>
+            Email de contacto <span className="text-accent">*</span>
           </label>
           <input
             id="email"
@@ -86,30 +97,61 @@ export function AssociateForm() {
             type="email"
             required
             placeholder="Ingresar correo electrónico"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className={fieldClass}
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="mensaje" className="mb-1 block text-sm font-medium text-ink">
-          Mensaje
+        <fieldset>
+          <legend className={labelClass}>
+            Deseo recibir más información para asociarme{" "}
+            <span className="text-accent">*</span>
+          </legend>
+          <div className="flex flex-wrap gap-3">
+            {[
+              { label: "Si", value: "si" },
+              { label: "No", value: "no" },
+            ].map((option) => (
+              <label
+                key={option.value}
+                className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border bg-bg px-4 text-sm text-ink transition-colors hover:border-accent/60"
+              >
+                <input
+                  type="radio"
+                  name="info"
+                  value={option.value}
+                  required
+                  className="h-4 w-4 accent-primary"
+                />
+                {option.label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      </div>
+
+      <div>
+        <label htmlFor="mensaje" className={labelClass}>
+          Comentario o mensaje
         </label>
         <textarea
           id="mensaje"
           name="mensaje"
           rows={4}
           placeholder="Escribir..."
-          className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"
         />
       </div>
 
-      <button
+      <Button
         type="submit"
-        className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
+        size="lg"
+        className="w-full sm:w-auto"
       >
-        Enviar solicitud
-      </button>
+        Enviar
+        <Send className="h-4 w-4" strokeWidth={1.8} aria-hidden />
+      </Button>
     </form>
   );
 }

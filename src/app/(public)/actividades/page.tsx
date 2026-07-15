@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/public/page-hero";
 import { JoinCta } from "@/components/public/join-cta";
+import {
+  ContentCarousel,
+  type ContentCarouselItem,
+} from "@/components/public/content-carousel";
+import { EmptyState } from "@/components/shared/empty-state";
+import { actividades2025, capacitaciones } from "@/lib/data/home-content";
+import { getDataLayer } from "@/lib/data";
+import { onlyPublished } from "@/lib/data/published";
 
 /**
  * Actividades — migrated from actividades.html.
  *
- * The original page is entirely blog-driven: its content is the "Actividades
- * 2026 / 2025" event carousels sourced from articulos/actividades/*. That is
- * dynamic blog content wired from the internal panel in Etapa 3. The page
- * structure is reproduced here; the event grids are TODO for Etapa 3 — no
- * fabricated events are added.
+ * Content comes from real migrated activities and published BlogPosts from
+ * the internal DataLayer. Drafts stay hidden through onlyPublished().
  */
 
 export const metadata: Metadata = {
@@ -18,26 +23,76 @@ export const metadata: Metadata = {
     "Capacitaciones y eventos de la Cámara Argentina de Shopping Centers.",
 };
 
-export default function ActividadesPage() {
+const heroDescription =
+  "Desarrollamos una agenda capacitaciones y eventos orientada a promover el intercambio de conocimientos, la actualización profesional y el fortalecimiento de la industria de los Centros Comerciales en Argentina.";
+
+function formatDate(value: string): string {
+  return new Intl.DateTimeFormat("es-AR", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(value));
+}
+
+export default async function ActividadesPage() {
+  const blogPosts = onlyPublished(await getDataLayer().blog.list()).sort(
+    (a, b) => (a.fecha < b.fecha ? 1 : -1),
+  );
+
+  const activityItems: ContentCarouselItem[] = capacitaciones.map(
+    (item, index) => ({
+      id: `actividad-${index + 1}`,
+      title: item.titulo,
+      description: item.descripcion,
+      image: item.imagen,
+      eyebrow: "Actividad",
+    }),
+  );
+
+  const activity2025Items: ContentCarouselItem[] = actividades2025.map(
+    (item, index) => ({
+      id: `actividad-2025-${index + 1}`,
+      title: item.titulo,
+      description: item.descripcion,
+      image: item.imagen,
+      imageFit: "contain",
+      eyebrow: "Actividad 2025",
+    }),
+  );
+
+  const newsItems: ContentCarouselItem[] = blogPosts.map((post) => ({
+    id: post.slug,
+    title: post.titulo,
+    description: post.bajada,
+    image: post.portadaUrl,
+    eyebrow: "Noticia",
+    dateLabel: formatDate(post.fecha),
+  }));
+
   return (
     <>
-      <PageHero title="Capacitaciones y eventos" />
+      <PageHero title="Capacitaciones y eventos" subtitle={heroDescription} />
 
-      {/* Actividades 2026 — Etapa 3 (blog desde el panel) */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <h2 className="mb-8 text-3xl font-extrabold tracking-tight text-ink">
-          Actividades 2026
-        </h2>
-        {/* TODO Etapa 3: carrusel de actividades 2026 alimentado desde el panel. */}
+        <ContentCarousel title="Actividades 2026" items={activityItems} />
       </section>
 
-      {/* Actividades 2025 — Etapa 3 (blog desde el panel) */}
       <section className="border-t border-border bg-surface">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <h2 className="mb-8 text-3xl font-extrabold tracking-tight text-ink">
-            Actividades 2025
-          </h2>
-          {/* TODO Etapa 3: carrusel de actividades 2025 alimentado desde el panel. */}
+          <ContentCarousel title="Actividades 2025" items={activity2025Items} />
+        </div>
+      </section>
+
+      <section className="border-t border-border">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          {newsItems.length > 0 ? (
+            <ContentCarousel
+              title="Noticias y tendencias del sector"
+              items={newsItems}
+            />
+          ) : (
+            <EmptyState message="Pronto vas a encontrar acá las últimas noticias del sector." />
+          )}
         </div>
       </section>
 

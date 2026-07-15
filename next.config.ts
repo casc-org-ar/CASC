@@ -24,23 +24,41 @@ const legacyRedirects = [
   { from: "/login.html", to: "/login" },
 ];
 
+const associateCategoryRedirects = [
+  {
+    from: "/asociados/shopping-centers",
+    to: "/asociados?categoria=shopping-centers#directorio",
+  },
+  {
+    from: "/asociados/retailers",
+    to: "/asociados?categoria=retailers#directorio",
+  },
+  {
+    from: "/asociados/proveedores-de-servicios",
+    to: "/asociados?categoria=proveedores-de-servicios#directorio",
+  },
+];
+
 const nextConfig: NextConfig = {
   async redirects() {
     return [
-      // Prototype deploy: the public site is not ready to be shown yet, so the
-      // root lands on the internal platform login. Remove this once the public
-      // site is finalized (Etapa 2). Redirects run before the filesystem, so
-      // the migrated public home stays reachable only by direct URL.
-      {
-        source: "/",
-        destination: "/login",
-        permanent: false,
-      },
       ...legacyRedirects.map((r) => ({
         source: r.from,
         destination: r.to,
         permanent: true,
       })),
+      ...associateCategoryRedirects.flatMap((r) => [
+        {
+          source: r.from,
+          destination: r.to,
+          permanent: true,
+        },
+        {
+          source: `${r.from}.html`,
+          destination: r.to,
+          permanent: true,
+        },
+      ]),
       // Associate fichas: /asociados/<slug>.html -> /asociados/<slug>
       {
         source: "/asociados/:slug.html",

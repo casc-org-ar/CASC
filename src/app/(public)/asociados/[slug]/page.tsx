@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { PageHero } from "@/components/public/page-hero";
 import { JoinCta } from "@/components/public/join-cta";
+import { ButtonAnchor } from "@/components/ui/button";
 import { asociados, getAsociadoBySlug } from "@/lib/data/asociados";
 
 /**
@@ -58,7 +59,7 @@ export default async function AsociadoFichaPage({
     <>
       <PageHero title={asociado.name} subtitle={asociado.category} />
 
-      <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <Link
           href="/asociados"
           className="mb-8 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
@@ -67,16 +68,16 @@ export default async function AsociadoFichaPage({
           Volver al directorio
         </Link>
 
-        <div className="grid gap-10 md:grid-cols-[200px_1fr]">
+        <div className="grid gap-10 md:grid-cols-[280px_1fr] lg:gap-16">
           {/* Logo */}
-          <div className="flex items-start justify-center">
+          <div className="flex items-start justify-center md:sticky md:top-24 md:self-start">
             {asociado.logo ? (
               <Image
                 src={asociado.logo}
                 alt={asociado.name}
-                width={200}
-                height={120}
-                className="w-full max-w-[200px] object-contain"
+                width={280}
+                height={168}
+                className="w-full max-w-70 object-contain"
               />
             ) : (
               <span className="text-5xl font-bold text-accent">
@@ -115,15 +116,15 @@ export default async function AsociadoFichaPage({
             </dl>
 
             {webHref && (
-              <a
+              <ButtonAnchor
                 href={webHref}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-6 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
+                className="mt-6"
               >
                 Visitar sitio web
                 <ExternalLink className="h-4 w-4" aria-hidden />
-              </a>
+              </ButtonAnchor>
             )}
           </div>
         </div>

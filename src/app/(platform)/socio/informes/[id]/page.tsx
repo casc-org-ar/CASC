@@ -1,6 +1,7 @@
 import { ArrowLeft, FileDown } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ButtonAnchor } from "@/components/ui/button";
 import { getDataLayer } from "@/lib/data";
 
 /** Individual informe page: embedded PDF viewer + download (published only). */
@@ -36,14 +37,13 @@ export default async function InformeDetailPage({
             {new Date(informe.fecha).toLocaleDateString("es-AR")}
           </p>
         </div>
-        <a
+        <ButtonAnchor
           href={informe.archivoUrl}
           download
-          className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
         >
           <FileDown className="h-4 w-4" />
           Descargar PDF
-        </a>
+        </ButtonAnchor>
       </div>
 
       <p className="mt-4 text-base leading-relaxed text-ink">

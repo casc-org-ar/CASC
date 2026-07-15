@@ -127,6 +127,35 @@ button:disabled,
   }
 }
 
+@keyframes casc-card-shine {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0.08;
+  }
+  45% {
+    opacity: 0.32;
+  }
+  100% {
+    background-position: 100% 50%;
+    opacity: 0.08;
+  }
+}
+
+@keyframes casc-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.75rem);
+  }
+}
+
+/* Slow vertical drift for hero/showcase imagery. Gated by reduced-motion. */
+.animate-float {
+  animation: casc-float 6s ease-in-out infinite;
+}
+
 /* Fades content in on mount; the -up variant adds a small rise. */
 .animate-fade-in {
   animation: casc-fade-in 0.3s ease-out both;
@@ -166,11 +195,163 @@ button:disabled,
 }
 
 /**
+ * Logo marquee — continuous horizontal scroll for the associated Shopping
+ * Centers strip. The track renders the list twice; translating by -50% loops
+ * seamlessly. Gated by prefers-reduced-motion below.
+ */
+@keyframes casc-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: casc-marquee 80s linear infinite;
+}
+
+/**
+ * Layered card effect â€” the card sibling of the button/icon-frame language.
+ * It keeps the institutional look restrained: subtle depth, inset highlights
+ * and a soft shine pass that is disabled by prefers-reduced-motion below.
+ */
+.card-depth {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  box-shadow:
+    6px 6px 12px rgba(11, 37, 53, 0.08),
+    -6px -6px 12px rgba(255, 255, 255, 0.65),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.62),
+    inset -1px -1px 3px rgba(11, 37, 53, 0.08);
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.card-depth::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.42),
+    transparent 70%
+  );
+  background-size: 220% 220%;
+  animation: casc-card-shine 4.8s ease-in-out infinite;
+}
+.card-depth > * {
+  position: relative;
+  z-index: 1;
+}
+.card-depth:hover {
+  transform: translateY(-0.125rem);
+  box-shadow:
+    8px 8px 16px rgba(11, 37, 53, 0.1),
+    -8px -8px 16px rgba(255, 255, 255, 0.72),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.7),
+    inset -1px -1px 3px rgba(11, 37, 53, 0.1);
+}
+
+/**
+ * Estatuto document — a long static legal text (CAPÍTULOS + Artículos, marked
+ * up with <b>/<br>). These rules add reading rhythm without touching the text:
+ * comfortable line height, spaced paragraphs, and emphasized headings.
+ */
+.estatuto-body {
+  line-height: 1.8;
+  text-align: justify;
+  hyphens: auto;
+}
+.estatuto-body p {
+  margin-bottom: 1.25rem;
+}
+.estatuto-body b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* Chapter headings lifted out of the legacy markup by parse-estatuto.ts. */
+.estatuto-chapter {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-align: left;
+}
+/*
+ * The first chapter opens the document, so it needs no separator or top space.
+ * The legacy HTML starts with an empty <p>, so match the first chapter rather
+ * than relying on :first-child.
+ */
+.estatuto-chapter:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+.estatuto-chapter-sub {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+.estatuto-body br {
+  content: "";
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.estatuto-body a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/**
+ * Print / Save-as-PDF: strip the app chrome so only the document prints.
+ * The page hides header/footer/toolbar with `print:hidden`; here we reset
+ * page margins and colors for a clean paper document.
+ */
+@media print {
+  header,
+  footer {
+    display: none !important;
+  }
+  main {
+    padding-top: 0 !important;
+  }
+  .estatuto-body {
+    max-width: none;
+    color: #000;
+    font-size: 11pt;
+  }
+}
+
+/**
+ * Smooth anchor navigation (e.g. the Estatuto chapter index). Overridden by
+ * the reduce-motion block below for users who ask for stillness.
+ */
+html {
+  scroll-behavior: smooth;
+}
+
+/**
  * Accessibility: honor the OS "reduce motion" setting. Collapse every
  * animation and transition to near-instant so the interface is still and
  * comfortable for users who are motion-sensitive. This is non-negotiable.
  */
 @media (prefers-reduced-motion: reduce) {
+  html,
   *,
   *::before,
   *::after {

@@ -465,7 +465,7 @@ export const asociados: Asociado[] = [
   },
   {
     "slug": "mcdonalds",
-    "name": "McDonald&#039;s",
+    "name": "McDonald's",
     "category": "Retailers",
     "logo": "/assets/asociados/logos/mcdonalds.webp",
     "web": "www.mcdonalds.com.ar",

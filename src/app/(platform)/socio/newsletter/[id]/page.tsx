@@ -1,6 +1,7 @@
 import { ArrowLeft, ExternalLink, FileDown } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ButtonAnchor } from "@/components/ui/button";
 import { getDataLayer } from "@/lib/data";
 
 /**
@@ -67,12 +68,11 @@ export default async function NewsletterDetailPage({
                 <p className="mb-3 text-sm text-ink-muted">
                   Accedé a la edición completa tal como fue enviada:
                 </p>
-                <a
+                <ButtonAnchor
                   href={edicion.adjuntoUrl}
                   {...(esPdf
                     ? { download: true }
                     : { target: "_blank", rel: "noreferrer" })}
-                  className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
                 >
                   {esPdf ? (
                     <>
@@ -85,7 +85,7 @@ export default async function NewsletterDetailPage({
                       Ver edición completa
                     </>
                   )}
-                </a>
+                </ButtonAnchor>
               </div>
             );
           })()}

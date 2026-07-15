@@ -29,31 +29,81 @@ export const mainNav: NavItem[] = [
     label: "Nosotros",
     children: [
       { label: "Sobre la Cámara", href: "/nosotros" },
-      { label: "Datos del sector", href: "/datos-del-sector" },
-      { label: "Comisión Directiva", href: "/comision-directiva" },
       { label: "Estatuto", href: "/estatuto" },
+      { label: "Comisión Directiva", href: "/comision-directiva" },
+      { label: "Datos del sector", href: "/datos-del-sector" },
       { label: "Delegaciones Regionales", href: "/delegaciones-regionales" },
-      { label: "Staff", href: "/comision-directiva#staff" },
     ],
   },
   {
     label: "Asociados",
     children: [
-      { label: "Shopping Center", href: "/delegaciones-regionales" },
-      { label: "Retailers", href: "/asociados/retailers" },
-      { label: "Proveedores de servicios", href: "/asociados/proveedores-de-servicios" },
+      {
+        label: "Shopping Centers",
+        href: "/asociados?categoria=shopping-centers#directorio",
+      },
+      {
+        label: "Retailers",
+        href: "/asociados?categoria=retailers#directorio",
+      },
+      {
+        label: "Proveedores de servicios",
+        href: "/asociados?categoria=proveedores-de-servicios#directorio",
+      },
     ],
   },
   { label: "Actividades", href: "/actividades" },
   { label: "Beneficios", href: "/beneficios" },
   { label: "Contacto", href: "/contacto" },
-  { label: "Asociarse", href: "/como-asociarse" },
+];
+
+/** Footer column groups for the public site footer. */
+export const footerColumns: NavGroup[] = [
+  {
+    label: "Institucional",
+    children: [
+      { label: "Sobre la Cámara", href: "/nosotros" },
+      { label: "Estatuto", href: "/estatuto" },
+      { label: "Comisión Directiva", href: "/comision-directiva" },
+      { label: "Datos del sector", href: "/datos-del-sector" },
+      { label: "Delegaciones Regionales", href: "/delegaciones-regionales" },
+    ],
+  },
+  {
+    label: "Asociados",
+    children: [
+      {
+        label: "Shopping Centers",
+        href: "/asociados?categoria=shopping-centers#directorio",
+      },
+      {
+        label: "Retailers",
+        href: "/asociados?categoria=retailers#directorio",
+      },
+      {
+        label: "Proveedores de servicios",
+        href: "/asociados?categoria=proveedores-de-servicios#directorio",
+      },
+      { label: "Beneficios", href: "/beneficios" },
+      { label: "Cómo asociarse", href: "/como-asociarse" },
+      { label: "Acceso al panel", href: "/login" },
+    ],
+  },
+  {
+    label: "Secciones",
+    children: [
+      { label: "Actividades", href: "/actividades" },
+      { label: "Bolsa de trabajo", href: "/bolsa-de-trabajo" },
+      { label: "Contacto", href: "/contacto" },
+    ],
+  },
 ];
 
 /** Footer legal links. */
 export const legalNav: NavLink[] = [
   { label: "Términos y condiciones", href: "/terminos-y-condiciones" },
   { label: "Políticas de privacidad", href: "/politicas-de-privacidad" },
+  { label: "Política de cookies", href: "/politica-de-cookies" },
 ];
 
 /** Institutional contact data (verbatim from the original site). */

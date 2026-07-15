@@ -25,7 +25,6 @@ export const webinars: Webinar[] = [
       "Análisis del comportamiento del consumidor argentino y proyecciones para el sector shopping.",
     fecha: iso(2026, 5, 20),
     videoUrl: "https://www.youtube.com/embed/_O6MYU4vgQQ",
-    portadaUrl: "/assets/banners/banner-1.webp",
     categoria: "Retail",
     materialAdjuntoUrl: "/mock/tendencias-2026.pdf",
     status: "publicado",
@@ -66,7 +65,6 @@ export const informes: Informe[] = [
       "Datos consolidados de tráfico peatonal en centros comerciales asociados.",
     categoria: "Estadísticas",
     archivoUrl: "/mock/afluencia-2025.pdf",
-    portadaUrl: "/assets/banners/banner-2.webp",
     fecha: iso(2026, 2, 15),
     status: "publicado",
     createdAt: iso(2026, 2, 15),
@@ -106,7 +104,6 @@ export const noticias: Noticia[] = [
       "El convenio busca simplificar trámites para los centros comerciales asociados.",
     cuerpo:
       "La Cámara Argentina de Shopping Centers anunció la firma de un acuerdo de colaboración con la Secretaría de Comercio de la Nación. El objetivo es agilizar procesos administrativos y establecer canales de diálogo directo entre el sector y el organismo.",
-    imagenUrl: "/assets/banners/banner-3.webp",
     categoria: "Institucional",
     fecha: iso(2026, 6, 28),
     status: "publicado",
@@ -157,18 +154,22 @@ export const newsletters: Newsletter[] = [
   },
 ];
 
+/**
+ * Blog posts migrated verbatim from the original CASC site (Noticias y
+ * tendencias del sector). Bodies are placeholders until the real article text
+ * is available; titles, summaries and cover images are the real ones.
+ */
 export const blogPosts: BlogPost[] = [
   {
     id: "blog-1",
-    titulo: "El futuro del retail experiencial en Argentina",
-    slug: "futuro-retail-experiencial-argentina",
-    bajada:
-      "Cómo los centros comerciales se transforman en espacios de experiencia más allá de la compra.",
+    titulo: "Más servicios y una mirada federal: la misión institucional de la CASC",
+    slug: "mas-servicios-mirada-federal-mision-institucional",
+    bajada: "Una Cámara enfocada en generar valor para sus asociados y para la industria.",
     cuerpo:
-      "Los shopping centers dejaron de ser meros puntos de venta. Hoy compiten por el tiempo y la atención de las personas ofreciendo gastronomía, entretenimiento y espacios de encuentro.\n\nEn este artículo repasamos las tendencias que están redefiniendo el rol del centro comercial en la vida urbana argentina.",
-    portadaUrl: "/mock/blog-retail.jpg",
+      "Una Cámara enfocada en generar valor para sus asociados y para la industria.",
+    portadaUrl: "/assets/blog/mas-servicios.webp",
     autor: "Equipo CASC",
-    tags: ["retail", "tendencias", "experiencia"],
+    tags: ["institucional"],
     fecha: iso(2026, 6, 15),
     status: "publicado",
     createdAt: iso(2026, 6, 15),
@@ -176,18 +177,35 @@ export const blogPosts: BlogPost[] = [
   },
   {
     id: "blog-2",
-    titulo: "Sustentabilidad: el nuevo estándar del sector",
-    slug: "sustentabilidad-nuevo-estandar-sector",
+    titulo: "Los principales desafíos de la industria de los Shopping Centers hacia el futuro",
+    slug: "principales-desafios-industria-shopping-centers-futuro",
     bajada:
-      "La eficiencia energética dejó de ser opcional para los centros comerciales.",
+      "Gestión, servicios, federalización y trabajo conjunto como ejes de crecimiento.",
     cuerpo:
-      "Cada vez más shoppings incorporan paneles solares, gestión inteligente de residuos y certificaciones ambientales.\n\nAnalizamos casos concretos y el impacto de estas medidas en la operación y en la percepción de marca.",
+      "Gestión, servicios, federalización y trabajo conjunto como ejes de crecimiento.",
+    portadaUrl: "/assets/blog/los-principales-desafios.webp",
     autor: "Equipo CASC",
-    tags: ["sustentabilidad", "energía"],
-    fecha: iso(2026, 5, 28),
-    status: "borrador",
-    createdAt: iso(2026, 5, 28),
-    updatedAt: iso(2026, 5, 28),
+    tags: ["industria", "tendencias"],
+    fecha: iso(2026, 6, 10),
+    status: "publicado",
+    createdAt: iso(2026, 6, 10),
+    updatedAt: iso(2026, 6, 10),
+  },
+  {
+    id: "blog-3",
+    titulo: "El rol de los Centros Comerciales en el desarrollo económico de Argentina",
+    slug: "rol-centros-comerciales-desarrollo-economico-argentina",
+    bajada:
+      "Una mirada federal sobre la industria de los Centros Comerciales y su impacto en el país.",
+    cuerpo:
+      "Una mirada federal sobre la industria de los Centros Comerciales y su impacto en el país.",
+    portadaUrl: "/assets/blog/rol-de-los-centros-comerciales.webp",
+    autor: "Equipo CASC",
+    tags: ["economía", "federal"],
+    fecha: iso(2026, 6, 5),
+    status: "publicado",
+    createdAt: iso(2026, 6, 5),
+    updatedAt: iso(2026, 6, 5),
   },
 ];
 

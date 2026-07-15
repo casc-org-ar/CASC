@@ -10,14 +10,14 @@ export function PageHero({
   subtitle?: string;
 }) {
   return (
-    <section className="border-b border-border bg-surface">
+    <section className="bg-casc-navy-900">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold tracking-tight text-ink">
+        <h1 className="text-4xl font-extrabold tracking-tight text-white">
           <span className="text-accent">[</span> {title}{" "}
           <span className="text-accent">]</span>
         </h1>
         {subtitle && (
-          <p className="mt-3 max-w-3xl text-lg font-light text-ink-muted">
+          <p className="mt-3 max-w-3xl text-lg font-light text-white/80">
             {subtitle}
           </p>
         )}

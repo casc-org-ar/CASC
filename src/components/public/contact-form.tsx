@@ -1,9 +1,13 @@
 "use client";
 
+import { Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 /**
  * Contact form. Content parity phase: reproduces the original Livewire form
- * fields (Nombre, Empresa, Email, Mensaje). Submission is NOT wired yet — the
- * original posted to a PHP/Livewire backend, out of scope for content parity.
+ * fields (Nombre y Apellido, Empresa, Correo electrónico, Mensaje).
+ * Submission is NOT wired yet — the original posted to a PHP/Livewire backend,
+ * out of scope for content parity.
  */
 export function ContactForm() {
   return (
@@ -16,31 +20,40 @@ export function ContactForm() {
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="mb-1 block text-sm font-medium text-ink">
-            Nombre <span className="text-accent">*</span>
+          <label
+            htmlFor="name"
+            className="mb-2 block text-sm font-semibold text-ink"
+          >
+            Nombre y Apellido <span className="text-accent">*</span>
           </label>
           <input
             id="name"
             name="name"
             required
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
         </div>
         <div>
-          <label htmlFor="empresa" className="mb-1 block text-sm font-medium text-ink">
+          <label
+            htmlFor="empresa"
+            className="mb-2 block text-sm font-semibold text-ink"
+          >
             Empresa
           </label>
           <input
             id="empresa"
             name="empresa"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium text-ink">
-          Email <span className="text-accent">*</span>
+        <label
+          htmlFor="email"
+          className="mb-2 block text-sm font-semibold text-ink"
+        >
+          Correo electrónico <span className="text-accent">*</span>
         </label>
         <input
           id="email"
@@ -48,12 +61,15 @@ export function ContactForm() {
           type="email"
           required
           placeholder="Ingresar correo electrónico"
-          className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          className="min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"
         />
       </div>
 
       <div>
-        <label htmlFor="mensaje" className="mb-1 block text-sm font-medium text-ink">
+        <label
+          htmlFor="mensaje"
+          className="mb-2 block text-sm font-semibold text-ink"
+        >
           Mensaje <span className="text-accent">*</span>
         </label>
         <textarea
@@ -62,16 +78,18 @@ export function ContactForm() {
           rows={5}
           required
           placeholder="Escribir..."
-          className="w-full rounded-md border border-border bg-bg px-3 py-2 text-ink focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"
         />
       </div>
 
-      <button
+      <Button
         type="submit"
-        className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
+        size="lg"
+        className="w-full sm:w-auto"
       >
-        Enviar mensaje
-      </button>
+        Enviar
+        <Send className="h-4 w-4" strokeWidth={1.8} aria-hidden />
+      </Button>
     </form>
   );
 }

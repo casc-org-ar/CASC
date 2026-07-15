@@ -2,6 +2,7 @@ import { ArrowLeft, FileDown } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { ButtonAnchor } from "@/components/ui/button";
 import { getDataLayer } from "@/lib/data";
 
 /** Individual webinar page: embedded player + attached material (published only). */
@@ -50,14 +51,15 @@ export default async function WebinarDetailPage({
       </p>
 
       {webinar.materialAdjuntoUrl && (
-        <a
+        <ButtonAnchor
           href={webinar.materialAdjuntoUrl}
           download
-          className="mt-4 inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-surface"
+          variant="secondary"
+          className="mt-4"
         >
           <FileDown className="h-4 w-4 text-primary" />
           Descargar material adjunto
-        </a>
+        </ButtonAnchor>
       )}
     </div>
   );

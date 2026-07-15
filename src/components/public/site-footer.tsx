@@ -1,6 +1,9 @@
+﻿import Image from "next/image";
 import Link from "next/link";
-import { Mail, MapPin } from "lucide-react";
-import { contactInfo, legalNav, socialLinks } from "./nav-data";
+import { Mail, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { IconFrame } from "@/components/ui/icon-frame";
+import { contactInfo, footerColumns, legalNav, socialLinks } from "./nav-data";
 
 /**
  * Brand icons (LinkedIn, Instagram). lucide-react dropped brand logos over
@@ -34,118 +37,166 @@ function InstagramIcon({ className }: { className?: string }) {
   );
 }
 
+const footerDescription =
+  "La Cámara Argentina de Shopping Centers es una entidad sin fines de lucro que desde hace más de 35 años representa, conecta y acompaña a los centros comerciales del país.";
+
 /**
- * Public site footer. Content parity phase: reproduces the original CASC
- * footer — contact data, social links, legal links and copyright — verbatim.
+ * Public site footer. Uses real CASC navigation, social links, legal links and
+ * the legacy newsletter subscription labels.
  */
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-surface">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-8 md:grid-cols-3">
-          {/* Brand + email */}
-          <div>
-            <Link href="/" className="text-lg font-bold tracking-tight text-ink">
-              <span className="text-accent">[</span>
-              CASC
-              <span className="text-accent">]</span>
-            </Link>
-            <p className="mt-3 text-sm text-ink-muted">
-              Cámara Argentina de Shopping Centers
-            </p>
-            <a
-              href={`mailto:${contactInfo.email}`}
-              className="mt-3 inline-flex items-center gap-2 text-sm text-ink transition-colors hover:text-primary"
-            >
-              <Mail className="h-4 w-4" aria-hidden />
-              {contactInfo.email}
-            </a>
-          </div>
+    <footer className="border-t border-border bg-white print:hidden">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="border-b border-border pb-10">
+          <Link
+            href="/"
+            aria-label="CASC — Inicio"
+            className="-mb-4 inline-flex"
+          >
+            <Image
+              src="/assets/brand/casc-logo.webp"
+              alt="Cámara Argentina de Shopping Centers"
+              width={312}
+              height={104}
+              className="h-20 w-auto sm:h-[6.5rem]"
+            />
+          </Link>
 
-          {/* Addresses */}
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-sm font-bold text-ink">Domicilio comercial</h3>
-              <p className="mt-1 text-sm text-ink-muted">
-                {contactInfo.commercialAddress}
+          <div className="grid gap-8 lg:grid-cols-[1fr_0.95fr] lg:items-start">
+            <div className="max-w-xl">
+              <p className="mt-4 max-w-lg text-sm leading-6 text-ink-muted">
+                {footerDescription}
               </p>
-              <a
-                href={contactInfo.commercialMap}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-1 inline-flex items-center gap-1 text-sm text-primary hover:underline"
-              >
-                <MapPin className="h-4 w-4" aria-hidden />
-                Ver mapa
-              </a>
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-ink">Domicilio legal</h3>
-              <p className="mt-1 text-sm text-ink-muted">
-                {contactInfo.legalAddress}
-              </p>
-              <a
-                href={contactInfo.legalMap}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-1 inline-flex items-center gap-1 text-sm text-primary hover:underline"
-              >
-                <MapPin className="h-4 w-4" aria-hidden />
-                Ver mapa
-              </a>
-            </div>
-          </div>
 
-          {/* Legal + social */}
-          <div className="space-y-4">
-            <ul className="space-y-2">
-              {legalNav.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-ink-muted transition-colors hover:text-ink hover:underline"
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <a
+                  href={socialLinks.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="LinkedIn de CASC"
+                  className="group inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                >
+                  <IconFrame
+                    size="sm"
+                    variant="secondary"
+                    contentClassName="group-hover:text-primary"
                   >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="flex gap-3">
-              <a
-                href={socialLinks.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
-                className="text-ink-muted transition-colors hover:text-primary"
-              >
-                <LinkedinIcon className="h-5 w-5" />
-              </a>
-              <a
-                href={socialLinks.instagram}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-                className="text-ink-muted transition-colors hover:text-primary"
-              >
-                <InstagramIcon className="h-5 w-5" />
-              </a>
-              <a
-                href={`mailto:${contactInfo.email}`}
-                aria-label="Email"
-                className="text-ink-muted transition-colors hover:text-primary"
-              >
-                <Mail className="h-5 w-5" />
-              </a>
+                    <LinkedinIcon className="h-5 w-5" />
+                  </IconFrame>
+                </a>
+                <a
+                  href={socialLinks.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Instagram de CASC"
+                  className="group inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                >
+                  <IconFrame
+                    size="sm"
+                    variant="secondary"
+                    contentClassName="group-hover:text-primary"
+                  >
+                    <InstagramIcon className="h-5 w-5" />
+                  </IconFrame>
+                </a>
+                <a
+                  href={`mailto:${contactInfo.email}`}
+                  aria-label="Enviar email a CASC"
+                  className="group inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                >
+                  <IconFrame
+                    size="sm"
+                    variant="secondary"
+                    contentClassName="group-hover:text-primary"
+                  >
+                    <Mail className="h-5 w-5" strokeWidth={1.8} aria-hidden />
+                  </IconFrame>
+                </a>
+              </div>
+            </div>
+
+            <div className="card-depth rounded-xl border border-border bg-surface p-6">
+              <h2 className="text-xl font-extrabold tracking-tight text-ink">
+                Newsletter
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-ink-muted">
+                Recibí noticias y novedades de la Cámara en tu correo.
+              </p>
+
+              <form aria-label="Suscripción al newsletter" className="mt-5">
+                <label htmlFor="footer-newsletter-email" className="sr-only">
+                  Suscribirse
+                </label>
+                <div className="relative">
+                  <input
+                    id="footer-newsletter-email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="Ingresar correo electrónico"
+                    className="min-h-12 w-full rounded-[16px] border border-border bg-white px-4 pr-32 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="absolute bottom-1 right-1 top-1 min-w-24"
+                  >
+                    Enviar
+                    <Send className="h-4 w-4" strokeWidth={1.8} aria-hidden />
+                  </Button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 border-t border-border pt-6">
+        <nav
+          aria-label="Secciones del sitio"
+          className="grid gap-8 border-b border-border py-10 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {footerColumns.map((column) => (
+            <div key={column.label}>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-ink">
+                {column.label}
+              </h3>
+              <ul className="mt-4 space-y-2.5">
+                {column.children.map((link) => (
+                  <li key={`${column.label}-${link.label}`}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-ink-muted transition-colors hover:text-primary hover:underline"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+
+        <div className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-ink-muted">
-            © 2026 Cámara Argentina de Shopping Centers, All rights reserved.
+            © 2026 Cámara Argentina de Shopping Centers, Todos los derechos
+            reservados.
           </p>
+
+          <ul className="flex flex-wrap gap-x-5 gap-y-2 sm:justify-end">
+            {legalNav.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-xs text-ink-muted transition-colors hover:text-primary hover:underline"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </footer>
   );
 }
+

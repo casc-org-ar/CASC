@@ -12,10 +12,12 @@ export function CardCover({
   src,
   alt,
   className,
+  imageClassName,
 }: {
   src?: string;
   alt: string;
   className?: string;
+  imageClassName?: string;
 }) {
   return (
     <div
@@ -30,7 +32,10 @@ export function CardCover({
           alt={alt}
           fill
           sizes="(max-width: 768px) 100vw, 400px"
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className={cn(
+            "object-cover transition-transform duration-300 group-hover:scale-105",
+            imageClassName,
+          )}
         />
       ) : (
         <div className="flex h-full flex-col items-center justify-center gap-2 bg-casc-gray-100 text-ink-muted/60">

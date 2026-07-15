@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import Image from "next/image";
+import {
+  BriefcaseBusiness,
+  Building2,
+  Network,
+  ShieldCheck,
+  UserRound,
+  UsersRound,
+} from "lucide-react";
 import { PageHero } from "@/components/public/page-hero";
 import { JoinCta } from "@/components/public/join-cta";
+import { Card } from "@/components/ui/card";
+import { IconFrame } from "@/components/ui/icon-frame";
+import { cn } from "@/lib/utils";
 
 /**
  * Comisión Directiva — migrated verbatim from comision-directiva.html.
@@ -17,6 +30,10 @@ interface Member {
   name: string;
   org?: string;
   alternate?: string;
+  photo?: {
+    src: string;
+    alt: string;
+  };
 }
 
 const board: Member[] = [
@@ -50,20 +67,189 @@ const auditorsAlternate: Member[] = [
   { role: "Suplente", name: "María Laura Gregoriadis", org: "Else S.A." },
 ];
 
-function MemberCard({ member }: { member: Member }) {
+const president = board[0];
+const vicePresidents = board.filter((member) =>
+  member.role.startsWith("Vicepresidente"),
+);
+const executiveRoles = board.filter((member) =>
+  ["Secretario", "Tesorero"].includes(member.role),
+);
+const directors = board.filter((member) => member.role === "Vocal");
+
+type IconComponent = typeof UsersRound;
+
+function SectionHeading({
+  eyebrow,
+  title,
+  icon: Icon,
+}: {
+  eyebrow: string;
+  title: string;
+  icon: IconComponent;
+}) {
   return (
-    <div className="rounded-lg border border-border bg-bg p-5">
-      <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-        {member.role}
-      </p>
-      <p className="mt-1 font-bold text-ink">{member.name}</p>
-      {member.org && <p className="text-sm text-ink-muted">{member.org}</p>}
-      {member.alternate && (
-        <p className="mt-2 text-sm text-ink-muted">
-          {member.alternate} <span className="text-xs">(Suplente)</span>
+    <div className="flex items-center gap-3">
+      <IconFrame size="xl">
+        <Icon className="h-6 w-6" aria-hidden="true" />
+      </IconFrame>
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+          {eyebrow}
+        </p>
+        <h2 className="mt-1 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+          {title}
+        </h2>
+      </div>
+    </div>
+  );
+}
+
+function SectionHeader({
+  eyebrow,
+  title,
+  icon,
+  aside,
+}: {
+  eyebrow: string;
+  title: string;
+  icon: IconComponent;
+  aside?: ReactNode;
+}) {
+  return (
+    <div className="mb-7 flex flex-col gap-4 border-b border-border pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <SectionHeading eyebrow={eyebrow} title={title} icon={icon} />
+      {aside && (
+        <p className="text-sm font-medium text-ink-muted sm:text-right">
+          {aside}
         </p>
       )}
     </div>
+  );
+}
+
+function SectionBlock({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      className={cn(
+        "animate-fade-in-up rounded-xl border border-border bg-surface/60 p-5 shadow-none sm:p-7 lg:p-8",
+        className,
+      )}
+    >
+      {children}
+    </section>
+  );
+}
+
+function MemberCard({
+  member,
+  variant = "default",
+}: {
+  member: Member;
+  variant?: "featured" | "default" | "auditor";
+}) {
+  const isFeatured = variant === "featured";
+  const isAuditor = variant === "auditor";
+  const isSupplementary = member.role === "Suplente";
+
+  return (
+    <Card
+      className={cn(
+        "card-depth h-full rounded-lg bg-white p-4 transition-all duration-200 ease-out hover:border-accent/60 sm:p-5",
+        isFeatured && "border-primary/25 bg-surface/60 p-5 shadow-none sm:p-6",
+        isAuditor && "bg-bg",
+      )}
+    >
+      <div className="flex gap-4">
+        <IconFrame
+          size={
+            isFeatured ? "avatarLg" : isSupplementary ? "md" : "avatar"
+          }
+          variant={isFeatured ? "solid" : "primary"}
+          contentClassName={cn(
+            member.photo && "from-white to-white",
+            isAuditor && "from-accent/10 to-white",
+          )}
+        >
+          {member.photo ? (
+            <Image
+              src={member.photo.src}
+              alt={member.photo.alt}
+              fill
+              sizes={isFeatured ? "80px" : "64px"}
+              className="object-cover"
+            />
+          ) : (
+            <UserRound
+              className={cn(
+                "h-7 w-7",
+                isFeatured && "h-9 w-9",
+                isSupplementary && "h-5 w-5",
+              )}
+            />
+          )}
+        </IconFrame>
+
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-semibold uppercase leading-none tracking-[0.18em] text-primary">
+            {member.role}
+          </p>
+          <h3
+            className={cn(
+              "mt-1 text-lg font-bold leading-tight tracking-tight text-ink",
+              isFeatured && "text-xl sm:text-2xl",
+            )}
+          >
+            {member.name}
+          </h3>
+          {member.org && (
+            <p className="mt-2 flex items-start gap-2 text-sm leading-5 text-ink-muted">
+              <Building2
+                className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                aria-hidden="true"
+              />
+              <span>{member.org}</span>
+            </p>
+          )}
+        </div>
+      </div>
+
+      {member.alternate && (
+        <dl className="mt-4 border-t border-border pt-3">
+          <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-ink-muted">
+            Suplente
+          </dt>
+          <dd className="mt-1 text-sm font-semibold text-ink">
+            {member.alternate}
+          </dd>
+        </dl>
+      )}
+    </Card>
+  );
+}
+
+function MemberGrid({
+  members,
+  variant,
+  columns = "lg:grid-cols-3",
+}: {
+  members: Member[];
+  variant?: "default" | "auditor";
+  columns?: string;
+}) {
+  return (
+    <ul className={cn("grid gap-5 sm:grid-cols-2", columns, "stagger-children")}>
+      {members.map((member) => (
+        <li key={`${member.role}-${member.name}`}>
+          <MemberCard member={member} variant={variant} />
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -75,30 +261,87 @@ export default function ComisionDirectivaPage() {
         subtitle="La Comisión Directiva de la CASC está integrada por referentes de la industria que conducen y acompañan la gestión institucional de la Cámara, velando por el desarrollo, la representación y el fortalecimiento del sector."
       />
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {board.map((m) => (
-            <MemberCard key={`${m.role}-${m.name}`} member={m} />
-          ))}
-        </div>
+      <section className="mx-auto max-w-7xl space-y-12 px-4 py-16 sm:px-6 lg:px-8">
+        <SectionBlock>
+          <SectionHeader
+            eyebrow="Organigrama"
+            title="Presidencia y vicepresidencias"
+            icon={Network}
+            aside="Comisión Directiva"
+          />
 
-        <h2 className="mt-14 text-2xl font-bold text-ink">
-          Revisores de Cuenta — Titulares
-        </h2>
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {auditorsTitular.map((m) => (
-            <MemberCard key={m.name} member={m} />
-          ))}
-        </div>
+          <div className="relative">
+            <div className="mx-auto max-w-2xl animate-fade-in-up">
+              <MemberCard member={president} variant="featured" />
+            </div>
 
-        <h2 className="mt-14 text-2xl font-bold text-ink">
-          Revisores de Cuenta — Suplentes
-        </h2>
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {auditorsAlternate.map((m) => (
-            <MemberCard key={m.name} member={m} />
-          ))}
-        </div>
+            <div
+              className="mx-auto hidden h-8 w-px bg-border md:block"
+              aria-hidden="true"
+            />
+
+            <div className="relative mx-auto max-w-5xl">
+              <span
+                className="absolute -top-4 left-1/4 right-1/4 hidden h-px bg-border md:block"
+                aria-hidden="true"
+              />
+              <ul className="grid gap-5 md:grid-cols-2 stagger-children">
+                {vicePresidents.map((member) => (
+                  <li key={`${member.role}-${member.name}`}>
+                    <MemberCard member={member} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </SectionBlock>
+
+        <SectionBlock className="bg-bg">
+          <SectionHeader
+            eyebrow="Gestión"
+            title="Secretaría y tesorería"
+            icon={BriefcaseBusiness}
+          />
+          <MemberGrid members={executiveRoles} columns="lg:grid-cols-2" />
+        </SectionBlock>
+
+        <SectionBlock className="bg-bg">
+          <SectionHeader
+            eyebrow="Representación"
+            title="Vocales"
+            icon={UsersRound}
+            aside={`${directors.length} integrantes`}
+          />
+          <MemberGrid members={directors} columns="lg:grid-cols-3" />
+        </SectionBlock>
+
+        <SectionBlock>
+          <SectionHeader
+            eyebrow="Fiscalización"
+            title="Revisores de Cuenta"
+            icon={ShieldCheck}
+          />
+
+          <div className="grid gap-8 lg:grid-cols-2">
+            <section>
+              <h3 className="mb-5 text-lg font-bold text-ink">Titulares</h3>
+              <MemberGrid
+                members={auditorsTitular}
+                variant="auditor"
+                columns="lg:grid-cols-1"
+              />
+            </section>
+
+            <section>
+              <h3 className="mb-5 text-lg font-bold text-ink">Suplentes</h3>
+              <MemberGrid
+                members={auditorsAlternate}
+                variant="auditor"
+                columns="lg:grid-cols-1"
+              />
+            </section>
+          </div>
+        </SectionBlock>
 
         {/* Staff anchor referenced by the header menu. */}
         <div id="staff" className="scroll-mt-24" />

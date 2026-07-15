@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CardCover } from "@/components/shared/card-cover";
 import { Badge } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getAuth } from "@/lib/auth";
 import { getDataLayer } from "@/lib/data";
@@ -127,13 +128,13 @@ export default async function SocioHomePage() {
             ))}
           </div>
           <div className="mt-6 flex justify-center">
-            <Link
+            <ButtonLink
               href={seccion.href}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-5 py-2 text-sm font-medium text-primary transition-colors hover:border-accent hover:bg-surface"
+              variant="secondary"
             >
               {seccion.verTodos}
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </ButtonLink>
           </div>
         </section>
       ))}
