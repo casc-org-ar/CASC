@@ -197,7 +197,7 @@ main.sphere-main {
   bottom: 0;
 }
 
-:global(body.dg-scroll-lock) {
+body.dg-scroll-lock {
   overflow: hidden;
   touch-action: none;
 }
