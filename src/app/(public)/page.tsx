@@ -148,7 +148,7 @@ export default async function HomePage() {
           {/* Video protagonista, a todo el ancho */}
           <div className="card-depth aspect-video w-full overflow-hidden rounded-2xl border border-border bg-white p-2">
             <iframe
-              src="https://player.vimeo.com/video/1150099121"
+              src="https://www.youtube-nocookie.com/embed/tVvNHVC9a44"
               title="Cámara Argentina de Shopping Centers"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -400,7 +400,7 @@ export default async function HomePage() {
       </section>
 
       {/* Sponsors + integrante de */}
-      <section className="border-t border-border bg-surface/70">
+      <section className="border-t border-border bg-white">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <HomeSectionHeader
             eyebrow="Red institucional"
@@ -410,18 +410,18 @@ export default async function HomePage() {
 
           {/* Sponsors — logos sueltos en fila, sin card contenedora */}
           <div>
-            <div className="mt-8 flex snap-x snap-mandatory items-center gap-2 overflow-x-auto pb-3 [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-nowrap sm:justify-center sm:gap-x-2 sm:overflow-visible sm:pb-0 [&::-webkit-scrollbar]:hidden">
+            <div className="mt-8 flex snap-x snap-mandatory items-center gap-1 overflow-x-auto pb-3 [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-nowrap sm:justify-center sm:gap-x-0 sm:overflow-visible sm:pb-0 [&::-webkit-scrollbar]:hidden">
               {sponsors.map((sponsor) => (
                 <div
                   key={sponsor.name}
-                  className="flex h-28 w-64 shrink-0 snap-center items-center justify-center sm:h-28 sm:w-auto sm:flex-1"
+                  className="flex h-32 w-64 shrink-0 snap-center items-center justify-center sm:h-36 sm:w-auto sm:flex-1"
                 >
                   <Image
                     src={sponsor.logo}
                     alt={sponsor.name}
                     width={288}
-                    height={128}
-                    className="max-h-full w-auto object-contain opacity-80 grayscale transition hover:opacity-100 hover:grayscale-0"
+                    height={144}
+                    className="max-h-full w-auto object-contain"
                   />
                 </div>
               ))}

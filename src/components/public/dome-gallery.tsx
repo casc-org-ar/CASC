@@ -24,6 +24,8 @@ interface DomeGalleryProps {
   imageBorderRadius?: string;
   openedImageBorderRadius?: string;
   grayscale?: boolean;
+  autoRotate?: boolean;
+  autoRotateSpeed?: number;
 }
 
 const DEFAULTS = {
@@ -31,6 +33,7 @@ const DEFAULTS = {
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
   segments: 35,
+  autoRotateSpeed: 6,
 };
 
 const clamp = (v: number, min: number, max: number) =>
@@ -133,6 +136,8 @@ export default function DomeGallery({
   imageBorderRadius = "30px",
   openedImageBorderRadius = "30px",
   grayscale = true,
+  autoRotate = true,
+  autoRotateSpeed = DEFAULTS.autoRotateSpeed,
 }: DomeGalleryProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -157,6 +162,8 @@ export default function DomeGallery({
   const openingRef = useRef(false);
   const openStartedAtRef = useRef(0);
   const lastDragEndAt = useRef(0);
+  const autoRotateRAF = useRef<number | null>(null);
+  const lastAutoFrameRef = useRef(0);
 
   const scrollLockedRef = useRef(false);
   const lockScroll = useCallback(() => {
@@ -249,6 +256,48 @@ export default function DomeGallery({
   useEffect(() => {
     applyTransform(rotationRef.current.x, rotationRef.current.y);
   }, []);
+
+  // Idle auto-rotation: the sphere spins horizontally on its own and only
+  // pauses while the user is interacting (dragging, inertia gliding, or with a
+  // tile opened). When they let go, it resumes seamlessly — never a hard stop.
+  useEffect(() => {
+    if (!autoRotate) return;
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    const step = (t: number) => {
+      const last = lastAutoFrameRef.current || t;
+      const dt = Math.min(64, t - last);
+      lastAutoFrameRef.current = t;
+
+      const idle =
+        !draggingRef.current &&
+        !openingRef.current &&
+        !focusedElRef.current &&
+        inertiaRAF.current == null;
+
+      if (idle) {
+        const nextY = wrapAngleSigned(
+          rotationRef.current.y + (autoRotateSpeed * dt) / 1000,
+        );
+        rotationRef.current = { x: rotationRef.current.x, y: nextY };
+        applyTransform(rotationRef.current.x, nextY);
+      }
+
+      autoRotateRAF.current = requestAnimationFrame(step);
+    };
+
+    autoRotateRAF.current = requestAnimationFrame(step);
+    return () => {
+      if (autoRotateRAF.current) cancelAnimationFrame(autoRotateRAF.current);
+      autoRotateRAF.current = null;
+      lastAutoFrameRef.current = 0;
+    };
+  }, [autoRotate, autoRotateSpeed]);
 
   const stopInertia = useCallback(() => {
     if (inertiaRAF.current) {
