@@ -111,7 +111,7 @@ export function SiteHeader() {
             width={132}
             height={44}
             priority
-            className="h-11 w-auto"
+            className="h-9 w-auto"
           />
         </Link>
 
@@ -261,9 +261,9 @@ export function SiteHeader() {
                   <motion.div
                     key={item.label}
                     variants={itemVariants}
-                    className="rounded-xl bg-casc-navy-500 p-3 text-white"
+                    className="rounded-xl border border-border bg-surface/40 p-2"
                   >
-                    <p className="px-1 pb-2 text-xs font-semibold uppercase tracking-wide text-white/60">
+                    <p className="px-2 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-ink-muted">
                       {item.label}
                     </p>
                     {item.children.map((child) => {
@@ -277,14 +277,14 @@ export function SiteHeader() {
                           className={cn(
                             "group/link flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium transition-colors",
                             active
-                              ? "bg-white/15 text-white"
-                              : "text-white/85 hover:bg-white/10 hover:text-white",
+                              ? "bg-surface text-primary"
+                              : "text-ink hover:bg-surface",
                           )}
                         >
                           <ArrowUpRight
                             className={cn(
-                              "h-4 w-4 shrink-0 transition-all duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 group-hover/link:text-white",
-                              active ? "text-white" : "text-white/50",
+                              "h-4 w-4 shrink-0 transition-all duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5",
+                              active ? "text-primary" : "text-ink-muted",
                             )}
                             aria-hidden="true"
                           />

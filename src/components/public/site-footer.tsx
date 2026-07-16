@@ -49,27 +49,27 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-white print:hidden">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="border-b border-border pb-10">
-          <Link
-            href="/"
-            aria-label="CASC — Inicio"
-            className="-mb-4 inline-flex"
-          >
-            <Image
-              src="/assets/brand/casc-logo.webp"
-              alt="Cámara Argentina de Shopping Centers"
-              width={312}
-              height={104}
-              className="h-20 w-auto sm:h-[6.5rem]"
-            />
-          </Link>
+          <div className="grid gap-8 lg:grid-cols-[1fr_0.95fr] lg:items-stretch">
+            <div className="flex max-w-xl flex-col">
+              <Link
+                href="/"
+                aria-label="CASC — Inicio"
+                className="inline-flex w-fit"
+              >
+                <Image
+                  src="/assets/brand/casc-logo.webp"
+                  alt="Cámara Argentina de Shopping Centers"
+                  width={312}
+                  height={104}
+                  className="h-10 w-auto sm:h-12"
+                />
+              </Link>
 
-          <div className="grid gap-8 lg:grid-cols-[1fr_0.95fr] lg:items-start">
-            <div className="max-w-xl">
               <p className="mt-4 max-w-lg text-sm leading-6 text-ink-muted">
                 {footerDescription}
               </p>
 
-              <div className="mt-5 flex flex-wrap items-center gap-3">
+              <div className="mt-3 flex flex-wrap items-center gap-3">
                 <a
                   href={socialLinks.linkedin}
                   target="_blank"
