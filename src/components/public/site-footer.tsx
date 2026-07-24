@@ -1,8 +1,6 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
-import { Mail, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { IconFrame } from "@/components/ui/icon-frame";
+import { Mail } from "lucide-react";
 import { contactInfo, footerColumns, legalNav, socialLinks } from "./nav-data";
 
 /**
@@ -40,144 +38,105 @@ function InstagramIcon({ className }: { className?: string }) {
 const footerDescription =
   "La Cámara Argentina de Shopping Centers es una entidad sin fines de lucro que desde hace más de 35 años representa, conecta y acompaña a los centros comerciales del país.";
 
+/** Social icon buttons, styled for the dark navy footer surface. */
+const socialLinkClass =
+  "inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white transition-colors hover:border-white/40 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-casc-navy-900";
+
 /**
- * Public site footer. Uses real CASC navigation, social links, legal links and
- * the legacy newsletter subscription labels.
+ * Public site footer. Uses real CASC navigation, social links and legal links.
+ *
+ * Layout: menu sections come first, then the brand block (logo + socials)
+ * below them. The institutional navy background moved here from the home
+ * platform CTA, so every element is styled for a dark surface.
+ *
+ * The newsletter subscription lives in the members-only platform, not here.
  */
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-white print:hidden">
+    <footer className="bg-casc-navy-900 text-white print:hidden">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="border-b border-border pb-10">
-          <div className="grid gap-8 lg:grid-cols-[1fr_0.95fr] lg:items-stretch">
-            <div className="flex max-w-xl flex-col">
-              <Link
-                href="/"
-                aria-label="CASC — Inicio"
-                className="inline-flex w-fit"
+        {/*
+          Brand block on the left, menu sections on the right. Below lg they
+          stack (brand first, then the menu), and the menu itself collapses
+          from three columns to two, then one on the narrowest screens.
+        */}
+        <div className="grid gap-10 border-b border-white/15 pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-12">
+          <div className="flex max-w-md flex-col">
+            <Link
+              href="/"
+              aria-label="CASC — Inicio"
+              className="inline-flex w-fit"
+            >
+              <Image
+                src="/assets/brand/casc-logo.webp"
+                alt="Cámara Argentina de Shopping Centers"
+                width={312}
+                height={104}
+                className="h-10 w-auto brightness-0 invert sm:h-12"
+              />
+            </Link>
+
+            <p className="mt-4 text-sm leading-6 text-white/75">
+              {footerDescription}
+            </p>
+
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <a
+                href={socialLinks.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn de CASC"
+                className={socialLinkClass}
               >
-                <Image
-                  src="/assets/brand/casc-logo.webp"
-                  alt="Cámara Argentina de Shopping Centers"
-                  width={312}
-                  height={104}
-                  className="h-10 w-auto sm:h-12"
-                />
-              </Link>
-
-              <p className="mt-4 max-w-lg text-sm leading-6 text-ink-muted">
-                {footerDescription}
-              </p>
-
-              <div className="mt-3 flex flex-wrap items-center gap-3">
-                <a
-                  href={socialLinks.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="LinkedIn de CASC"
-                  className="group inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                >
-                  <IconFrame
-                    size="sm"
-                    variant="secondary"
-                    contentClassName="group-hover:text-primary"
-                  >
-                    <LinkedinIcon className="h-5 w-5" />
-                  </IconFrame>
-                </a>
-                <a
-                  href={socialLinks.instagram}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Instagram de CASC"
-                  className="group inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                >
-                  <IconFrame
-                    size="sm"
-                    variant="secondary"
-                    contentClassName="group-hover:text-primary"
-                  >
-                    <InstagramIcon className="h-5 w-5" />
-                  </IconFrame>
-                </a>
-                <a
-                  href={`mailto:${contactInfo.email}`}
-                  aria-label="Enviar email a CASC"
-                  className="group inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                >
-                  <IconFrame
-                    size="sm"
-                    variant="secondary"
-                    contentClassName="group-hover:text-primary"
-                  >
-                    <Mail className="h-5 w-5" strokeWidth={1.8} aria-hidden />
-                  </IconFrame>
-                </a>
-              </div>
-            </div>
-
-            <div className="card-depth rounded-xl border border-border bg-surface p-6">
-              <h2 className="text-xl font-extrabold tracking-tight text-ink">
-                Newsletter
-              </h2>
-              <p className="mt-1 text-sm leading-6 text-ink-muted">
-                Recibí noticias y novedades de la Cámara en tu correo.
-              </p>
-
-              <form aria-label="Suscripción al newsletter" className="mt-5">
-                <label htmlFor="footer-newsletter-email" className="sr-only">
-                  Suscribirse
-                </label>
-                <div className="relative">
-                  <input
-                    id="footer-newsletter-email"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="Ingresar correo electrónico"
-                    className="min-h-12 w-full rounded-[16px] border border-border bg-white px-4 pr-32 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"
-                  />
-                  <Button
-                    type="button"
-                    size="sm"
-                    className="absolute bottom-1 right-1 top-1 min-w-24"
-                  >
-                    Enviar
-                    <Send className="h-4 w-4" strokeWidth={1.8} aria-hidden />
-                  </Button>
-                </div>
-              </form>
+                <LinkedinIcon className="h-5 w-5" />
+              </a>
+              <a
+                href={socialLinks.instagram}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram de CASC"
+                className={socialLinkClass}
+              >
+                <InstagramIcon className="h-5 w-5" />
+              </a>
+              <a
+                href={`mailto:${contactInfo.email}`}
+                aria-label="Enviar email a CASC"
+                className={socialLinkClass}
+              >
+                <Mail className="h-5 w-5" strokeWidth={1.8} aria-hidden />
+              </a>
             </div>
           </div>
+
+          <nav
+            aria-label="Secciones del sitio"
+            className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {footerColumns.map((column) => (
+              <div key={column.label}>
+                <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-white">
+                  {column.label}
+                </h3>
+                <ul className="mt-4 space-y-2.5">
+                  {column.children.map((link) => (
+                    <li key={`${column.label}-${link.label}`}>
+                      <Link
+                        href={link.href}
+                        className="text-sm text-white/75 transition-colors hover:text-white hover:underline"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
         </div>
 
-        <nav
-          aria-label="Secciones del sitio"
-          className="grid gap-8 border-b border-border py-10 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {footerColumns.map((column) => (
-            <div key={column.label}>
-              <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-ink">
-                {column.label}
-              </h3>
-              <ul className="mt-4 space-y-2.5">
-                {column.children.map((link) => (
-                  <li key={`${column.label}-${link.label}`}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-ink-muted transition-colors hover:text-primary hover:underline"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </nav>
-
         <div className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-ink-muted">
+          <p className="text-xs text-white/60">
             © 2026 Cámara Argentina de Shopping Centers, Todos los derechos
             reservados.
           </p>
@@ -187,7 +146,7 @@ export function SiteFooter() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-xs text-ink-muted transition-colors hover:text-primary hover:underline"
+                  className="text-xs text-white/60 transition-colors hover:text-white hover:underline"
                 >
                   {link.label}
                 </Link>

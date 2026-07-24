@@ -13,7 +13,7 @@ export function PrintButton({ label = "Imprimir" }: { label?: string }) {
   return (
     <Button
       type="button"
-      variant="secondary"
+      variant="primary"
       size="lg"
       onClick={() => window.print()}
       className="print:hidden"

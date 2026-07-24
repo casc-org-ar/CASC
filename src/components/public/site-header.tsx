@@ -102,7 +102,7 @@ export function SiteHeader() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-border bg-bg/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-24 lg:px-8">
         {/* Brand */}
         <Link href="/" className="flex items-center" aria-label="CASC — Inicio">
           <Image
@@ -253,7 +253,7 @@ export function SiteHeader() {
             animate="visible"
             exit="exit"
             className="overflow-y-auto border-t border-border bg-bg lg:hidden"
-            style={{ maxHeight: "calc(100vh - 4rem)" }}
+            style={{ maxHeight: "calc(100vh - 5rem)" }}
           >
             <nav className="space-y-2 px-4 py-4">
               {mainNav.map((item) =>

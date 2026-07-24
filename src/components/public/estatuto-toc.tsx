@@ -95,7 +95,7 @@ export function EstatutoToc({ chapters }: { chapters: TocChapter[] }) {
       {/* Mobile: collapsible panel pinned under the fixed header. */}
       <nav
         aria-label="Índice del estatuto"
-        className="sticky top-16 z-30 -mx-4 mb-8 border-y border-border bg-bg/95 px-4 backdrop-blur print:hidden lg:hidden"
+        className="sticky top-20 z-30 -mx-4 mb-8 border-y border-border bg-bg/95 px-4 backdrop-blur print:hidden lg:hidden"
       >
         <button
           type="button"
