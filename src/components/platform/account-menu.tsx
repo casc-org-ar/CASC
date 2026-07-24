@@ -55,7 +55,7 @@ export function AccountMenu({ user }: { user: CurrentUser }) {
         title="Ajustes de cuenta"
       >
         <div className="py-4 text-center">
-          <span className="text-3xl font-extralight text-accent">[ ]</span>
+          <Settings className="mx-auto h-8 w-8 text-accent" aria-hidden />
           <p className="mt-3 text-sm text-ink-muted">
             La configuración de cuenta estará disponible al conectar Clerk.
           </p>

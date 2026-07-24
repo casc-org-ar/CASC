@@ -26,6 +26,16 @@ export interface HeroSlide {
 const TABLET_MIN = 768;
 const DESKTOP_MIN = 1024;
 
+/**
+ * Whether a banner destination is an app route (so it can use next/link).
+ * External URLs and static files (e.g. a PDF under /assets) must use a plain
+ * anchor — next/link would treat them as routes and the click would do nothing.
+ */
+function isInternalRoute(href: string): boolean {
+  if (!href.startsWith("/")) return false; // http(s), mailto, etc.
+  return !/\.[a-z0-9]{2,5}$/i.test(href); // has a file extension → static file
+}
+
 function SlidePicture({ slide }: { slide: HeroSlide }) {
   return (
     <picture>
@@ -78,16 +88,29 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
               aria-hidden={!active}
             >
               {slide.href ? (
-                <Link
-                  href={slide.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block h-full w-full"
-                  aria-label={slide.alt}
-                  tabIndex={active ? 0 : -1}
-                >
-                  {inner}
-                </Link>
+                isInternalRoute(slide.href) ? (
+                  <Link
+                    href={slide.href}
+                    className="block h-full w-full"
+                    aria-label={slide.alt}
+                    tabIndex={active ? 0 : -1}
+                  >
+                    {inner}
+                  </Link>
+                ) : (
+                  // Static files (PDFs) and external URLs need a plain anchor:
+                  // next/link treats them as app routes and the click does nothing.
+                  <a
+                    href={slide.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block h-full w-full"
+                    aria-label={slide.alt}
+                    tabIndex={active ? 0 : -1}
+                  >
+                    {inner}
+                  </a>
+                )
               ) : (
                 inner
               )}

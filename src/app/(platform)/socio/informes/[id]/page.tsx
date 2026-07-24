@@ -1,4 +1,4 @@
-import { ArrowLeft, FileDown } from "lucide-react";
+import { ArrowLeft, FileDown, FileText } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonAnchor } from "@/components/ui/button";
@@ -58,7 +58,7 @@ export default async function InformeDetailPage({
           className="h-[70vh] w-full"
         >
           <div className="flex flex-col items-center justify-center gap-2 py-16 text-center">
-            <span className="text-3xl font-extralight text-accent">[ ]</span>
+            <FileText className="h-8 w-8 text-accent" aria-hidden />
             <p className="text-sm text-ink-muted">
               No se puede previsualizar el PDF aquí.
             </p>

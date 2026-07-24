@@ -1,6 +1,11 @@
 "use client";
 
-import { ArrowLeft, LayoutGrid, FileText } from "lucide-react";
+import {
+  ArrowLeft,
+  LayoutGrid,
+  FileText,
+  Image as ImageIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
@@ -83,7 +88,7 @@ export function BlogPreview({
                 />
               ) : (
                 <div className="flex h-full items-center justify-center bg-casc-navy-900">
-                  <span className="text-4xl font-bold text-accent">[ ]</span>
+                  <ImageIcon className="h-10 w-10 text-accent" aria-hidden />
                 </div>
               )}
             </div>

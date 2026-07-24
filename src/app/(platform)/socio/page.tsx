@@ -99,7 +99,7 @@ export default async function SocioHomePage() {
       {/* Personalized greeting */}
       <header className="animate-fade-in-up">
         <h1 className="text-2xl font-bold tracking-tight text-ink">
-          <span className="casc-bracket">Hola{firstName ? `, ${firstName}` : ""}</span>
+          Hola{firstName ? `, ${firstName}` : ""}
         </h1>
         <p className="mt-1 text-sm text-ink-muted">
           {user?.shopping

@@ -36,9 +36,9 @@ const pasos = [
   },
   {
     icon: Users,
-    title: "Te encuentran los reclutadores",
+    title: "Formás parte de nuestra base de talentos",
     description:
-      "Los centros comerciales asociados buscan perfiles por habilidades y te contactan.",
+      "Tu perfil queda disponible para los reclutadores de las empresas que forman parte de la Cámara, quienes podrán contactarte cuando surjan oportunidades acordes a tu experiencia.",
   },
 ];
 
@@ -82,8 +82,8 @@ export default function BolsaDeTrabajoPage() {
 
           <div className="mt-8 flex flex-col items-start gap-4 rounded-xl bg-primary p-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-2xl text-sm leading-6 text-white/90">
-              ¿Buscás las ofertas laborales de las empresas asociadas? Las
-              publicamos en el LinkedIn de la Cámara.
+              Encontrá oportunidades en la industria. Compartimos en el LinkedIn
+              las búsquedas laborales de las empresas asociadas.
             </p>
             <ButtonAnchor
               href={LINKEDIN_CASC_URL}

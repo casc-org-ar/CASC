@@ -1,4 +1,6 @@
-/** Empty state using the CASC bracket motif, with an optional action slot. */
+import { Inbox } from "lucide-react";
+
+/** Empty state for lists and search results, with an optional action slot. */
 export function EmptyState({
   message,
   children,
@@ -8,7 +10,7 @@ export function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-surface py-16 text-center">
-      <span className="text-4xl font-extralight text-accent">[ ]</span>
+      <Inbox className="h-9 w-9 text-accent" aria-hidden />
       <p className="mt-3 text-sm text-ink-muted">{message}</p>
       {children && <div className="mt-4">{children}</div>}
     </div>

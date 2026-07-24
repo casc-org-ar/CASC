@@ -158,9 +158,9 @@ export default function BeneficiosPage() {
                   dentro de la Cámara.
                 </p>
 
-                {/* Panel access, not Cámara membership — this button leads to the platform login. */}
+                {/* Leads to the membership request, not the platform login. */}
                 <div className="mt-auto pt-6">
-                  <ButtonLink href="/login" size="lg">
+                  <ButtonLink href="/como-asociarse" size="lg">
                     Solicitar unirse
                     <ArrowRight
                       className="h-4 w-4"
