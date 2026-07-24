@@ -3,6 +3,8 @@ import { getDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 import { CandidatosList } from "./candidatos-list";
 
+export const metadata = { title: "Bolsa de Trabajo" };
+
 /**
  * Socio Bolsa de Trabajo: recruiters browse published (moderated) candidates,
  * filtering by skill, area and availability. Only published candidates are ever

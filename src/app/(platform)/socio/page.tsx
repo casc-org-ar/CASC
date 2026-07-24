@@ -10,6 +10,8 @@ import { getAuth } from "@/lib/auth";
 import { getDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 
+export const metadata = { title: "Inicio" };
+
 /** A normalized item from any content type, for the home feed. */
 type FeedItem = {
   tipo: "Noticia" | "Webinar" | "Informe";

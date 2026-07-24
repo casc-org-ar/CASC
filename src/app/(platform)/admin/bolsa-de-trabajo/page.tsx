@@ -2,6 +2,8 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { getDataLayer } from "@/lib/data";
 import { BolsaTrabajoManager } from "./bolsa-trabajo-manager";
 
+export const metadata = { title: "Bolsa de Trabajo" };
+
 /**
  * Admin Bolsa de Trabajo: moderate candidates submitted from the public
  * landing. Newest first so pending submissions surface at the top.

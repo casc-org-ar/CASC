@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PlatformShell } from "@/components/platform/platform-shell";
 import { getAuth } from "@/lib/auth";
+
+/**
+ * Title template for admin pages: each page sets a short title and Next
+ * composes it as "Informes — CASC Admin".
+ */
+export const metadata: Metadata = {
+  title: {
+    template: "%s — CASC Admin",
+    default: "Panel de administración — CASC",
+  },
+};
 
 /**
  * Admin subtree guard. Resolves the user on the server; only role "admin"

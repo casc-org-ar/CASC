@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { TitleRotator } from "@/components/shared/title-rotator";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,6 +25,7 @@ export default function RootLayout({
       {/* Browser extensions (ColorZilla, password managers) inject attributes
           on <body> before hydration; suppress the mismatch on this node only. */}
       <body className="min-h-full" suppressHydrationWarning>
+        <TitleRotator />
         {children}
       </body>
     </html>

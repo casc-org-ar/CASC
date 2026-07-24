@@ -3,6 +3,8 @@ import { getDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 import { WebinarsList } from "./webinars-list";
 
+export const metadata = { title: "Webinars" };
+
 /** Socio Webinars: grid of published webinars with a category filter. */
 export default async function SocioWebinarsPage() {
   const webinars = onlyPublished(await getDataLayer().webinars.list());

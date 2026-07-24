@@ -2,6 +2,8 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { getDataLayer } from "@/lib/data";
 import { NoticiasManager } from "./noticias-manager";
 
+export const metadata = { title: "Noticias" };
+
 /** Admin Noticias: server-loads the list, delegates CRUD to the client manager. */
 export default async function AdminNoticiasPage() {
   const noticias = await getDataLayer().noticias.list();

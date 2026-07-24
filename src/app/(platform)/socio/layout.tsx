@@ -1,6 +1,19 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PlatformShell } from "@/components/platform/platform-shell";
 import { getAuth } from "@/lib/auth";
+
+/**
+ * Title template for socio pages: each page sets a short title (e.g. "Informes")
+ * and Next composes it as "Informes — CASC Socios". Pages without a title fall
+ * back to the default.
+ */
+export const metadata: Metadata = {
+  title: {
+    template: "%s — CASC Socios",
+    default: "Plataforma de Socios — CASC",
+  },
+};
 
 /**
  * Socio subtree guard. Both roles may view socio routes, but an

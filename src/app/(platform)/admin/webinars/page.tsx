@@ -2,6 +2,8 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { getDataLayer } from "@/lib/data";
 import { WebinarsManager } from "./webinars-manager";
 
+export const metadata = { title: "Webinars" };
+
 /** Admin Webinars: server-loads the list, delegates CRUD to the client manager. */
 export default async function AdminWebinarsPage() {
   const webinars = await getDataLayer().webinars.list();

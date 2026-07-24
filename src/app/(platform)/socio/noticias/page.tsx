@@ -3,6 +3,8 @@ import { getDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 import { NoticiasList } from "./noticias-list";
 
+export const metadata = { title: "Noticias" };
+
 /** Socio Noticias: feed of published news with an optional category filter. */
 export default async function SocioNoticiasPage() {
   const noticias = onlyPublished(await getDataLayer().noticias.list()).sort(

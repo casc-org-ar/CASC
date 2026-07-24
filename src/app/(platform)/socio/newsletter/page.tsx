@@ -7,6 +7,8 @@ import { getDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 import type { Newsletter } from "@/lib/types/domain";
 
+export const metadata = { title: "Newsletter" };
+
 /** Socio Newsletter: archive of published editions, grouped by year only when spanning multiple years. */
 export default async function SocioNewsletterPage() {
   const ediciones = onlyPublished(

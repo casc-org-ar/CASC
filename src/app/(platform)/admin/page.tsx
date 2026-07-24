@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getDataLayer } from "@/lib/data";
 
+export const metadata = { title: "Dashboard" };
+
 /** Admin dashboard: summary metrics + quick access + latest publications. */
 export default async function AdminDashboardPage() {
   const data = getDataLayer();

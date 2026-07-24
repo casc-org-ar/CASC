@@ -3,6 +3,8 @@ import { getDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 import { BeneficiosList } from "./beneficios-list";
 
+export const metadata = { title: "Beneficios" };
+
 /** Socio Beneficios: hotels with discounts for members, searchable by name/city. */
 export default async function SocioBeneficiosPage() {
   const hoteles = onlyPublished(await getDataLayer().hoteles.list()).sort(
