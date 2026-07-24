@@ -100,7 +100,9 @@ export function ContentCarousel({
 }) {
   const trackRef = useRef<HTMLUListElement>(null);
   const isCentered = align === "center";
-  const hasControls = items.length > 1;
+  // Up to 3 cards fit on desktop without scrolling, so the carousel controls
+  // only make sense past that. Fewer cards simply lay out as a static grid.
+  const hasControls = items.length > 3;
   const controlsClassName =
     "inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-white text-primary shadow-sm transition-colors hover:border-accent hover:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 

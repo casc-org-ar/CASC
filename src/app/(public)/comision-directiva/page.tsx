@@ -67,6 +67,16 @@ const auditorsAlternate: Member[] = [
   { role: "Suplente", name: "María Laura Gregoriadis", org: "Else S.A." },
 ];
 
+/**
+ * Staff — migrated verbatim from comision-directiva.html. Not part of the
+ * Comisión Directiva: this is the Cámara's operational management.
+ */
+const staff: Member[] = [
+  { role: "Gerente General", name: "Carolina Lopes Perera" },
+  { role: "Staff", name: "Gabriela Domínguez" },
+  { role: "Staff", name: "Florencia Gazzo" },
+];
+
 const president = board[0];
 const vicePresidents = board.filter((member) =>
   member.role.startsWith("Vicepresidente"),
@@ -79,11 +89,9 @@ const directors = board.filter((member) => member.role === "Vocal");
 type IconComponent = typeof UsersRound;
 
 function SectionHeading({
-  eyebrow,
   title,
   icon: Icon,
 }: {
-  eyebrow: string;
   title: string;
   icon: IconComponent;
 }) {
@@ -92,32 +100,25 @@ function SectionHeading({
       <IconFrame size="xl">
         <Icon className="h-6 w-6" aria-hidden="true" />
       </IconFrame>
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-          {eyebrow}
-        </p>
-        <h2 className="mt-1 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-          {title}
-        </h2>
-      </div>
+      <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+        {title}
+      </h2>
     </div>
   );
 }
 
 function SectionHeader({
-  eyebrow,
   title,
   icon,
   aside,
 }: {
-  eyebrow: string;
   title: string;
   icon: IconComponent;
   aside?: ReactNode;
 }) {
   return (
     <div className="mb-7 flex flex-col gap-4 border-b border-border pb-5 sm:flex-row sm:items-end sm:justify-between">
-      <SectionHeading eyebrow={eyebrow} title={title} icon={icon} />
+      <SectionHeading title={title} icon={icon} />
       {aside && (
         <p className="text-sm font-medium text-ink-muted sm:text-right">
           {aside}
@@ -130,12 +131,15 @@ function SectionHeader({
 function SectionBlock({
   children,
   className,
+  id,
 }: {
   children: ReactNode;
   className?: string;
+  id?: string;
 }) {
   return (
     <section
+      id={id}
       className={cn(
         "animate-fade-in-up rounded-xl border border-border bg-surface/60 p-5 shadow-none sm:p-7 lg:p-8",
         className,
@@ -262,13 +266,22 @@ export default function ComisionDirectivaPage() {
       />
 
       <section className="mx-auto max-w-7xl space-y-12 px-4 py-16 sm:px-6 lg:px-8">
+        {/*
+          The Comisión Directiva is a single body: the Comité Ejecutivo (Presidente,
+          Vicepresidencias, Secretaría and Tesorería) together with the Vocales. Both
+          live inside one block so that unity reads visually. Revisores de Cuentas is a
+          separate organ, and Gerencia General is not part of the Comisión at all.
+        */}
         <SectionBlock>
           <SectionHeader
-            eyebrow="Organigrama"
-            title="Presidencia y vicepresidencias"
+            title="Comisión Directiva"
             icon={Network}
-            aside="Comisión Directiva"
+            aside={`${board.length} integrantes`}
           />
+
+          <h3 className="mb-6 text-center text-lg font-bold tracking-tight text-ink">
+            Comité Ejecutivo
+          </h3>
 
           <div className="relative">
             <div className="mx-auto max-w-2xl animate-fade-in-up">
@@ -293,34 +306,22 @@ export default function ComisionDirectivaPage() {
                 ))}
               </ul>
             </div>
+
+            <div className="mt-5">
+              <MemberGrid members={executiveRoles} columns="lg:grid-cols-2" />
+            </div>
+          </div>
+
+          <div className="mt-10 border-t border-border pt-8">
+            <h3 className="mb-6 text-lg font-bold tracking-tight text-ink">
+              Vocales
+            </h3>
+            <MemberGrid members={directors} columns="lg:grid-cols-3" />
           </div>
         </SectionBlock>
 
         <SectionBlock className="bg-bg">
-          <SectionHeader
-            eyebrow="Gestión"
-            title="Secretaría y tesorería"
-            icon={BriefcaseBusiness}
-          />
-          <MemberGrid members={executiveRoles} columns="lg:grid-cols-2" />
-        </SectionBlock>
-
-        <SectionBlock className="bg-bg">
-          <SectionHeader
-            eyebrow="Representación"
-            title="Vocales"
-            icon={UsersRound}
-            aside={`${directors.length} integrantes`}
-          />
-          <MemberGrid members={directors} columns="lg:grid-cols-3" />
-        </SectionBlock>
-
-        <SectionBlock>
-          <SectionHeader
-            eyebrow="Fiscalización"
-            title="Revisores de Cuenta"
-            icon={ShieldCheck}
-          />
+          <SectionHeader title="Revisores de Cuentas" icon={ShieldCheck} />
 
           <div className="grid gap-8 lg:grid-cols-2">
             <section>
@@ -344,7 +345,14 @@ export default function ComisionDirectivaPage() {
         </SectionBlock>
 
         {/* Staff anchor referenced by the header menu. */}
-        <div id="staff" className="scroll-mt-24" />
+        <SectionBlock id="staff" className="scroll-mt-24 bg-bg">
+          <SectionHeader title="Staff" icon={BriefcaseBusiness} />
+          <p className="mb-6 max-w-3xl text-sm leading-6 text-ink-muted">
+            La Gerencia General no integra la Comisión Directiva: conduce la
+            gestión operativa y administrativa de la Cámara.
+          </p>
+          <MemberGrid members={staff} columns="lg:grid-cols-2" />
+        </SectionBlock>
       </section>
 
       <JoinCta />

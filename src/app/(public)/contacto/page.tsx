@@ -96,7 +96,7 @@ export default function ContactoPage() {
                               target={item.external ? "_blank" : undefined}
                               rel={item.external ? "noreferrer" : undefined}
                               variant="secondary"
-                              size="sm"
+                              size="md"
                               className="mt-3"
                             >
                               {item.action}

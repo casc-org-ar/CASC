@@ -9,7 +9,6 @@ import { PageHero } from "@/components/public/page-hero";
 import { JoinCta } from "@/components/public/join-cta";
 import { Card } from "@/components/ui/card";
 import { IconFrame } from "@/components/ui/icon-frame";
-import { cn } from "@/lib/utils";
 
 /**
  * Datos del sector — migrated verbatim from datos-del-sector.html.
@@ -29,7 +28,6 @@ interface SectorMetric {
   prefix: "+";
   unit?: string;
   label: string;
-  featured?: boolean;
 }
 
 interface MetricGroup {
@@ -47,7 +45,6 @@ const metricGroups: MetricGroup[] = [
         value: 142,
         prefix: "+",
         label: "Centros Comerciales y Paseos Comerciales",
-        featured: true,
       },
       {
         value: 5_000_000,
@@ -70,7 +67,6 @@ const metricGroups: MetricGroup[] = [
         value: 30_000_000,
         prefix: "+",
         label: "Visitas mensuales",
-        featured: true,
       },
       {
         value: 820,
@@ -97,7 +93,6 @@ const metricGroups: MetricGroup[] = [
         value: 55_000,
         prefix: "+",
         label: "Empleados de locatarios",
-        featured: true,
       },
       {
         value: 5_500,
@@ -119,32 +114,17 @@ function MetricValue({ metric }: { metric: SectorMetric }) {
 
   return (
     <p
-      className={cn(
-        "flex flex-wrap items-baseline gap-x-1.5 tracking-tight text-ink",
-        metric.featured ? "text-5xl font-black" : "text-4xl font-extrabold",
-      )}
+      className="flex flex-wrap items-baseline gap-x-1.5 text-4xl font-extrabold tracking-tight text-ink"
       aria-label={formattedValue}
     >
-      <span
-        className={cn(
-          "text-primary",
-          metric.featured ? "text-3xl" : "text-2xl",
-        )}
-        aria-hidden="true"
-      >
+      <span className="text-2xl text-primary" aria-hidden="true">
         {metric.prefix}
       </span>
       <span aria-hidden="true">
         <CountUpNumber value={metric.value} />
       </span>
       {metric.unit && (
-        <span
-          className={cn(
-            "font-bold text-primary",
-            metric.featured ? "text-xl" : "text-lg",
-          )}
-          aria-hidden="true"
-        >
+        <span className="text-lg font-bold text-primary" aria-hidden="true">
           {metric.unit}
         </span>
       )}
@@ -154,12 +134,7 @@ function MetricValue({ metric }: { metric: SectorMetric }) {
 
 function MetricCard({ metric }: { metric: SectorMetric }) {
   return (
-    <Card
-      className={cn(
-        "card-depth h-full rounded-lg bg-white p-5 text-left transition-all duration-200 ease-out hover:border-accent/60 sm:p-6",
-        metric.featured && "border-primary/25 bg-surface/60",
-      )}
-    >
+    <Card className="card-depth h-full rounded-lg bg-white p-5 text-left transition-all duration-200 ease-out hover:border-accent/60 sm:p-6">
       <MetricValue metric={metric} />
       <h3 className="mt-3 text-sm font-semibold leading-5 text-ink-muted">
         {metric.label}

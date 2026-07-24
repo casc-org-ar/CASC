@@ -39,7 +39,7 @@ const benefits: BenefitItem[] = [
     icon: Users,
   },
   {
-    title: "Comisiones de trabajo",
+    title: "Comisiones de Trabajo",
     description:
       "Conformación de Comisiones de Trabajo entre los asociados de la Cámara.",
     icon: ClipboardList,
@@ -62,9 +62,9 @@ const benefits: BenefitItem[] = [
     icon: Mail,
   },
   {
-    title: "Descuentos y promociones",
+    title: "Descuentos especiales",
     description:
-      "Descuentos especiales en distintas cadenas y comercios para los asociados de la Cámara.",
+      "Descuentos en cadenas hoteleras para los asociados de la Cámara.",
     icon: BadgePercent,
   },
 ];
@@ -158,8 +158,9 @@ export default function BeneficiosPage() {
                   dentro de la Cámara.
                 </p>
 
+                {/* Panel access, not Cámara membership — this button leads to the platform login. */}
                 <div className="mt-auto pt-6">
-                  <ButtonLink href="/como-asociarse" size="lg">
+                  <ButtonLink href="/login" size="lg">
                     Solicitar unirse
                     <ArrowRight
                       className="h-4 w-4"
