@@ -1,11 +1,13 @@
 import type {
   BlogPost,
   Candidato,
+  ConsultaContacto,
   Hotel,
   Informe,
   Newsletter,
   Noticia,
   Socio,
+  SolicitudAsociacion,
   Webinar,
 } from "@/lib/types/domain";
 
@@ -547,5 +549,52 @@ export const candidatos: Candidato[] = [
     status: "borrador",
     createdAt: iso(2026, 7, 14),
     updatedAt: iso(2026, 7, 14),
+  },
+];
+
+/**
+ * Inbound public enquiries: membership requests and contact messages.
+ * Written by the public forms, managed from the admin panel.
+ */
+export const solicitudes: SolicitudAsociacion[] = [
+  {
+    id: "sol-1",
+    sector: "Shopping center",
+    empresa: "Portal Rosario",
+    contacto: "Andrea Villalba",
+    cargo: "Gerenta comercial",
+    telefono: "341 555 8899",
+    email: "avillalba@portalrosario.com.ar",
+    mensaje:
+      "Nos interesa sumarnos a la Cámara y participar de las comisiones de trabajo.",
+    gestion: "nueva",
+    createdAt: iso(2026, 7, 18),
+    updatedAt: iso(2026, 7, 18),
+  },
+  {
+    id: "sol-2",
+    sector: "Proveedor de servicio",
+    empresa: "Seguridad Integral SRL",
+    contacto: "Rubén Paz",
+    cargo: "Director",
+    email: "rpaz@seguridadintegral.com.ar",
+    mensaje: "Brindamos servicios de vigilancia para centros comerciales.",
+    gestion: "en-proceso",
+    createdAt: iso(2026, 7, 20),
+    updatedAt: iso(2026, 7, 21),
+  },
+];
+
+export const consultas: ConsultaContacto[] = [
+  {
+    id: "con-1",
+    nombre: "Julieta Ramos",
+    empresa: "Estudio Ramos & Asoc.",
+    email: "jramos@estudioramos.com",
+    mensaje:
+      "Quisiera saber si publican estadísticas del sector de acceso público.",
+    gestion: "nueva",
+    createdAt: iso(2026, 7, 22),
+    updatedAt: iso(2026, 7, 22),
   },
 ];

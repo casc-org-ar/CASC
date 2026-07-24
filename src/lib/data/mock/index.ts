@@ -3,11 +3,13 @@ import { InMemoryContentRepository } from "@/lib/data/mock/in-memory-repository"
 import {
   blogPosts,
   candidatos,
+  consultas,
   hoteles,
   informes,
   newsletters,
   noticias,
   socios,
+  solicitudes,
   webinars,
 } from "@/lib/data/mock/seed-data";
 
@@ -24,5 +26,7 @@ export const mockDataLayer: DataLayer = {
   blog: new InMemoryContentRepository(blogPosts),
   hoteles: new InMemoryContentRepository(hoteles),
   candidatos: new InMemoryContentRepository(candidatos),
+  solicitudes: new InMemoryContentRepository(solicitudes),
+  consultas: new InMemoryContentRepository(consultas),
   socios: new InMemoryContentRepository(socios),
 };

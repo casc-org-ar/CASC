@@ -164,6 +164,46 @@ export interface Candidato extends BaseEntity {
   status: PublicationStatus;
 }
 
+/**
+ * How a public enquiry has been handled by the CASC team. Mirrors the
+ * moderation idea of `PublicationStatus` but for inbound messages.
+ */
+export type GestionStatus = "nueva" | "en-proceso" | "resuelta";
+
+/** Sector a membership applicant belongs to (matches the public form). */
+export type SectorSolicitud =
+  | "Shopping center"
+  | "Proveedor de servicio"
+  | "Retailer";
+
+/**
+ * A membership request submitted from the public "Cómo asociarse" form.
+ * Written by the public site, read and managed only from the admin panel.
+ */
+export interface SolicitudAsociacion extends BaseEntity {
+  sector: SectorSolicitud;
+  empresa: string;
+  contacto: string;
+  cargo?: string;
+  telefono?: string;
+  email: string;
+  mensaje?: string;
+  /** Handling state for the CASC team. */
+  gestion: GestionStatus;
+}
+
+/**
+ * A general enquiry submitted from the public contact form. Same lifecycle as
+ * a membership request, but without company/sector data.
+ */
+export interface ConsultaContacto extends BaseEntity {
+  nombre: string;
+  empresa?: string;
+  email: string;
+  mensaje: string;
+  gestion: GestionStatus;
+}
+
 /** The shape of the currently authenticated user. */
 export interface CurrentUser {
   id: string;

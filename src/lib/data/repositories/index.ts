@@ -10,11 +10,13 @@ import type {
   BaseEntity,
   BlogPost,
   Candidato,
+  ConsultaContacto,
   Hotel,
   Informe,
   Newsletter,
   Noticia,
   Socio,
+  SolicitudAsociacion,
   Webinar,
 } from "@/lib/types/domain";
 
@@ -50,6 +52,8 @@ export type NewsletterRepository = ContentRepository<Newsletter>;
 export type BlogRepository = ContentRepository<BlogPost>;
 export type HotelRepository = ContentRepository<Hotel>;
 export type CandidatoRepository = ContentRepository<Candidato>;
+export type SolicitudRepository = ContentRepository<SolicitudAsociacion>;
+export type ConsultaRepository = ContentRepository<ConsultaContacto>;
 
 /** Members need the same CRUD; kept as its own name for clarity/intent. */
 export type SocioRepository = ContentRepository<Socio>;
@@ -66,5 +70,7 @@ export interface DataLayer {
   blog: BlogRepository;
   hoteles: HotelRepository;
   candidatos: CandidatoRepository;
+  solicitudes: SolicitudRepository;
+  consultas: ConsultaRepository;
   socios: SocioRepository;
 }
