@@ -28,6 +28,7 @@ export function CvForm() {
     initialState,
   );
   const [fileName, setFileName] = useState<string | null>(null);
+  const [showOtros, setShowOtros] = useState(false);
 
   if (state.ok) {
     return (
@@ -195,7 +196,27 @@ export function CvForm() {
               {skill}
             </label>
           ))}
+
+          {/* "Otros" reveals a free-text field for skills not in the list. */}
+          <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-sm text-ink-muted transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/10 has-[:checked]:text-primary">
+            <input
+              type="checkbox"
+              checked={showOtros}
+              onChange={(e) => setShowOtros(e.target.checked)}
+              className="h-3.5 w-3.5 accent-[var(--color-casc-navy-500)]"
+            />
+            Otros
+          </label>
         </div>
+
+        {showOtros && (
+          <input
+            type="text"
+            name="skillsOtros"
+            placeholder="Escribí otras habilidades separadas por coma"
+            className={`${inputClass} mt-3`}
+          />
+        )}
       </fieldset>
 
       {/* CV upload. */}

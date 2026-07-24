@@ -67,10 +67,25 @@ export async function submitCandidato(
   }
 
   // Skills: keep only known values, require at least one.
-  const skills = formData
+  // Skills from the checkboxes: keep only known values.
+  const skillsSeleccionados = formData
     .getAll("skills")
     .map(String)
     .filter((s) => skillValues.has(s));
+
+  // Free-text skills from the "Otros" field: split by comma, sanitize length.
+  const skillsOtros = String(formData.get("skillsOtros") ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0 && s.length <= 40)
+    .slice(0, 10);
+
+  // Dedupe (case-insensitive) so a free-text entry can't duplicate a checkbox.
+  const skills = Array.from(
+    new Map(
+      [...skillsSeleccionados, ...skillsOtros].map((s) => [s.toLowerCase(), s]),
+    ).values(),
+  );
   if (skills.length === 0) {
     return { ok: false, error: "Seleccioná al menos una habilidad." };
   }

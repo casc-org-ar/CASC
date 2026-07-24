@@ -62,10 +62,12 @@ export default function BolsaDeTrabajoPage() {
                   className="rounded-xl border border-border bg-white p-5"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary">
-                      {index + 1}
+                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
-                    <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
+                    <span className="rounded-full bg-surface px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+                      Paso {index + 1}
+                    </span>
                   </div>
                   <h3 className="mt-4 text-base font-bold text-ink">
                     {paso.title}
@@ -78,8 +80,8 @@ export default function BolsaDeTrabajoPage() {
             })}
           </div>
 
-          <div className="mt-8 flex flex-col items-start gap-3 rounded-xl border border-border bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-6 text-ink-muted">
+          <div className="mt-8 flex flex-col items-start gap-4 rounded-xl bg-primary p-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-2xl text-sm leading-6 text-white/90">
               ¿Buscás las ofertas laborales de las empresas asociadas? Las
               publicamos en el LinkedIn de la Cámara.
             </p>
@@ -88,6 +90,7 @@ export default function BolsaDeTrabajoPage() {
               target="_blank"
               rel="noreferrer"
               variant="secondary"
+              size="lg"
               className="shrink-0"
             >
               Ver búsquedas en LinkedIn
@@ -98,7 +101,7 @@ export default function BolsaDeTrabajoPage() {
       </section>
 
       {/* Formulario de carga de CV. */}
-      <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
             Cargá tu CV
