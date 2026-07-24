@@ -1,0 +1,45 @@
+Julio 2026
+SITIO WEB CASC - AJUSTES PROTOTIPO 
+
+HOME
+1) Tratar de adecuar los tamaños de la barra de menú y del banner grande, de tal forma que, al ingresar al sitio, se identifique bien que se trata del sitio de la Cámara (ej. agrandar la barra del menú y el logo CASC?).  
+Más que nada porque en ese banner grande a veces se suben imágenes de otras entidades -como ahora sucede con la imagen de CLICC- y la idea es que nuestra entidad/identidad sea la que prevalezca.
+2) Achicar el video y ver también si se puede realizar uno nuevo.
+3) Nuestros Shopping Centers Asociados:  ver si se puede poner un color de fondo suave, ya sea a la esfera o al fondo (para que se aprecie mejor la propia esfera).
+4) No utilizar corchetes en ninguna parte del sitio.
+5) Plataforma exclusiva para socios: sacar el fondo azul y poner ese fondo azul en la info del pie.  
+6) Sponsors e instituciones: dejar como título solamente Sponsors. También porfa agregarle link a las empresas Sponsors  y ordenarlas alfabéticamente.
+7) Integrante de: porfa igualar el tamaño de los logos de CLICC y CACyS  (con un tamaño intermedio)
+8) Pie de la Home: 
+- Sacar el Newletter (que irá en la plataforma exclusiva para socios)
+- Invertir el orden de lo que es el logo/redes con los ítems del menú (primero irían los ítems y más abajo iría el logo/redes) ó poner ambos uno al lado del otro (logo/redes a la izquierda e ítems a la derecha).
+- Bolsa de trabajo: ver de qué manera implementarla.  
+                          
+MENU
+9) Comisión Directiva: 
+- Poner con mayúsculas Vicepresidencias – Tesorería
+- Sacar las palabras Organigrama, Gestión, Representación y Fiscalización.
+- Tendríamos que agregar un subtítulo, que es Comité Ejecutivo (que está conformado por Presidente, Vices, Secretario y Tesorero). 
+Pero tenemos que tener en cuenta que la Comisión Directiva es una sola, integrada tanto por esos 5 cargos como también por los Vocales. 
+Lo que sí puede quedar más separado es la info de los Revisores de Cuentas, que son un órgano aparte de la Comisión Directiva (quizás poner solamente 2 rectángulos de fondo?)
+- Agregar Staff o, al menos, Gerencia General (que tendría que quedar claro que no forma parte de la Comisión Directiva).
+10)  Delegaciones. Les agradeceríamos ver cómo mejorar todo el diseño de este ítem.  ¿Quizás un mapa interactivo?
+11)  Asociados Retailers: habría que sacar el botón denominado Región.
+12)  Asociados Proveedores: habría que cambiar el nombre del botón Región por Rubro, para que se pueda filtrar según la actividad de c/socio Proveedor.
+
+13)  Tanto en asociados Proveedores como Retailers habría que agregar los datos de contacto.
+14)  Beneficios para asociados
+- Porfa poner Comisiones de Trabajo (con T)
+- Reemplazar el título Descuentos y promociones por Descuentos especiales.  Y, en el texto, poner: Descuentos en cadenas hoteleras para los asociados de la Cámara
+- En el Panel exclusivo para socios, corregir el link del botón “Solicitar unirse” (ahora lleva a asociarse a la Cámara)
+
+
+
+
+      
+
+                          
+                          
+                          
+                            
+                          
