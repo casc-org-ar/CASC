@@ -9,6 +9,8 @@
 import type {
   BaseEntity,
   BlogPost,
+  Candidato,
+  Hotel,
   Informe,
   Newsletter,
   Noticia,
@@ -46,6 +48,8 @@ export type InformeRepository = ContentRepository<Informe>;
 export type NoticiaRepository = ContentRepository<Noticia>;
 export type NewsletterRepository = ContentRepository<Newsletter>;
 export type BlogRepository = ContentRepository<BlogPost>;
+export type HotelRepository = ContentRepository<Hotel>;
+export type CandidatoRepository = ContentRepository<Candidato>;
 
 /** Members need the same CRUD; kept as its own name for clarity/intent. */
 export type SocioRepository = ContentRepository<Socio>;
@@ -60,5 +64,7 @@ export interface DataLayer {
   noticias: NoticiaRepository;
   newsletters: NewsletterRepository;
   blog: BlogRepository;
+  hoteles: HotelRepository;
+  candidatos: CandidatoRepository;
   socios: SocioRepository;
 }

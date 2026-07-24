@@ -2,6 +2,8 @@ import type { DataLayer } from "@/lib/data/repositories";
 import { InMemoryContentRepository } from "@/lib/data/mock/in-memory-repository";
 import {
   blogPosts,
+  candidatos,
+  hoteles,
   informes,
   newsletters,
   noticias,
@@ -20,5 +22,7 @@ export const mockDataLayer: DataLayer = {
   noticias: new InMemoryContentRepository(noticias),
   newsletters: new InMemoryContentRepository(newsletters),
   blog: new InMemoryContentRepository(blogPosts),
+  hoteles: new InMemoryContentRepository(hoteles),
+  candidatos: new InMemoryContentRepository(candidatos),
   socios: new InMemoryContentRepository(socios),
 };

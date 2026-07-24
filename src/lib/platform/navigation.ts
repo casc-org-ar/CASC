@@ -1,8 +1,9 @@
 import {
+  BadgePercent,
+  Briefcase,
   FileText,
   Home,
   LayoutDashboard,
-  Mail,
   Newspaper,
   PenSquare,
   Users,
@@ -24,7 +25,8 @@ const NAV: Record<UserRole, NavItem[]> = {
     { label: "Webinars", href: "/admin/webinars", icon: Video },
     { label: "Informes", href: "/admin/informes", icon: FileText },
     { label: "Noticias", href: "/admin/noticias", icon: Newspaper },
-    { label: "Newsletter", href: "/admin/newsletter", icon: Mail },
+    { label: "Beneficios", href: "/admin/beneficios", icon: BadgePercent },
+    { label: "Bolsa de trabajo", href: "/admin/bolsa-de-trabajo", icon: Briefcase },
     { label: "Blog", href: "/admin/blog", icon: PenSquare },
     { label: "Socios", href: "/admin/socios", icon: Users },
   ],
@@ -33,7 +35,8 @@ const NAV: Record<UserRole, NavItem[]> = {
     { label: "Webinars", href: "/socio/webinars", icon: Video },
     { label: "Informes", href: "/socio/informes", icon: FileText },
     { label: "Noticias", href: "/socio/noticias", icon: Newspaper },
-    { label: "Newsletter", href: "/socio/newsletter", icon: Mail },
+    { label: "Beneficios", href: "/socio/beneficios", icon: BadgePercent },
+    { label: "Bolsa de trabajo", href: "/socio/bolsa-de-trabajo", icon: Briefcase },
   ],
 };
 

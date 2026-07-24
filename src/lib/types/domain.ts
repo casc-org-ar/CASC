@@ -100,6 +100,70 @@ export interface Socio extends BaseEntity {
   invitacionEnviadaAt?: string;
 }
 
+/**
+ * A hotel offering a discount to CASC members. Shown in the members-only
+ * benefits section and managed from the admin panel like any other content.
+ */
+export interface Hotel extends BaseEntity {
+  nombre: string;
+  /** Star rating, e.g. 4 or 5. */
+  estrellas?: number;
+  ciudad: string;
+  direccion?: string;
+  telefono?: string;
+  web?: string;
+  logoUrl?: string;
+  /** The discount headline, e.g. "10% sobre tarifa pública". */
+  descuento: string;
+  /** Extra perks beyond the headline discount (breakfast, upgrades, etc.). */
+  beneficios?: string[];
+  /** How to book: free-text with email/phone/contact and any client code. */
+  reservas?: string;
+  /** Reminder shown to members, e.g. to mention they are a CASC associate. */
+  nota?: string;
+  status: PublicationStatus;
+}
+
+/** Availability a candidate offers. */
+export type Disponibilidad = "full-time" | "part-time" | "ambas";
+
+/**
+ * A job-seeker who submitted their CV through the public Bolsa de Trabajo
+ * landing. Recruiters (shopping centers) browse published candidates from the
+ * platform; admins moderate them. `status` is used as a moderation gate:
+ * "borrador" = pending review, "publicado" = visible to recruiters.
+ *
+ * Personal data (email, telefono, cvUrl) is only ever read inside the
+ * authenticated platform — the public site writes candidates but never lists
+ * them. `consentimiento` records the explicit data-storage consent (ley 25.326).
+ */
+export interface Candidato extends BaseEntity {
+  // Datos básicos
+  nombre: string;
+  email: string;
+  telefono?: string;
+  // Perfil profesional
+  puestoBuscado: string;
+  /** Area of interest — one of the taxonomy values; powers a filter. */
+  areaInteres: string;
+  /** Skill tags — the key filter recruiters use. */
+  skills: string[];
+  aniosExperiencia?: number;
+  nivelEducativo?: string;
+  disponibilidad?: Disponibilidad;
+  // Ubicación
+  ciudad?: string;
+  provincia?: string;
+  // CV (mock upload for now; a stored URL/reference)
+  cvUrl: string;
+  /** Original CV filename, sanitized. Shown to recruiters on download. */
+  cvNombre?: string;
+  // Legal
+  consentimiento: boolean;
+  // Moderación
+  status: PublicationStatus;
+}
+
 /** The shape of the currently authenticated user. */
 export interface CurrentUser {
   id: string;
