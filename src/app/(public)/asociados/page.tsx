@@ -7,7 +7,12 @@ import {
   type AsociadosDirectoryFilters,
   type RegionSlug,
 } from "@/components/public/asociados-directory";
-import { asociados, type Asociado } from "@/lib/data/asociados";
+import {
+  asociadoRubros,
+  asociados,
+  type Asociado,
+  type AsociadoRubro,
+} from "@/lib/data/asociados";
 
 /**
  * Asociados directory — migrated from asociados.html. Lists every associate
@@ -145,8 +150,12 @@ function toDirectoryItem(asociado: Asociado): AsociadoDirectoryItem {
     category: asociado.category,
     logo: asociado.logo,
     direccion: asociado.direccion,
+    telefono: asociado.telefono,
+    web: asociado.web,
+    contacto: asociado.contacto,
     region,
     regionLabel: region ? regionLabels[region] : undefined,
+    rubro: asociado.rubro,
   };
 }
 
@@ -159,6 +168,7 @@ function getInitialFilters(searchParams: {
 }): AsociadosDirectoryFilters {
   const category = firstParam(searchParams.categoria);
   const region = firstParam(searchParams.region);
+  const rubro = firstParam(searchParams.rubro);
   const sort = firstParam(searchParams.orden);
   const query = firstParam(searchParams.q) ?? "";
 
@@ -179,9 +189,23 @@ function getInitialFilters(searchParams: {
       ? region
       : "all";
 
+  const safeRubro: AsociadosDirectoryFilters["rubro"] =
+    rubro && (asociadoRubros as string[]).includes(rubro)
+      ? (rubro as AsociadoRubro)
+      : "all";
+
+  // A region implies Shopping Centers; a rubro implies Proveedores.
+  const resolvedCategory =
+    safeRegion !== "all"
+      ? "shopping-centers"
+      : safeRubro !== "all"
+        ? "proveedores-de-servicios"
+        : safeCategory;
+
   return {
-    category: safeRegion === "all" ? safeCategory : "shopping-centers",
+    category: resolvedCategory,
     region: safeRegion,
+    rubro: safeRubro,
     query,
     sort: sort === "za" ? "za" : "az",
   };
@@ -198,6 +222,7 @@ export default async function AsociadosPage({
   const directoryKey = [
     initialFilters.category,
     initialFilters.region,
+    initialFilters.rubro,
     initialFilters.query,
     initialFilters.sort,
   ].join(":");

@@ -81,7 +81,7 @@ export default async function AsociadoFichaPage({
               />
             ) : (
               <span className="text-5xl font-bold text-accent">
-                [{asociado.name.charAt(0)}]
+                {asociado.name.charAt(0)}
               </span>
             )}
           </div>
@@ -95,6 +95,9 @@ export default async function AsociadoFichaPage({
             )}
 
             <dl>
+              {asociado.rubro && (
+                <DataRow label="Rubro" value={asociado.rubro} />
+              )}
               {asociado.direccion && (
                 <DataRow label="Dirección" value={asociado.direccion} />
               )}

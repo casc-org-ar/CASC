@@ -3,12 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { FormEvent } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Globe, Phone, Search, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import type { AsociadoCategory } from "@/lib/data/asociados";
+import { Select } from "@/components/ui/select";
+import {
+  asociadoRubros,
+  type AsociadoCategory,
+  type AsociadoRubro,
+} from "@/lib/data/asociados";
 import { cn } from "@/lib/utils";
 
 export type RegionSlug =
@@ -33,13 +38,18 @@ export interface AsociadoDirectoryItem {
   category: AsociadoCategory;
   logo?: string;
   direccion?: string;
+  telefono?: string;
+  web?: string;
+  contacto?: string;
   region?: RegionSlug;
   regionLabel?: string;
+  rubro?: AsociadoRubro;
 }
 
 export interface AsociadosDirectoryFilters {
   category: CategoryFilter;
   region: RegionSlug | "all";
+  rubro: AsociadoRubro | "all";
   query: string;
   sort: SortFilter;
 }
@@ -60,6 +70,84 @@ const regionOptions: Array<{ value: RegionSlug | "all"; label: string }> = [
   { value: "norte", label: "Norte" },
   { value: "patagonia", label: "Patagonia" },
 ];
+
+const rubroOptions: Array<{ value: AsociadoRubro | "all"; label: string }> = [
+  { value: "all", label: "Todos los rubros" },
+  ...asociadoRubros.map((rubro) => ({ value: rubro, label: rubro })),
+];
+
+const sortOptions: Array<{ value: SortFilter; label: string }> = [
+  { value: "az", label: "A a Z" },
+  { value: "za", label: "Z a A" },
+];
+
+/** sessionStorage key for the last used directory filters. */
+const FILTERS_STORAGE_KEY = "casc:asociados-filters";
+
+const categoryValues = new Set(categoryOptions.map((o) => o.value));
+const regionValues = new Set(regionOptions.map((o) => o.value));
+const rubroValues = new Set<AsociadoRubro | "all">([
+  "all",
+  ...asociadoRubros,
+]);
+
+/** Whether the filters carry any non-default value (i.e. came from the URL). */
+function hasExplicitFilters(filters: AsociadosDirectoryFilters): boolean {
+  return (
+    filters.category !== "all" ||
+    filters.region !== "all" ||
+    filters.rubro !== "all" ||
+    filters.sort !== "az" ||
+    filters.query.trim() !== ""
+  );
+}
+
+/**
+ * Resolve the starting filters: if the URL is unfiltered, fall back to the last
+ * ones saved in sessionStorage. Returns the exact `initialFilters` object when
+ * there is nothing to restore, so callers can compare by identity.
+ */
+function restoreFilters(
+  initialFilters: AsociadosDirectoryFilters,
+): AsociadosDirectoryFilters {
+  if (typeof window === "undefined") return initialFilters;
+  if (hasExplicitFilters(initialFilters)) return initialFilters;
+
+  try {
+    const raw = sessionStorage.getItem(FILTERS_STORAGE_KEY);
+    if (!raw) return initialFilters;
+    const saved = JSON.parse(raw) as Partial<AsociadosDirectoryFilters>;
+
+    const category =
+      saved.category && categoryValues.has(saved.category)
+        ? saved.category
+        : "all";
+    const region =
+      saved.region && regionValues.has(saved.region) ? saved.region : "all";
+    const rubro =
+      saved.rubro && rubroValues.has(saved.rubro) ? saved.rubro : "all";
+    const sort = saved.sort === "za" ? "za" : "az";
+    const query = typeof saved.query === "string" ? saved.query : "";
+
+    const filters: AsociadosDirectoryFilters = {
+      // Keep category/region/rubro coherent with each other.
+      category:
+        region !== "all"
+          ? "shopping-centers"
+          : rubro !== "all"
+            ? "proveedores-de-servicios"
+            : category,
+      region,
+      rubro,
+      sort,
+      query,
+    };
+
+    return hasExplicitFilters(filters) ? filters : initialFilters;
+  } catch {
+    return initialFilters;
+  }
+}
 
 function normalizeText(value: string): string {
   return value
@@ -88,6 +176,10 @@ function buildDirectoryHref(filters: AsociadosDirectoryFilters): string {
 
   if (filters.region !== "all") {
     params.set("region", filters.region);
+  }
+
+  if (filters.rubro !== "all") {
+    params.set("rubro", filters.rubro);
   }
 
   if (filters.query.trim()) {
@@ -130,7 +222,7 @@ function AsociadoCard({ asociado }: { asociado: AsociadoDirectoryItem }) {
             />
           ) : (
             <span className="absolute inset-0 flex items-center justify-center text-5xl font-bold text-accent">
-              [{asociado.name.charAt(0)}]
+              {asociado.name.charAt(0)}
             </span>
           )}
         </div>
@@ -147,6 +239,39 @@ function AsociadoCard({ asociado }: { asociado: AsociadoDirectoryItem }) {
             <p className="mt-2 text-sm leading-5 text-ink-muted">
               {asociado.direccion}
             </p>
+          )}
+
+          {/* Contact details, shown when the associate has them on file. */}
+          {(asociado.contacto || asociado.telefono || asociado.web) && (
+            <ul className="mt-3 space-y-1.5">
+              {asociado.contacto && (
+                <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
+                  <UserRound
+                    className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                    aria-hidden="true"
+                  />
+                  <span>{asociado.contacto}</span>
+                </li>
+              )}
+              {asociado.telefono && (
+                <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
+                  <Phone
+                    className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                    aria-hidden="true"
+                  />
+                  <span>{asociado.telefono}</span>
+                </li>
+              )}
+              {asociado.web && (
+                <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
+                  <Globe
+                    className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                    aria-hidden="true"
+                  />
+                  <span className="truncate">{asociado.web}</span>
+                </li>
+              )}
+            </ul>
           )}
 
           <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-medium text-primary">
@@ -170,8 +295,34 @@ export function AsociadosDirectory({
   initialFilters: AsociadosDirectoryFilters;
 }) {
   const router = useRouter();
-  const [draft, setDraft] = useState(initialFilters);
-  const [applied, setApplied] = useState(initialFilters);
+
+  // Restore the last used filters when the page is reopened without explicit
+  // filters in the URL, so an accidental tab close doesn't lose the search.
+  // Read in the state initializer (not an effect) to avoid a cascading render;
+  // a URL that already carries filters wins (e.g. a shared link).
+  const startingFilters = useState(() =>
+    restoreFilters(initialFilters),
+  )[0];
+  const [draft, setDraft] = useState(startingFilters);
+  const [applied, setApplied] = useState(startingFilters);
+
+  // If filters were restored from storage, reflect them in the URL once.
+  useEffect(() => {
+    if (startingFilters !== initialFilters) {
+      router.replace(buildDirectoryHref(startingFilters), { scroll: false });
+    }
+    // Run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist applied filters so they survive a reload or accidental close.
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(applied));
+    } catch {
+      // Storage may be unavailable (private mode, quota) — non-fatal.
+    }
+  }, [applied]);
 
   const filteredItems = useMemo(() => {
     const normalizedQuery = normalizeText(applied.query.trim());
@@ -186,6 +337,10 @@ export function AsociadosDirectory({
         }
 
         if (applied.region !== "all" && item.region !== applied.region) {
+          return false;
+        }
+
+        if (applied.rubro !== "all" && item.rubro !== applied.rubro) {
           return false;
         }
 
@@ -207,6 +362,11 @@ export function AsociadosDirectory({
   const activeTitle =
     applied.category === "all" ? "Asociados" : categoryLabel(applied.category);
 
+  // Región is meaningful for Shopping Centers; Rubro for Proveedores. Retailers
+  // get neither — they filter by name only.
+  const showRegionFilter = draft.category === "shopping-centers";
+  const showRubroFilter = draft.category === "proveedores-de-servicios";
+
   function applyFilters(nextFilters: AsociadosDirectoryFilters) {
     setApplied(nextFilters);
     setDraft(nextFilters);
@@ -227,6 +387,7 @@ export function AsociadosDirectory({
   function onClearFilters() {
     applyFilters({
       category: applied.category,
+      rubro: "all",
       region: "all",
       query: "",
       sort: "az",
@@ -256,7 +417,7 @@ export function AsociadosDirectory({
         onSubmit={onSubmit}
         className="mb-8 rounded-xl border border-border bg-surface/60 p-5"
       >
-        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.6fr_auto] lg:items-end">
+        <div className="grid gap-4 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end [&>label]:lg:min-w-44 [&>label]:lg:flex-1">
           <label className="block">
             <span className="text-sm font-semibold text-ink">Buscar</span>
             <input
@@ -273,66 +434,66 @@ export function AsociadosDirectory({
             />
           </label>
 
-          <label className="block">
-            <span className="text-sm font-semibold text-ink">Tipo</span>
-            <select
-              value={draft.category}
-              onChange={(event) => {
-                const category = event.target.value as CategoryFilter;
-                setDraft((current) => ({
-                  ...current,
-                  category,
-                  region:
-                    category === "shopping-centers" ? current.region : "all",
-                }));
-              }}
-              className="mt-2 h-10 w-full rounded-md border border-border bg-bg px-3 text-sm text-ink outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-accent/30"
-            >
-              {categoryOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <Select
+            label="Tipo"
+            value={draft.category}
+            options={categoryOptions}
+            onChange={(event) => {
+              const category = event.target.value as CategoryFilter;
+              setDraft((current) => ({
+                ...current,
+                category,
+                // Drop filters that do not apply to the new category.
+                region:
+                  category === "shopping-centers" ? current.region : "all",
+                rubro:
+                  category === "proveedores-de-servicios"
+                    ? current.rubro
+                    : "all",
+              }));
+            }}
+          />
 
-          <label className="block">
-            <span className="text-sm font-semibold text-ink">Región</span>
-            <select
+          {/* Región applies to Shopping Centers only; Proveedores filter by Rubro instead. */}
+          {showRegionFilter && (
+            <Select
+              label="Región"
               value={draft.region}
-              disabled={draft.category !== "shopping-centers"}
+              options={regionOptions}
               onChange={(event) =>
                 setDraft((current) => ({
                   ...current,
                   region: event.target.value as RegionSlug | "all",
                 }))
               }
-              className="mt-2 h-10 w-full rounded-md border border-border bg-bg px-3 text-sm text-ink outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-50 focus:border-primary focus:ring-2 focus:ring-accent/30"
-            >
-              {regionOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+            />
+          )}
 
-          <label className="block">
-            <span className="text-sm font-semibold text-ink">Orden</span>
-            <select
-              value={draft.sort}
+          {showRubroFilter && (
+            <Select
+              label="Rubro"
+              value={draft.rubro}
+              options={rubroOptions}
               onChange={(event) =>
                 setDraft((current) => ({
                   ...current,
-                  sort: event.target.value as SortFilter,
+                  rubro: event.target.value as AsociadoRubro | "all",
                 }))
               }
-              className="mt-2 h-10 w-full rounded-md border border-border bg-bg px-3 text-sm text-ink outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-accent/30"
-            >
-              <option value="az">A a Z</option>
-              <option value="za">Z a A</option>
-            </select>
-          </label>
+            />
+          )}
+
+          <Select
+            label="Orden"
+            value={draft.sort}
+            options={sortOptions}
+            onChange={(event) =>
+              setDraft((current) => ({
+                ...current,
+                sort: event.target.value as SortFilter,
+              }))
+            }
+          />
 
           <div className="flex gap-2">
             <Button type="submit" className="h-10">

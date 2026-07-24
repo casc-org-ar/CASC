@@ -11,6 +11,27 @@ export type AsociadoCategory =
   | "Proveedores de servicios"
   | "Otros";
 
+/**
+ * Rubro (line of business) for "Proveedores de servicios". Derived from each
+ * provider's `actividad` text so the directory can filter by activity —
+ * pending validation by CASC.
+ */
+export type AsociadoRubro =
+  | "Arquitectura y desarrollo"
+  | "Tecnología y software"
+  | "Marketing y fidelización"
+  | "Ambientación y equipamiento"
+  | "Servicios generales";
+
+/** Selectable rubros, in the order shown by the directory filter. */
+export const asociadoRubros: AsociadoRubro[] = [
+  "Arquitectura y desarrollo",
+  "Tecnología y software",
+  "Marketing y fidelización",
+  "Ambientación y equipamiento",
+  "Servicios generales",
+];
+
 export interface Asociado {
   slug: string;
   name: string;
@@ -24,6 +45,8 @@ export interface Asociado {
   actividad?: string;
   visitas?: string;
   locales?: string;
+  /** Only meaningful for "Proveedores de servicios". */
+  rubro?: AsociadoRubro;
 }
 
 export const asociados: Asociado[] = [
@@ -31,6 +54,7 @@ export const asociados: Asociado[] = [
     "slug": "unoporunomarketingintegrado",
     "name": "1POR1 Marketing Integrado",
     "category": "Proveedores de servicios",
+    "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/unoporunomarketingintegrado.webp",
     "web": "www.1por1.com.ar",
     "actividad": "Servicios para el desarrollo de negocios. Estrategias competitivas y de marketing para Centros Comerciales y Retailers. Estudios para implantación de nuevos centros y expansión de los existentes."
@@ -51,6 +75,7 @@ export const asociados: Asociado[] = [
     "slug": "airbits",
     "name": "Airbits",
     "category": "Proveedores de servicios",
+    "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/airbits.webp",
     "web": "www.airbits.com.ar",
     "contacto": "Pablo Honnorat – Socio Gerente",
@@ -72,6 +97,7 @@ export const asociados: Asociado[] = [
     "slug": "aldo-volpe-arquitectos",
     "name": "Aldo Volpe Arquitectos",
     "category": "Proveedores de servicios",
+    "rubro": "Arquitectura y desarrollo",
     "logo": "/assets/asociados/logos/aldo-volpe-arquitectos.webp",
     "web": "www.aldovolpe.com.ar",
     "contacto": "Arq. Aldo Volpe",
@@ -151,6 +177,7 @@ export const asociados: Asociado[] = [
     "slug": "appa",
     "name": "Appa",
     "category": "Proveedores de servicios",
+    "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/appa.webp",
     "actividad": "&iexcl;appa! es la plataforma lider en fidelizaci&oacute;n y gesti&oacute;n digital para centros comerciales, dise&ntilde;ada para optimizar la operaci&oacute;n y reducir costos. Elimina las filas en stands de promociones y minimiza la necesidad de personal operativo a trav&eacute;s de inteligencia artificial para la validaci&oacute;n autom&aacute;tica de facturas, integra de forma nativa el control de parking y barreras, permitiendo al usuario obtener beneficios mientras que el shopping accede a un ecosistema de insights y data en tiempo real, permitiendo impactar a los clientes mediante canales de comunicaci&oacute;n segmentados basados en su comportamiento real de compra."
   },
@@ -158,6 +185,7 @@ export const asociados: Asociado[] = [
     "slug": "artisdeco",
     "name": "Artisdeco",
     "category": "Proveedores de servicios",
+    "rubro": "Ambientación y equipamiento",
     "logo": "/assets/asociados/logos/artisdeco.webp",
     "web": "www.artisdeco.com.ar",
     "contacto": "Noelia Nasir",
@@ -221,6 +249,7 @@ export const asociados: Asociado[] = [
     "slug": "centros-comerciales-latinoamerica-ccla",
     "name": "Centros comerciales Latinoamérica | CCLA",
     "category": "Proveedores de servicios",
+    "rubro": "Arquitectura y desarrollo",
     "logo": "/assets/asociados/logos/centros-comerciales-latinoamerica-ccla.webp",
     "web": "www.cclatinoamerica.com.ar",
     "actividad": "Estudios de Factibilidad para el desarrollo de Galerías, Centros Comerciales y Shoppings Centers. Comercialización de locales, espacios para stands y grandes superficies. Auditorías. Control de Calidad en procesos administrativos y comerciales. Reconversión de Espacios Comerciales. Diseño e Implementación de campañas de Marketing. Desarrollo de Programas de Fidelización de clientes."
@@ -237,6 +266,7 @@ export const asociados: Asociado[] = [
     "slug": "city-center-rosario",
     "name": "City Center Rosario",
     "category": "Proveedores de servicios",
+    "rubro": "Servicios generales",
     "logo": "/assets/asociados/logos/city-center-rosario.webp",
     "web": "www.citycenter-rosario.com.ar",
     "actividad": "Servicios relacionados con juegos de azar y apuestas N.C.P. // Servicios de expendio de comidas y bebidas en establecimientos con servicio de mesa y/o en mostrador N.C.P. // Servicios de alojamiento en hoteles, hosterías y residenciales similares, excepto por hora, que incluyen servicio de restaurante al público // Servicios inmobiliarios realizados por cuenta propia, con bienes urbanos propios o arrendados N.C.P. // Servicios de alquiler y explotación de inmuebles para fiestas, convenciones y otros eventos similares // Servicios de playas de estacionamiento y garajes // Servicios empresariales N.C.P."
@@ -245,6 +275,7 @@ export const asociados: Asociado[] = [
     "slug": "clash",
     "name": "Clash",
     "category": "Proveedores de servicios",
+    "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/clash.webp",
     "contacto": "Juan Marcos Aviano &ndash; Director Comercial &amp; MKT Redes sociales: X: https://x.com/ClashBeneficios Facebook: https://www.facebook.com/clash.beneficios Youtube: https://www.youtube.com/@clashbeneficios Instagram: https://www.instagram.com/clash.beneficios",
     "actividad": "Clash conecta a centros comerciales con sus visitantes a trav&eacute;s de promociones claras, organizadas y visibles. Es una soluci&oacute;n integral que profesionaliza la comunicaci&oacute;n de los beneficios de los locatarios, centraliz&aacute;ndolos en un solo lugar y acompa&ntilde;ando al shopping con tecnolog&iacute;a, soporte operativo y acciones comerciales. Adem&aacute;s, forma parte de un ecosistema donde miles de personas consultan cada mes todas las promociones bancarias y extrabancarias en supermercados, estaciones de servicio y otros rubros clave. Clash permite al centro comercial ganar visibilidad real y conectar con el consumidor justo cuando est&aacute; buscando d&oacute;nde aprovechar sus beneficios."
@@ -301,6 +332,7 @@ export const asociados: Asociado[] = [
     "slug": "di-desing",
     "name": "Di Desing",
     "category": "Proveedores de servicios",
+    "rubro": "Arquitectura y desarrollo",
     "logo": "/assets/asociados/logos/di-desing.webp",
     "web": "www.di-design.net",
     "contacto": "Luis Di Virgilio – Arquitecto",
@@ -361,6 +393,7 @@ export const asociados: Asociado[] = [
     "slug": "etia-charge",
     "name": "Etia charge",
     "category": "Proveedores de servicios",
+    "rubro": "Ambientación y equipamiento",
     "logo": "/assets/asociados/logos/etia-charge.webp",
     "web": "www.etiacharge.com",
     "contacto": "Carlos F. Pratts – Director Comercial",
@@ -370,6 +403,7 @@ export const asociados: Asociado[] = [
     "slug": "euler",
     "name": "Euler",
     "category": "Proveedores de servicios",
+    "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/euler.webp",
     "contacto": "Herman Moldovan - Director Redes : linkedin -&gt; www.linkedin.com/company/eulerlabs",
     "actividad": "Eulerlabs es una empresa de tecnolog&iacute;a dedicada a la medici&oacute;n, an&aacute;lisis y optimizaci&oacute;n del desempe&ntilde;o de centros comerciales . Brindamos soluciones que permiten entender el comportamiento de los visitantes , evaluar la performance de los locales y mejorar la gesti&oacute;n comercial y operativa del shopping, a partir de datos objetivos y confiables. Nuestra plataforma integra informaci&oacute;n de flujo peatonal, ocupaci&oacute;n, permanencia , junto con datos de ventas y contexto, para acompa&ntilde;ar la toma de decisiones estrat&eacute;gicas. Sectores o especialidades en los que opera Eulerlabs opera principalmente en el sector retail y centros comerciales , especializ&aacute;ndose en: Shopping centers Gesti&oacute;n y auditor&iacute;a de locales Medici&oacute;n de flujo peatonal y ocupaci&oacute;n An&aacute;lisis de performance comercial y operativa Integraci&oacute;n de datos f&iacute;sicos y comerciales en una &uacute;nica plataforma Valor diferencial / Propuesta de valor El principal diferencial de Eulerlabs es la combinaci&oacute;n de experiencia, cobertura y foco en resultados de negocio . Contamos con m&aacute;s de 15 a&ntilde;os de experiencia trabajando con shopping centers y tenemos presencia en casi la totalidad de los shoppings del pa&iacute;s , lo que nos permite conocer en profundidad su operaci&oacute;n, desaf&iacute;os y necesidades. Ofrecemos a nuestros clientes: Datos confiables y comparables entre locales y centros comerciales Una mirada objetiva para gestionar, auditar y optimizar la performance Una soluci&oacute;n desarrollada espec&iacute;ficamente para el negocio de shoppings"
@@ -558,6 +592,7 @@ export const asociados: Asociado[] = [
     "slug": "nuova-suite",
     "name": "Nuova Suite",
     "category": "Proveedores de servicios",
+    "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/nuova-suite.webp",
     "web": "www.nuovasuite.com",
     "contacto": "Gustavo Menicillo gustavo@nuovasuite.com",
@@ -1015,6 +1050,7 @@ export const asociados: Asociado[] = [
     "slug": "solutions-malls",
     "name": "Solutions malls",
     "category": "Proveedores de servicios",
+    "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/solutions-malls.webp",
     "web": "www.solutionsmalls.com.ar",
     "actividad": "Soluciones integrales de Software para centros comerciales."
@@ -1080,6 +1116,7 @@ export const asociados: Asociado[] = [
     "slug": "wiki-biz",
     "name": "Wiki Biz",
     "category": "Proveedores de servicios",
+    "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/wiki-biz.webp",
     "web": "www.wikibiz.us",
     "contacto": "Gustavo Menicillo",
