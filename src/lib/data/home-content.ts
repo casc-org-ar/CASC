@@ -56,59 +56,87 @@ export const beneficios: Beneficio[] = [
  * full list lives at /actividades.
  */
 export interface Capacitacion {
+  /** URL-friendly id for the activity's own page. */
+  slug: string;
   titulo: string;
   descripcion: string;
   imagen: string;
+  /**
+   * Full text for the detail page. Falls back to `descripcion` when the
+   * activity has no extended write-up yet.
+   */
+  cuerpo?: string;
+  /** Display date, e.g. "28 de mayo de 2026". Optional until CASC provides it. */
+  fecha?: string;
+  /** Venue or format, e.g. "Auditorio Plaza Galicia, CABA" / "Online". */
+  lugar?: string;
+  /** External registration or info link, when the activity has one. */
+  inscripcionUrl?: string;
 }
 
 export const capacitaciones: Capacitacion[] = [
   {
+    slug: "clicc-2026",
     titulo: "4.º Congreso Latinoamericano de Centros Comerciales CLICC 2026",
     descripcion:
       "Unidos desde el centro del mundo: transformando la experiencia. El sector de los centros comerciales de América Latina volverá a reunirse en uno de los eventos más relevantes de la industria.",
     imagen: "/assets/blog/clicc-congreso.webp",
   },
   {
+    slug: "fase-2026",
     titulo:
       "FASE 2026: más de 200 profesionales analizaron el presente y futuro de los shopping centers",
     descripcion:
       "La Cámara Argentina de Shopping Centers llevó adelante la segunda edición de FASE - Foro Argentino de Shoppings y Experiencias, el pasado 28 de mayo, en el Auditorio Plaza Galicia de la Ciudad de Buenos Aires.",
     imagen: "/assets/blog/fase-2026.webp",
+    fecha: "28 de mayo de 2026",
+    lugar: "Auditorio Plaza Galicia, Ciudad de Buenos Aires",
   },
   {
+    slug: "gestion-de-mall-integral-la-vaguada",
     titulo: "Gestión de mall integral: la experiencia de La Vaguada",
     descripcion:
       "CASC organiza un nuevo webinar con foco en buenas prácticas internacionales.",
     imagen: "/assets/blog/gestion-de-mall-integral.webp",
+    lugar: "Webinar online",
   },
   {
+    slug: "webinar-monitoreo-inteligente",
     titulo: "Webinar: “Monitoreo Inteligente”",
     descripcion:
       "Descubrí cómo la inteligencia artificial y el monitoreo inteligente pueden mejorar la gestión y operación de los shopping centers.",
     imagen: "/assets/blog/monitoreo-inteligente.webp",
+    lugar: "Webinar online",
   },
   {
+    slug: "webinar-remodelar-un-shopping",
     titulo: "Webinar: Remodelar un shopping",
     descripcion: "Errores que cuestan millones y cómo evitarlos.",
     imagen: "/assets/blog/remodelar-un-shopping.webp",
+    lugar: "Webinar online",
   },
 ];
 
 /** 2025 activities migrated from actividades.html, with images in /assets/pages/actividades. */
 export const actividades2025: Capacitacion[] = [
   {
+    slug: "fase-2025",
     titulo:
       "FASE 2025: un espacio clave para pensar el presente y futuro de los Centros Comerciales",
     descripcion:
       "El Foro Argentino de Shoppings y Experiencias reunirá a referentes del sector para analizar tendencias, datos y oportunidades.",
     imagen: "/assets/pages/actividades/articulo1.webp",
+    fecha: "2025",
   },
   {
+    slug: "eficiencia-energetica-centros-comerciales",
     titulo:
       "Eficiencia energética en Centros Comerciales: un eje clave para optimizar la gestión",
     descripcion:
       "Un webinar gratuito abordará buenas prácticas y estrategias para reducir el impacto energético en los Shopping Centers.",
     imagen: "/assets/pages/actividades/articulo2.webp",
+    fecha: "2025",
+    lugar: "Webinar online",
   },
 ];
 

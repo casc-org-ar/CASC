@@ -84,7 +84,7 @@ const homeActivityItems: ContentCarouselItem[] = capacitaciones.map(
     description: item.descripcion,
     image: item.imagen,
     eyebrow: "Actividad",
-    href: `/actividades#actividad-${index + 1}`,
+    href: `/actividades/${item.slug}`,
   }),
 );
 

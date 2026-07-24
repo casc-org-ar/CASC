@@ -46,6 +46,7 @@ export default async function ActividadesPage() {
       description: item.descripcion,
       image: item.imagen,
       eyebrow: "Actividad",
+      href: `/actividades/${item.slug}`,
     }),
   );
 
@@ -57,6 +58,7 @@ export default async function ActividadesPage() {
       image: item.imagen,
       imageFit: "contain",
       eyebrow: "Actividad 2025",
+      href: `/actividades/${item.slug}`,
     }),
   );
 
@@ -67,6 +69,9 @@ export default async function ActividadesPage() {
     image: post.portadaUrl,
     eyebrow: "Noticia",
     dateLabel: formatDate(post.fecha),
+    // Each news card opens its article; `from` lets the article send the
+    // reader back here instead of to the news listing.
+    href: `/noticias/${post.slug}?from=actividades`,
   }));
 
   return (
