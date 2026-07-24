@@ -48,7 +48,7 @@ export function PlatformShell({
             showDevSwitcher={showDevSwitcher}
             onMenuClick={() => setSidebarOpen(true)}
           />
-          <main className="mx-auto max-w-[1600px] px-4 py-8 lg:px-10 xl:px-12">
+          <main className="w-full px-4 py-8 lg:px-10 xl:px-12">
             {children}
           </main>
         </div>
