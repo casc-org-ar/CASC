@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, FileDown } from "lucide-react";
 import { DataTable, type Column } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
@@ -64,6 +64,26 @@ export function BolsaTrabajoManager({
     {
       header: "Área",
       cell: (c) => <span className="text-ink-muted">{c.areaInteres}</span>,
+    },
+    {
+      // The CV is what the admin needs to actually judge a candidate before
+      // publishing them, so it sits right before the moderation controls.
+      header: "CV",
+      cell: (c) =>
+        c.cvUrl ? (
+          <a
+            href={c.cvUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            aria-label={`Ver CV de ${c.nombre}`}
+          >
+            <FileDown className="h-4 w-4" aria-hidden />
+            Ver CV
+          </a>
+        ) : (
+          <span className="text-sm text-ink-muted">—</span>
+        ),
     },
     { header: "Estado", cell: (c) => <StatusBadge status={c.status} /> },
     {

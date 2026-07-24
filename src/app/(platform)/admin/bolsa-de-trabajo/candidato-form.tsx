@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { FileDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select } from "@/components/ui/field";
 import { useToast } from "@/components/ui/toast";
@@ -45,6 +46,28 @@ export function CandidatoForm({ candidato, onDone }: CandidatoFormProps) {
 
   return (
     <form action={action} className="space-y-4">
+      {/* The submitted CV, so the admin can review it while moderating. */}
+      {candidato.cvUrl && (
+        <a
+          href={candidato.cvUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-3 rounded-lg border border-border bg-surface p-3 transition-colors hover:border-accent/70"
+        >
+          <FileDown className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+          <span className="min-w-0">
+            <span className="block text-sm font-semibold text-ink">
+              Ver CV del candidato
+            </span>
+            {candidato.cvNombre && (
+              <span className="block truncate text-xs text-ink-muted">
+                {candidato.cvNombre}
+              </span>
+            )}
+          </span>
+        </a>
+      )}
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Nombre" htmlFor="nombre">
           <Input id="nombre" name="nombre" required defaultValue={candidato.nombre} />
