@@ -54,6 +54,7 @@ export const mainNav: NavItem[] = [
   },
   { label: "Actividades", href: "/actividades" },
   { label: "Beneficios", href: "/beneficios" },
+  { label: "Bolsa de trabajo", href: "/bolsa-de-trabajo" },
   { label: "Contacto", href: "/contacto" },
 ];
 

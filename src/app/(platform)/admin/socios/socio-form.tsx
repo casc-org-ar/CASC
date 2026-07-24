@@ -51,7 +51,7 @@ export function SocioForm({ socio, onDone, onAlta }: SocioFormProps) {
         />
       </FormField>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Email" htmlFor="email">
           <Input
             id="email"
@@ -66,7 +66,7 @@ export function SocioForm({ socio, onDone, onAlta }: SocioFormProps) {
         </FormField>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Rol" htmlFor="role">
           <Select id="role" name="role" defaultValue={socio?.role ?? "socio"}>
             <option value="socio">Socio</option>

@@ -46,7 +46,7 @@ export function HotelForm({ hotel, onDone }: HotelFormProps) {
         />
       </FormField>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Ciudad" htmlFor="ciudad">
           <Input
             id="ciudad"
@@ -79,7 +79,7 @@ export function HotelForm({ hotel, onDone }: HotelFormProps) {
         />
       </FormField>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Teléfono (opcional)" htmlFor="telefono">
           <Input
             id="telefono"

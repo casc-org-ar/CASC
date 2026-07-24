@@ -61,7 +61,7 @@ export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
         />
       </FormField>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Fecha" htmlFor="fecha">
           <Input
             id="fecha"

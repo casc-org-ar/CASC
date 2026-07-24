@@ -190,10 +190,16 @@ export default function NosotrosPage() {
 
       {/* Frase institucional */}
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
-        <p className="flex items-center justify-center gap-3 text-center text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-          <span className="text-4xl font-extralight text-accent">[</span>
+        <p className="flex items-center justify-center gap-4 text-center text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+          <span
+            aria-hidden="true"
+            className="hidden h-px w-10 shrink-0 bg-accent sm:block"
+          />
           Representamos a los Shopping Centers de Argentina
-          <span className="text-4xl font-extralight text-accent">]</span>
+          <span
+            aria-hidden="true"
+            className="hidden h-px w-10 shrink-0 bg-accent sm:block"
+          />
         </p>
       </section>
 

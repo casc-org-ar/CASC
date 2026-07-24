@@ -201,7 +201,7 @@ export function BlogForm({ post, onDone }: BlogFormProps) {
         </div>
       </FormField>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Autor" htmlFor="autor">
           <Input
             id="autor"
@@ -222,7 +222,7 @@ export function BlogForm({ post, onDone }: BlogFormProps) {
         </FormField>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Fecha" htmlFor="fecha">
           <Input
             id="fecha"

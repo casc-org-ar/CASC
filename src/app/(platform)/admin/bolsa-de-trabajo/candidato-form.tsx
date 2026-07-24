@@ -45,7 +45,7 @@ export function CandidatoForm({ candidato, onDone }: CandidatoFormProps) {
 
   return (
     <form action={action} className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Nombre" htmlFor="nombre">
           <Input id="nombre" name="nombre" required defaultValue={candidato.nombre} />
         </FormField>
@@ -60,7 +60,7 @@ export function CandidatoForm({ candidato, onDone }: CandidatoFormProps) {
         </FormField>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Teléfono" htmlFor="telefono">
           <Input id="telefono" name="telefono" defaultValue={candidato.telefono} />
         </FormField>
@@ -99,7 +99,7 @@ export function CandidatoForm({ candidato, onDone }: CandidatoFormProps) {
         />
       </FormField>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Ciudad" htmlFor="ciudad">
           <Input id="ciudad" name="ciudad" defaultValue={candidato.ciudad} />
         </FormField>

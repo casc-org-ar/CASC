@@ -39,7 +39,7 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
 
   return (
     <form action={action} className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Título" htmlFor="titulo">
           <Input
             id="titulo"
@@ -81,7 +81,7 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
         />
       </FormField>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Fecha" htmlFor="fecha">
           <Input
             id="fecha"

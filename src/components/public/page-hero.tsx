@@ -1,6 +1,6 @@
 /**
  * Public page hero — the standard title band for institutional pages.
- * Uses the brand bracket motif via the shared token color.
+ * The title scales down on small screens so long titles never overflow.
  */
 export function PageHero({
   title,
@@ -11,13 +11,12 @@ export function PageHero({
 }) {
   return (
     <section className="bg-casc-navy-900">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold tracking-tight text-white">
-          <span className="text-accent">[</span> {title}{" "}
-          <span className="text-accent">]</span>
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
+        <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          {title}
         </h1>
         {subtitle && (
-          <p className="mt-3 max-w-3xl text-lg font-light text-white/80">
+          <p className="mt-3 max-w-3xl text-base font-light leading-7 text-white/80 sm:text-lg">
             {subtitle}
           </p>
         )}
