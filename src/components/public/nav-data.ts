@@ -94,6 +94,7 @@ export const footerColumns: NavGroup[] = [
     label: "Secciones",
     children: [
       { label: "Actividades", href: "/actividades" },
+      { label: "Noticias", href: "/noticias" },
       { label: "Bolsa de trabajo", href: "/bolsa-de-trabajo" },
       { label: "Contacto", href: "/contacto" },
     ],

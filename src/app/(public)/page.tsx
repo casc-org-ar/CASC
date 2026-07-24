@@ -275,7 +275,7 @@ export default async function HomePage() {
             title="Noticias y tendencias del sector"
             description="Contenido actualizado sobre consumo, retail, centros comerciales, tecnologías aplicadas al sector, aperturas y eventos."
             action={
-              <ButtonLink href="/actividades" size="lg">
+              <ButtonLink href="/noticias" size="lg">
                 Ver todas las noticias
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </ButtonLink>
@@ -287,7 +287,7 @@ export default async function HomePage() {
               {noticias.map((post) => (
                 <Link
                   key={post.id}
-                  href={`/actividades#${post.slug}`}
+                  href={`/noticias/${post.slug}`}
                   className="group block h-full min-w-full shrink-0 snap-start focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:min-w-0"
                 >
                   <Card
