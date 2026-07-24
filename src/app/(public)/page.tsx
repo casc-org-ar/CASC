@@ -7,7 +7,6 @@ import { ArrowRight } from "lucide-react";
 const DomeGallery = dynamic(
   () => import("@/components/public/dome-gallery"),
 );
-const Grainient = dynamic(() => import("@/components/public/grainient"));
 import {
   ContentCarousel,
   type ContentCarouselItem,
@@ -27,6 +26,7 @@ import {
 } from "@/lib/data/home-content";
 import { getDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
+import { cn } from "@/lib/utils";
 
 /**
  * Public home page — migrated from the original CASC index.html.
@@ -39,17 +39,17 @@ import { onlyPublished } from "@/lib/data/published";
 
 const heroSlides = [
   {
-    desktop: "/assets/banners/banner-1-1.webp",
-    tablet: "/assets/banners/banner-1-2.webp",
-    mobile: "/assets/banners/banner-1-3.webp",
-    alt: "Cámara Argentina de Shopping Centers",
-  },
-  {
     desktop: "/assets/banners/banner-2-1.webp",
     tablet: "/assets/banners/banner-2-2.webp",
     mobile: "/assets/banners/banner-2-3.webp",
     alt: "Propuesta de valor CASC",
     href: "/assets/banners/Propuesta_valor_CASC_23_12_25.pdf",
+  },
+  {
+    desktop: "/assets/banners/banner-1-1.webp",
+    tablet: "/assets/banners/banner-1-2.webp",
+    mobile: "/assets/banners/banner-1-3.webp",
+    alt: "Cámara Argentina de Shopping Centers",
   },
   {
     desktop: "/assets/banners/banner-3-1.webp",
@@ -67,10 +67,15 @@ const funciones = [
   "Difusión de novedades, regulaciones y tendencias",
 ];
 
-/** Shopping Center logos for the marquee, drawn from the associates dataset. */
+/** Sponsors shown alphabetically, independent of the source list order. */
+const sortedSponsors = [...sponsors].sort((a, b) =>
+  a.name.localeCompare(b.name, "es"),
+);
+
+/** Shopping Center logos for the sphere, linking to each associate's page. */
 const shoppingLogos = asociados
   .filter((a) => a.category === "Shopping Centers" && a.logo)
-  .map((a) => ({ name: a.name, logo: a.logo! }));
+  .map((a) => ({ name: a.name, logo: a.logo!, slug: a.slug }));
 
 const homeActivityItems: ContentCarouselItem[] = capacitaciones.map(
   (item, index) => ({
@@ -145,8 +150,8 @@ export default async function HomePage() {
         />
 
         <div className="space-y-10">
-          {/* Video protagonista, a todo el ancho */}
-          <div className="card-depth aspect-video w-full overflow-hidden rounded-2xl border border-border bg-white p-2">
+          {/* Video, con ancho contenido para no competir con el resto de la sección */}
+          <div className="card-depth mx-auto aspect-video w-full max-w-3xl overflow-hidden rounded-2xl border border-border bg-white p-2">
             <iframe
               src="https://www.youtube-nocookie.com/embed/tVvNHVC9a44"
               title="Cámara Argentina de Shopping Centers"
@@ -207,17 +212,19 @@ export default async function HomePage() {
             }
           />
 
-          {/* DomeGallery (React Bits) — logos de shopping centers en esfera 3D */}
+          {/* DomeGallery (React Bits) — logos de shopping centers en esfera 3D.
+              Fondo suave detrás de la esfera para que se aprecie mejor su volumen. */}
           <div
-            className="relative overflow-hidden rounded-2xl border border-border bg-surface"
+            className="relative overflow-hidden rounded-2xl border border-border bg-linear-to-b from-casc-blue-300/25 via-surface to-white"
             style={{ height: 520 }}
           >
             <DomeGallery
               images={shoppingLogos.map((s) => ({
                 src: s.logo,
                 alt: s.name,
+                href: `/asociados/${s.slug}`,
               }))}
-              overlayBlurColor="#f7f8fa"
+              overlayBlurColor="#eef1f6"
               grayscale={false}
               fit={0.6}
               minRadius={400}
@@ -330,39 +337,17 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* CTA plataforma */}
-      <section className="relative overflow-hidden bg-casc-navy-900">
-        {/* Grainient (React Bits) — fondo azul oscuro animado (WebGL) */}
-        <div aria-hidden="true" className="absolute inset-0">
-          <Grainient
-            color1="#000143"
-            color2="#261e46"
-            color3="#000000"
-            timeSpeed={0.25}
-            colorBalance={-0.26}
-            warpStrength={1.0}
-            warpFrequency={5.0}
-            warpSpeed={2.0}
-            warpAmplitude={50.0}
-            blendSoftness={0.05}
-            rotationAmount={500.0}
-            noiseScale={2.0}
-            grainAmount={0.1}
-            grainScale={2.0}
-            contrast={1.5}
-            zoom={0.9}
-          />
-        </div>
-
+      {/* CTA plataforma — sobre fondo claro; el azul institucional pasó al pie. */}
+      <section className="relative overflow-hidden border-y border-border bg-surface/70">
         <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
               Plataforma para asociados
             </p>
-            <h2 className="mt-3 text-4xl font-extrabold tracking-tight text-white">
+            <h2 className="mt-3 text-4xl font-extrabold tracking-tight text-ink">
               Accedé a la plataforma exclusiva para asociados
             </h2>
-            <p className="mt-4 max-w-2xl text-lg font-light leading-8 text-white/80">
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-ink-muted">
               Los miembros de la CASC cuentan con un panel privado con acceso a
               documentación, estadísticas ampliadas, materiales de comisiones,
               informes técnicos y contenido profesional exclusivo.
@@ -404,18 +389,15 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <HomeSectionHeader
             eyebrow="Red institucional"
-            title="Sponsors e instituciones"
+            title="Sponsors"
             align="center"
           />
 
           {/* Sponsors — logos sueltos en fila, sin card contenedora */}
           <div>
             <div className="mt-8 flex snap-x snap-mandatory items-center gap-1 overflow-x-auto pb-3 [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-nowrap sm:justify-center sm:gap-x-0 sm:overflow-visible sm:pb-0 [&::-webkit-scrollbar]:hidden">
-              {sponsors.map((sponsor) => (
-                <div
-                  key={sponsor.name}
-                  className="flex h-32 w-64 shrink-0 snap-center items-center justify-center sm:h-36 sm:w-auto sm:flex-1"
-                >
+              {sortedSponsors.map((sponsor) => {
+                const logo = (
                   <Image
                     src={sponsor.logo}
                     alt={sponsor.name}
@@ -423,8 +405,29 @@ export default async function HomePage() {
                     height={144}
                     className="max-h-full w-auto object-contain"
                   />
-                </div>
-              ))}
+                );
+
+                return (
+                  <div
+                    key={sponsor.name}
+                    className="flex h-32 w-64 shrink-0 snap-center items-center justify-center sm:h-36 sm:w-auto sm:flex-1"
+                  >
+                    {sponsor.url ? (
+                      <a
+                        href={sponsor.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`Sitio web de ${sponsor.name}`}
+                        className="flex h-full items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                      >
+                        {logo}
+                      </a>
+                    ) : (
+                      logo
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -433,21 +436,32 @@ export default async function HomePage() {
             <h3 className="text-center text-sm font-semibold uppercase tracking-[0.16em] text-ink-muted">
               Integrante de
             </h3>
+            {/* CACyS has heavy internal padding, so besides a larger box it gets
+                an extra scale to actually read bigger than CLICC. */}
             <div className="mt-10 flex flex-wrap items-center justify-center gap-12 sm:gap-16">
-              {memberOf.map((member) => (
-                <div
-                  key={member.name}
-                  className="flex h-36 w-36 items-center justify-center sm:h-44 sm:w-44"
-                >
-                  <Image
-                    src={member.logo}
-                    alt={member.name}
-                    width={176}
-                    height={176}
-                    className="max-h-full w-auto rounded-full object-contain"
-                  />
-                </div>
-              ))}
+              {memberOf.map((member) => {
+                const larger = member.name.startsWith("Cámara Argentina de Comercio");
+                return (
+                  <div
+                    key={member.name}
+                    className={cn(
+                      "flex items-center justify-center",
+                      larger ? "h-56 w-56" : "h-40 w-40",
+                    )}
+                  >
+                    <Image
+                      src={member.logo}
+                      alt={member.name}
+                      width={224}
+                      height={224}
+                      className={cn(
+                        "rounded-full object-contain",
+                        larger ? "h-56 w-56 scale-110" : "h-40 w-40",
+                      )}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

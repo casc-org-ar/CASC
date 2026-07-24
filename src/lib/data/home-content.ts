@@ -112,14 +112,44 @@ export const actividades2025: Capacitacion[] = [
   },
 ];
 
-/** Sponsors, with logos in /assets/sponsors. */
-export const sponsors = [
-  { name: "City Center", logo: "/assets/sponsors/citycenter.webp" },
-  { name: "Nuova Suite", logo: "/assets/sponsors/nuova-site.webp" },
-  { name: "Solutions Malls", logo: "/assets/sponsors/solutions-malls.webp" },
-  { name: "Wiki Biz", logo: "/assets/sponsors/wiki-biz.webp" },
-  { name: "Pullman", logo: "/assets/sponsors/pullman.webp" },
-] as const;
+/**
+ * Sponsors, with logos in /assets/sponsors. Sorted alphabetically at render
+ * time so the display order does not depend on how this list is maintained.
+ */
+export interface Sponsor {
+  name: string;
+  logo: string;
+  /** Sponsor website, opened in a new tab from the home page. */
+  url?: string;
+}
+
+export const sponsors: Sponsor[] = [
+  {
+    name: "City Center",
+    logo: "/assets/sponsors/citycenter.webp",
+    url: "https://www.citycenter-rosario.com.ar",
+  },
+  {
+    name: "Nuova Suite",
+    logo: "/assets/sponsors/nuova-site.webp",
+    url: "https://www.nuovasuite.com",
+  },
+  {
+    name: "Solutions Malls",
+    logo: "/assets/sponsors/solutions-malls.webp",
+    url: "https://www.solutionsmalls.com",
+  },
+  {
+    name: "Wiki Biz",
+    logo: "/assets/sponsors/wiki-biz.webp",
+    url: "https://wikibiz.us/",
+  },
+  {
+    name: "Pullman",
+    logo: "/assets/sponsors/pullman.webp",
+    url: "https://pullman.accor.com/es.html",
+  },
+];
 
 /** "Integrante de:" institutional memberships. */
 export const memberOf = [

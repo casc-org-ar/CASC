@@ -102,7 +102,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
             type="button"
             onClick={() => goTo(index - 1)}
             aria-label="Banner anterior"
-            className="group absolute left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/20 text-white shadow-lg backdrop-blur-md transition hover:bg-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:left-5 sm:h-12 sm:w-12"
+            className="group absolute left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-casc-navy-900/80 text-white shadow-lg ring-1 ring-white/60 backdrop-blur-md transition hover:bg-casc-navy-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-white sm:left-5 sm:h-12 sm:w-12"
           >
             <ChevronLeft
               className="h-5 w-5 transition-transform duration-200 group-hover:-translate-x-0.5"
@@ -114,7 +114,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
             type="button"
             onClick={() => goTo(index + 1)}
             aria-label="Banner siguiente"
-            className="group absolute right-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/20 text-white shadow-lg backdrop-blur-md transition hover:bg-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:right-5 sm:h-12 sm:w-12"
+            className="group absolute right-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-casc-navy-900/80 text-white shadow-lg ring-1 ring-white/60 backdrop-blur-md transition hover:bg-casc-navy-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-white sm:right-5 sm:h-12 sm:w-12"
           >
             <ChevronRight
               className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5"
@@ -130,8 +130,8 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                 onClick={() => goTo(i)}
                 aria-label={`Ir al banner ${i + 1}`}
                 className={cn(
-                  "h-2 w-2 rounded-full transition-colors",
-                  i === index ? "bg-primary" : "bg-white/70 hover:bg-white",
+                  "h-2.5 w-2.5 rounded-full ring-1 ring-casc-navy-900/40 transition-colors",
+                  i === index ? "bg-primary" : "bg-white/80 hover:bg-white",
                 )}
               />
             ))}

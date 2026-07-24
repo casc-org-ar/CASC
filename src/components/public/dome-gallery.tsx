@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useGesture } from "@use-gesture/react";
 import "./dome-gallery.css";
 
-type ImageInput = string | { src: string; alt?: string };
+type ImageInput = string | { src: string; alt?: string; href?: string };
 
 interface DomeGalleryProps {
   images?: ImageInput[];
@@ -58,6 +59,8 @@ interface TileCoord {
 interface TileItem extends TileCoord {
   src: string;
   alt: string;
+  /** Optional destination when the enlarged tile is clicked. */
+  href?: string;
 }
 
 function buildItems(pool: ImageInput[], seg: number): TileItem[] {
@@ -76,8 +79,8 @@ function buildItems(pool: ImageInput[], seg: number): TileItem[] {
   }
 
   const normalizedImages = pool.map((image) => {
-    if (typeof image === "string") return { src: image, alt: "" };
-    return { src: image.src || "", alt: image.alt || "" };
+    if (typeof image === "string") return { src: image, alt: "", href: undefined };
+    return { src: image.src || "", alt: image.alt || "", href: image.href };
   });
 
   const usedImages = Array.from(
@@ -102,6 +105,7 @@ function buildItems(pool: ImageInput[], seg: number): TileItem[] {
     ...c,
     src: usedImages[i].src,
     alt: usedImages[i].alt,
+    href: usedImages[i].href,
   }));
 }
 
@@ -139,6 +143,7 @@ export default function DomeGallery({
   autoRotate = true,
   autoRotateSpeed = DEFAULTS.autoRotateSpeed,
 }: DomeGalleryProps) {
+  const router = useRouter();
   const rootRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   const sphereRef = useRef<HTMLDivElement>(null);
@@ -471,6 +476,20 @@ export default function DomeGallery({
       const img = document.createElement("img");
       img.src = rawSrc;
       overlay.appendChild(img);
+
+      // If the tile carries a destination, make the enlarged image a link to
+      // that associate's page. The whole overlay is clickable.
+      const href = parent.dataset.href;
+      if (href) {
+        overlay.style.cursor = "pointer";
+        overlay.setAttribute("role", "link");
+        overlay.setAttribute("aria-label", el.getAttribute("aria-label") || "");
+        overlay.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          router.push(href);
+        });
+      }
+
       viewerRef.current?.appendChild(overlay);
       setTimeout(() => {
         if (!overlay.parentElement) return;
@@ -478,7 +497,7 @@ export default function DomeGallery({
         rootRef.current?.setAttribute("data-enlarging", "true");
       }, 16);
     },
-    [enlargeTransitionMs, lockScroll, segments, unlockScroll],
+    [enlargeTransitionMs, lockScroll, router, segments, unlockScroll],
   );
 
   const onTileClick = useCallback(
@@ -560,6 +579,7 @@ export default function DomeGallery({
                 key={`${it.x},${it.y},${i}`}
                 className="item"
                 data-src={it.src}
+                data-href={it.href}
                 data-offset-x={it.x}
                 data-offset-y={it.y}
                 data-size-x={it.sizeX}
@@ -573,7 +593,6 @@ export default function DomeGallery({
                   } as React.CSSProperties
                 }
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <div
                   className="item__image"
                   role="button"
