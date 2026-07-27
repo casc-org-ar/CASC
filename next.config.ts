@@ -43,6 +43,10 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  images: {
+    // Clerk serves user avatars from img.clerk.com; allow next/image to load it.
+    remotePatterns: [{ protocol: "https", hostname: "img.clerk.com" }],
+  },
   async redirects() {
     return [
       ...legacyRedirects.map((r) => ({

@@ -28,8 +28,8 @@ const MOCK_USERS: Record<UserRole, CurrentUser> = {
 
 /**
  * Mock auth provider. Persists the active role in a cookie so both server
- * components and route handlers can read it. Replaced wholesale by a Clerk
- * implementation later — consumers never change.
+ * components and route handlers can read it. Satisfies the read-only
+ * `AuthProvider` port; Clerk satisfies the same port in production.
  */
 export const mockAuth: AuthProvider = {
   async getRole(): Promise<UserRole | null> {
@@ -42,20 +42,26 @@ export const mockAuth: AuthProvider = {
     const role = await mockAuth.getRole();
     return role ? MOCK_USERS[role] : null;
   },
-
-  async signIn(role: UserRole): Promise<void> {
-    const store = await cookies();
-    store.set(ROLE_COOKIE, role, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-    });
-  },
-
-  async signOut(): Promise<void> {
-    const store = await cookies();
-    store.delete(ROLE_COOKIE);
-  },
 };
+
+/**
+ * Dev-only session controls. These live OUTSIDE the `AuthProvider` port on
+ * purpose: letting a caller pick their own role is fine for a local mock but
+ * would be a privilege-escalation hole in production, so the port must not
+ * expose it. Only the mock login/role-switcher (dev tooling) calls these.
+ */
+export async function setMockRole(role: UserRole): Promise<void> {
+  const store = await cookies();
+  store.set(ROLE_COOKIE, role, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+  });
+}
+
+export async function clearMockRole(): Promise<void> {
+  const store = await cookies();
+  store.delete(ROLE_COOKIE);
+}
 
 export { ROLE_COOKIE };

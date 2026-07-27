@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { esES } from "@clerk/localizations";
 import "./globals.css";
 import { TitleRotator } from "@/components/shared/title-rotator";
+import { clerkAppearance } from "@/lib/auth/clerk-appearance";
+
+/**
+ * Clerk is only mounted when it's the active provider. In mock mode the app
+ * runs with no Clerk keys and no Clerk runtime — the public site pays nothing.
+ */
+const clerkOn = process.env.NEXT_PUBLIC_AUTH_PROVIDER === "clerk";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,7 +29,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+  const tree = (
     <html lang="es" className={`${inter.variable} h-full`}>
       {/* Browser extensions (ColorZilla, password managers) inject attributes
           on <body> before hydration; suppress the mismatch on this node only. */}
@@ -29,5 +38,13 @@ export default function RootLayout({
         {children}
       </body>
     </html>
+  );
+
+  return clerkOn ? (
+    <ClerkProvider localization={esES} appearance={clerkAppearance}>
+      {tree}
+    </ClerkProvider>
+  ) : (
+    tree
   );
 }

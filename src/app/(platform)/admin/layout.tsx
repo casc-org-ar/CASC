@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PlatformShell } from "@/components/platform/platform-shell";
 import { getAuth } from "@/lib/auth";
+import { clerkEnabled } from "@/lib/auth/flag";
 
 /**
  * Title template for admin pages: each page sets a short title and Next
@@ -32,7 +33,7 @@ export default async function AdminLayout({
   return (
     <PlatformShell
       user={user}
-      showDevSwitcher={process.env.NODE_ENV !== "production"}
+      showDevSwitcher={process.env.NODE_ENV !== "production" && !clerkEnabled()}
     >
       {children}
     </PlatformShell>

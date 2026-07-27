@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AccountMenu } from "@/components/platform/account-menu";
+import { SectionSwitcher } from "@/components/platform/section-switcher";
 import { getNavForRole } from "@/lib/platform/navigation";
-import type { CurrentUser } from "@/lib/types/domain";
+import type { CurrentUser, UserRole } from "@/lib/types/domain";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
@@ -17,22 +18,29 @@ interface SidebarProps {
 
 export function Sidebar({ user, open, onNavigate }: SidebarProps) {
   const pathname = usePathname();
-  const items = getNavForRole(user.role);
-  const isAdmin = user.role === "admin";
+
+  // Which section is being viewed, from the URL — NOT from the user's role.
+  // This lets an admin browse the socio section (preview) while staying admin.
+  // It's navigation only: every server action still re-checks the real role.
+  const section: UserRole = pathname.startsWith("/socio") ? "socio" : "admin";
+  const items = getNavForRole(section);
+  const isAdminSurface = section === "admin";
+  const canSwitch = user.role === "admin";
 
   return (
     <aside
       className={cn(
         "fixed inset-y-0 left-0 z-40 flex w-64 flex-col text-white transition-transform lg:translate-x-0",
-        // Admin gets the near-black surface, socio the institutional navy.
-        // Same brand palette — a glance tells the two panels apart.
-        isAdmin ? "bg-casc-black" : "bg-casc-navy-900",
+        // The surface color tracks the SECTION being viewed, so an admin
+        // previewing socio sees the socio (navy) chrome — an unmistakable cue
+        // of which side they're on.
+        isAdminSurface ? "bg-casc-black" : "bg-casc-navy-900",
         open ? "translate-x-0" : "-translate-x-full",
       )}
     >
       <div className="flex h-20 items-center border-b border-white/10 px-6">
         <Link
-          href={`/${user.role}`}
+          href={`/${section}`}
           onClick={onNavigate}
           aria-label="CASC — inicio"
         >
@@ -47,11 +55,15 @@ export function Sidebar({ user, open, onNavigate }: SidebarProps) {
         </Link>
       </div>
 
+      {canSwitch && (
+        <SectionSwitcher section={section} onNavigate={onNavigate} />
+      )}
+
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {items.map((item) => {
           const active =
             pathname === item.href ||
-            (item.href !== `/${user.role}` && pathname.startsWith(item.href));
+            (item.href !== `/${section}` && pathname.startsWith(item.href));
           const Icon = item.icon;
           return (
             <Link
