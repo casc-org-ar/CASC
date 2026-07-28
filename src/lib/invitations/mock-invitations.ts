@@ -13,6 +13,8 @@ import type { InvitationService } from "@/lib/invitations/types";
  *      socio's `invitacionStatus` to "aceptada".
  */
 export const mockInvitations: InvitationService = {
+  // `role` is accepted to satisfy the port; the mock doesn't act on it (no real
+  // Clerk user is created). The Clerk implementation puts it in publicMetadata.
   async sendInvitation({ email }) {
     // Simulate provider latency so the UI's pending state is visible in the demo.
     await new Promise((resolve) => setTimeout(resolve, 400));

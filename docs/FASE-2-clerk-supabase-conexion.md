@@ -166,6 +166,46 @@ andar":
 
 ---
 
+## 7. Invitaciones reales (alta de socios desde la plataforma)
+
+Con Clerk activo, el alta de un socio en `/admin/socios` ya NO es mock: crea una
+invitación real de Clerk. El flujo:
+
+1. El admin da de alta un socio (email + rol) en `/admin/socios`.
+2. La app llama a `clerkClient().invitations.createInvitation()` con:
+   - `redirectUrl` → `${NEXT_PUBLIC_APP_URL}/sign-up` (la invitación abre la
+     pantalla de registro DENTRO de la app, con la marca CASC — no el Account
+     Portal de Clerk en inglés).
+   - `publicMetadata: { role }` → el rol viaja EN la invitación.
+3. El socio recibe el email, hace clic, cae en `/sign-up?__clerk_ticket=...`,
+   y el `<SignUp>` completa el registro.
+4. Al aceptar, el `publicMetadata.role` queda en su usuario **automáticamente**.
+   Ya no hace falta setear el rol a mano en el dashboard (eso era solo para los
+   usuarios de prueba del paso 2).
+
+### Env var requerida
+
+En `.env.local`:
+
+```
+# URL base de la app, para construir el redirectUrl absoluto de las invitaciones.
+# En dev: http://localhost:3000. En prod: el dominio real.
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+### Dashboard: rutas del Account Portal
+
+Para que Clerk use las páginas de la app en vez de su portal hospedado:
+
+1. Dashboard de Clerk → **Configure** → **Paths** (o **Account Portal**).
+2. Apuntar **Sign-in** a `/sign-in` y **Sign-up** a `/sign-up`.
+
+> Pendiente para la próxima tanda: el webhook `invitation.accepted`, que marca
+> el `invitacionStatus` del socio como "aceptada" y linkea su `clerk_user_id`.
+> Necesita persistencia real (Fase 3) para tener dónde escribir.
+
+---
+
 ## Checklist
 
 - [ ] Registro público desactivado en Clerk — solo invitación (paso 0)
@@ -175,3 +215,4 @@ andar":
 - [ ] Migración 0006 aplicada (paso 4)
 - [ ] `NEXT_PUBLIC_AUTH_PROVIDER=clerk` + rutas de Clerk en `.env.local` (paso 5)
 - [ ] Prueba adversarial pasada (paso 6)
+- [ ] `NEXT_PUBLIC_APP_URL` + rutas del Account Portal para invitaciones (paso 7)

@@ -54,7 +54,12 @@ export async function createSocio(formData: FormData): Promise<AltaResult> {
     invitacionStatus: "pendiente",
   });
 
-  const result = await sendInvitationFor(socio.id, parsed.email, parsed.nombre);
+  const result = await sendInvitationFor(
+    socio.id,
+    parsed.email,
+    parsed.nombre,
+    parsed.role,
+  );
   revalidatePath("/admin/socios");
   return { socioId: socio.id, invitacionEnviada: result.ok, email: parsed.email };
 }
@@ -86,7 +91,12 @@ export async function resendInvitation(id: string): Promise<AltaResult> {
   const socio = await getDataLayer().socios.getById(id);
   if (!socio) throw new Error("Socio no encontrado");
 
-  const result = await sendInvitationFor(socio.id, socio.email, socio.nombre);
+  const result = await sendInvitationFor(
+    socio.id,
+    socio.email,
+    socio.nombre,
+    socio.role,
+  );
   revalidatePath("/admin/socios");
   return { socioId: id, invitacionEnviada: result.ok, email: socio.email };
 }
@@ -96,8 +106,13 @@ export async function resendInvitation(id: string): Promise<AltaResult> {
  * Shared by alta and resend. When Clerk lands, only the provider behind
  * `getInvitations()` changes — this stays the same.
  */
-async function sendInvitationFor(id: string, email: string, nombre: string) {
-  const result = await getInvitations().sendInvitation({ email, nombre });
+async function sendInvitationFor(
+  id: string,
+  email: string,
+  nombre: string,
+  role: UserRole,
+) {
+  const result = await getInvitations().sendInvitation({ email, nombre, role });
   if (result.ok) {
     await getDataLayer().socios.update(id, {
       invitacionStatus: "enviada",

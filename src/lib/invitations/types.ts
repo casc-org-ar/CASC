@@ -1,3 +1,5 @@
+import type { UserRole } from "@/lib/types/domain";
+
 /**
  * Invitation contract (the "port"). The mock implementation satisfies it now;
  * a Clerk-backed implementation satisfies it later. Callers (server actions)
@@ -21,9 +23,14 @@ export interface InvitationService {
   /**
    * Send (or resend) an account invitation to a member's email. In production
    * this triggers Clerk's invitation email; here it is mocked.
+   *
+   * `role` is pre-assigned on the invitation's publicMetadata, so when the
+   * invited member accepts and signs up, their Clerk user already carries the
+   * right role — the admin never sets it by hand.
    */
   sendInvitation(input: {
     email: string;
     nombre: string;
+    role: UserRole;
   }): Promise<InvitationResult>;
 }
