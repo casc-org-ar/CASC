@@ -6,7 +6,7 @@ import { JoinCta } from "@/components/public/join-cta";
 import { CardCover } from "@/components/shared/card-cover";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
-import { getDataLayer } from "@/lib/data";
+import { getPublicDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 
 /**
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NoticiasPage() {
-  const posts = onlyPublished(await getDataLayer().blog.list()).sort((a, b) =>
+  const posts = onlyPublished(await getPublicDataLayer().blog.list()).sort((a, b) =>
     b.fecha.localeCompare(a.fecha),
   );
 

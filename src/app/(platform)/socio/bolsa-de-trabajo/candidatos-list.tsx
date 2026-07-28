@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import {
   Briefcase,
   FileDown,
@@ -13,7 +13,9 @@ import { SearchInput } from "@/components/shared/search-input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useToast } from "@/components/ui/toast";
 import type { Candidato, Disponibilidad } from "@/lib/types/domain";
+import { getCvUrl } from "@/lib/actions/cv-download";
 
 const disponibilidadLabel: Record<Disponibilidad, string> = {
   "full-time": "Full-time",
@@ -22,6 +24,22 @@ const disponibilidadLabel: Record<Disponibilidad, string> = {
 };
 
 function CandidatoCard({ candidato }: { candidato: Candidato }) {
+  const [pending, startTransition] = useTransition();
+  const toast = useToast();
+
+  // CVs live in a private bucket: resolve a fresh signed URL on click and open
+  // it, instead of linking to a stored path that isn't publicly navigable.
+  const openCv = () => {
+    startTransition(async () => {
+      const url = await getCvUrl(candidato.cvUrl);
+      if (url) {
+        window.open(url, "_blank", "noopener,noreferrer");
+      } else {
+        toast.error("No pudimos abrir el CV. Intentá de nuevo.");
+      }
+    });
+  };
+
   return (
     <Card className="flex h-full flex-col">
       <div className="flex items-start justify-between gap-3">
@@ -86,16 +104,16 @@ function CandidatoCard({ candidato }: { candidato: Candidato }) {
         >
           {candidato.email}
         </a>
-        {/* CV opens in a new tab; real storage will serve it as an attachment. */}
-        <a
-          href={candidato.cvUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="ml-auto inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+        {/* CV lives in a private bucket: fetch a fresh signed URL on click. */}
+        <button
+          type="button"
+          onClick={openCv}
+          disabled={pending}
+          className="ml-auto inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline disabled:opacity-50"
         >
           <FileDown className="h-4 w-4" aria-hidden="true" />
-          Ver CV
-        </a>
+          {pending ? "Abriendo…" : "Ver CV"}
+        </button>
       </div>
     </Card>
   );

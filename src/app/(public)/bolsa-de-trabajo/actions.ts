@@ -7,6 +7,8 @@ import {
   validateCvFile,
 } from "@/lib/security/pdf-upload";
 import { areasInteres, skillsDisponibles } from "@/lib/data/bolsa-trabajo";
+import { clerkEnabled } from "@/lib/auth/flag";
+import { BUCKETS, uploadFile } from "@/lib/data/supabase/storage";
 import type { Disponibilidad } from "@/lib/types/domain";
 
 /**
@@ -104,6 +106,28 @@ export async function submitCandidato(
   }
   const cvNombre = sanitizeCvFilename(cv.name);
 
+  // Store the file. With Supabase active, upload to the private `cvs` bucket
+  // and keep the returned object PATH (not a URL — the bucket is private; the
+  // app mints a signed URL on demand). With the mock, keep the placeholder path.
+  let cvUrl: string;
+  if (clerkEnabled()) {
+    try {
+      const currentYear = new Date().getFullYear().toString();
+      const { path } = await uploadFile(BUCKETS.cvs, cv, {
+        prefix: currentYear,
+        extension: "pdf",
+      });
+      cvUrl = path;
+    } catch {
+      return {
+        ok: false,
+        error: "No pudimos guardar tu CV. Intentá de nuevo.",
+      };
+    }
+  } else {
+    cvUrl = `/mock/cv/${cvNombre}`;
+  }
+
   // Optional fields.
   const disponibilidadRaw = String(formData.get("disponibilidad") ?? "");
   const disponibilidad = disponibilidadValues.includes(
@@ -126,9 +150,9 @@ export async function submitCandidato(
       disponibilidad,
       ciudad: String(formData.get("ciudad") ?? "").trim() || undefined,
       provincia: String(formData.get("provincia") ?? "").trim() || undefined,
-      // Mock storage: keep a placeholder path plus the real (sanitized) name.
-      // When real storage lands, replace with the uploaded file's URL.
-      cvUrl: `/mock/cv/${cvNombre}`,
+      // Real storage: the private-bucket object path (mock: a placeholder).
+      // The original filename is kept separately for the recruiter's download.
+      cvUrl,
       cvNombre,
       consentimiento,
       // Pending admin moderation before recruiters can see it.

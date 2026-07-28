@@ -8,6 +8,7 @@ import { StatusBadge } from "@/components/ui/badge";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
 import type { Candidato } from "@/lib/types/domain";
+import { getCvUrl } from "@/lib/actions/cv-download";
 import {
   deleteCandidato,
   setCandidatoStatus,
@@ -36,6 +37,17 @@ export function BolsaTrabajoManager({
         );
       } catch {
         toast.error("No se pudo actualizar el estado.");
+      }
+    });
+  };
+
+  const openCv = (c: Candidato) => {
+    startTransition(async () => {
+      const url = await getCvUrl(c.cvUrl);
+      if (url) {
+        window.open(url, "_blank", "noopener,noreferrer");
+      } else {
+        toast.error("No pudimos abrir el CV.");
       }
     });
   };
@@ -71,16 +83,15 @@ export function BolsaTrabajoManager({
       header: "CV",
       cell: (c) =>
         c.cvUrl ? (
-          <a
-            href={c.cvUrl}
-            target="_blank"
-            rel="noreferrer"
+          <button
+            type="button"
+            onClick={() => openCv(c)}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
             aria-label={`Ver CV de ${c.nombre}`}
           >
             <FileDown className="h-4 w-4" aria-hidden />
             Ver CV
-          </a>
+          </button>
         ) : (
           <span className="text-sm text-ink-muted">—</span>
         ),

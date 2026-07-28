@@ -7,7 +7,7 @@ import {
 } from "@/components/public/content-carousel";
 import { EmptyState } from "@/components/shared/empty-state";
 import { actividades2025, capacitaciones } from "@/lib/data/home-content";
-import { getDataLayer } from "@/lib/data";
+import { getPublicDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 
 /**
@@ -35,7 +35,7 @@ function formatDate(value: string): string {
 }
 
 export default async function ActividadesPage() {
-  const blogPosts = onlyPublished(await getDataLayer().blog.list()).sort(
+  const blogPosts = onlyPublished(await getPublicDataLayer().blog.list()).sort(
     (a, b) => (a.fecha < b.fecha ? 1 : -1),
   );
 

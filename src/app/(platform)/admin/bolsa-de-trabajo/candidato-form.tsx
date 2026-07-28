@@ -7,6 +7,7 @@ import { FormField, Input, Select } from "@/components/ui/field";
 import { useToast } from "@/components/ui/toast";
 import { areasInteres } from "@/lib/data/bolsa-trabajo";
 import type { Candidato } from "@/lib/types/domain";
+import { getCvUrl } from "@/lib/actions/cv-download";
 import { updateCandidato } from "./actions";
 
 interface CandidatoFormProps {
@@ -46,13 +47,23 @@ export function CandidatoForm({ candidato, onDone }: CandidatoFormProps) {
 
   return (
     <form action={action} className="space-y-4">
-      {/* The submitted CV, so the admin can review it while moderating. */}
+      {/* The submitted CV, so the admin can review it while moderating.
+          Private bucket → resolve a signed URL on click. */}
       {candidato.cvUrl && (
-        <a
-          href={candidato.cvUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-3 rounded-lg border border-border bg-surface p-3 transition-colors hover:border-accent/70"
+        <button
+          type="button"
+          onClick={() =>
+            startTransition(async () => {
+              const url = await getCvUrl(candidato.cvUrl);
+              if (url) {
+                window.open(url, "_blank", "noopener,noreferrer");
+              } else {
+                toast.error("No pudimos abrir el CV.");
+              }
+            })
+          }
+          disabled={pending}
+          className="flex w-full items-center gap-3 rounded-lg border border-border bg-surface p-3 text-left transition-colors hover:border-accent/70 disabled:opacity-50"
         >
           <FileDown className="h-5 w-5 shrink-0 text-primary" aria-hidden />
           <span className="min-w-0">
@@ -65,7 +76,7 @@ export function CandidatoForm({ candidato, onDone }: CandidatoFormProps) {
               </span>
             )}
           </span>
-        </a>
+        </button>
       )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

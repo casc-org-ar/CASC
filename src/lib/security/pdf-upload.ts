@@ -61,10 +61,10 @@ export async function validateCvFile(file: File): Promise<PdfValidationResult> {
     };
   }
 
-  // TODO(storage): when CVs are stored for real (e.g. Vercel Blob), run
-  // `scanFile(file)` here and reject the upload if it does not pass. The
-  // function is stubbed below so wiring an antivirus service is a one-line
-  // change and the flow above never needs rewriting.
+  // Antivirus scan. Storage is now real (Supabase Storage, Fase 3), so this is
+  // the last stub in the chain: `scanFile` returns clean until a scanner is
+  // wired (Fase 4 — security). The seam is already here so enabling it is a
+  // one-line change and the flow above never needs rewriting.
   const scan = await scanFile(file);
   if (!scan.clean) {
     return {
@@ -77,13 +77,13 @@ export async function validateCvFile(file: File): Promise<PdfValidationResult> {
 }
 
 /**
- * Antivirus scan seam. In the prototype there is no real storage or scanner,
- * so this returns clean. Replace the body with a call to a scanner (ClamAV,
- * Cloudmersive, VirusTotal, …) once uploads are persisted for real.
+ * Antivirus scan seam. No scanner is wired yet (Fase 4 — security), so this
+ * returns clean. Replace the body with a call to a scanner (ClamAV,
+ * Cloudmersive, VirusTotal, …) — uploads are now persisted for real, so this
+ * is the remaining gap before public CV uploads are fully hardened.
  */
 async function scanFile(file: File): Promise<{ clean: boolean }> {
-  // Prototype stub: no scanner is wired yet, so treat any real file as clean.
-  // Replace this body with the antivirus call once uploads are persisted.
+  // Not-yet-wired scanner: treat any real file as clean until Fase 4.
   return { clean: file.size >= 0 };
 }
 

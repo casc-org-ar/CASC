@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarDays, UserRound } from "lucide-react";
 import { JoinCta } from "@/components/public/join-cta";
 import { ShareButtons } from "@/components/public/share-buttons";
-import { getDataLayer } from "@/lib/data";
+import { getPublicDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 import type { BlogPost } from "@/lib/types/domain";
 
@@ -16,12 +16,12 @@ import type { BlogPost } from "@/lib/types/domain";
  */
 
 async function getPost(slug: string): Promise<BlogPost | null> {
-  const posts = onlyPublished(await getDataLayer().blog.list());
+  const posts = onlyPublished(await getPublicDataLayer().blog.list());
   return posts.find((p) => p.slug === slug) ?? null;
 }
 
 export async function generateStaticParams() {
-  const posts = onlyPublished(await getDataLayer().blog.list());
+  const posts = onlyPublished(await getPublicDataLayer().blog.list());
   return posts.map((p) => ({ slug: p.slug }));
 }
 

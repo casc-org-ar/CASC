@@ -42,3 +42,16 @@ export function createSupabaseClient() {
     },
   });
 }
+
+/**
+ * An ANONYMOUS Supabase client — no Clerk token. For public-site reads of
+ * published content (news, blog, hotel benefits), where there is no logged-in
+ * user and, crucially, no HTTP request at all during static generation
+ * (generateStaticParams). Because it never calls Clerk's `auth()`, it works at
+ * build time; because it carries no token, RLS treats it as `anon`, so it can
+ * only read what the public policies allow (status = 'publicado', migration
+ * 0009). It must never be used for member/admin data.
+ */
+export function createPublicSupabaseClient() {
+  return createClient(supabaseUrl!, supabaseKey!);
+}
