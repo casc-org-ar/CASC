@@ -20,6 +20,13 @@ export const metadata: Metadata = {
     "Sumá tu CV a la Bolsa de Trabajo de la Cámara Argentina de Shopping Centers y conectá con los centros comerciales del país.",
 };
 
+/**
+ * Interruptor temporal: mientras la Bolsa de Trabajo está "en preparación", el
+ * detalle (las 3 cards de pasos + el bloque de LinkedIn) se oculta y solo se
+ * muestra el aviso de "Próximamente". Poner en true para reactivarlo.
+ */
+const MOSTRAR_DETALLE = false;
+
 const pasos = [
   {
     icon: Briefcase,
@@ -49,7 +56,11 @@ export default function BolsaDeTrabajoPage() {
         subtitle="Sumá tu CV y conectá con los centros comerciales, retailers y empresas asociadas a la Cámara Argentina de Shopping Centers."
       />
 
-      {/* Cómo funciona + acceso a búsquedas externas (LinkedIn). */}
+      {/* Las 3 cards de pasos y el bloque de LinkedIn están OCULTOS
+          temporalmente (a pedido del cliente): mientras la Bolsa de Trabajo
+          esté "en preparación" solo se muestra el aviso de "Próximamente".
+          Para reactivar, poner MOSTRAR_DETALLE en true. */}
+      {MOSTRAR_DETALLE && (
       <section className="border-b border-border bg-surface/50">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="grid gap-6 sm:grid-cols-3">
@@ -98,6 +109,7 @@ export default function BolsaDeTrabajoPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Carga de CV — deshabilitada por ahora ("próximamente"). La sección se
           mantiene visible para anticipar la funcionalidad, pero el formulario NO
