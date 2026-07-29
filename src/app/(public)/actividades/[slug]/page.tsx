@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/safe-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
@@ -95,14 +95,7 @@ export default async function ActividadPage({
         </header>
 
         <div className="relative mt-8 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-surface">
-          <Image
-            src={actividad.imagen}
-            alt={actividad.titulo}
-            fill
-            sizes="(max-width: 1024px) 100vw, 1024px"
-            className="object-cover"
-            priority
-          />
+          <SafeImage src={actividad.imagen} alt={actividad.titulo} />
         </div>
 
         <div className="mt-8 space-y-5">

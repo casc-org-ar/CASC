@@ -1,8 +1,8 @@
 import { ArrowLeft } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { SafeImage } from "@/components/shared/safe-image";
 import { getDataLayer } from "@/lib/data";
 
 /** Individual news article page (read-only, published only). */
@@ -29,14 +29,7 @@ export default async function NoticiaDetailPage({
 
       {noticia.imagenUrl && (
         <div className="relative mb-6 h-64 w-full overflow-hidden rounded-xl bg-surface md:h-80">
-          <Image
-            src={noticia.imagenUrl}
-            alt={noticia.titulo}
-            fill
-            sizes="(max-width: 768px) 100vw, 800px"
-            className="object-cover"
-            priority
-          />
+          <SafeImage src={noticia.imagenUrl} alt={noticia.titulo} />
         </div>
       )}
 

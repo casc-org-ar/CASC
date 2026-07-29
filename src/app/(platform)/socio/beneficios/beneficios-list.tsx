@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import {
   BadgePercent,
@@ -18,6 +17,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { SearchInput } from "@/components/shared/search-input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SafeImage } from "@/components/shared/safe-image";
 import type { Hotel } from "@/lib/types/domain";
 
 /** Full URL for a hotel website, tolerating values stored without a scheme. */
@@ -31,11 +31,9 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
       <div className="flex items-start gap-4 border-b border-border pb-4">
         <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-border bg-white">
           {hotel.logoUrl ? (
-            <Image
+            <SafeImage
               src={hotel.logoUrl}
               alt={hotel.nombre}
-              fill
-              sizes="64px"
               className="object-contain p-1.5"
             />
           ) : (

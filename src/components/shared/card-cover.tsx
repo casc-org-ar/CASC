@@ -1,5 +1,4 @@
-import { ImageIcon } from "lucide-react";
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/safe-image";
 import { cn } from "@/lib/utils";
 
 /**
@@ -26,23 +25,14 @@ export function CardCover({
         className,
       )}
     >
-      {src ? (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes="(max-width: 768px) 100vw, 400px"
-          className={cn(
-            "object-cover transition-transform duration-300 group-hover:scale-105",
-            imageClassName,
-          )}
-        />
-      ) : (
-        <div className="flex h-full flex-col items-center justify-center gap-2 bg-casc-gray-100 text-ink-muted/60">
-          <ImageIcon className="h-8 w-8" strokeWidth={1.5} />
-          <span className="text-xs font-medium">Sin imagen</span>
-        </div>
-      )}
+      <SafeImage
+        src={src}
+        alt={alt}
+        className={cn(
+          "transition-transform duration-300 group-hover:scale-105",
+          imageClassName,
+        )}
+      />
     </div>
   );
 }

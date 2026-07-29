@@ -1,8 +1,8 @@
 import { ArrowRight, FileText, Newspaper, Video } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { CardCover } from "@/components/shared/card-cover";
+import { SafeImage } from "@/components/shared/safe-image";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
@@ -156,13 +156,10 @@ function FeaturedCard({ item }: { item: FeedItem }) {
       >
         {showCover && item.imagen ? (
           <div className="relative min-h-52 overflow-hidden bg-surface">
-            <Image
+            <SafeImage
               src={item.imagen}
               alt={item.titulo}
-              fill
-              sizes="(max-width: 768px) 100vw, 600px"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              priority
+              className="transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         ) : (

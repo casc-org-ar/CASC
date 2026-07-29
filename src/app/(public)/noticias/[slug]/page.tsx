@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { SafeImage } from "@/components/shared/safe-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarDays, UserRound } from "lucide-react";
@@ -110,14 +110,7 @@ export default async function NoticiaPage({
 
         {post.portadaUrl && (
           <div className="relative mt-8 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-surface">
-            <Image
-              src={post.portadaUrl}
-              alt={post.titulo}
-              fill
-              sizes="(max-width: 768px) 100vw, 768px"
-              className="object-cover"
-              priority
-            />
+            <SafeImage src={post.portadaUrl} alt={post.titulo} />
           </div>
         )}
 
@@ -141,13 +134,7 @@ export default async function NoticiaPage({
                 key={src}
                 className="relative aspect-4/3 overflow-hidden rounded-xl border border-border bg-surface"
               >
-                <Image
-                  src={src}
-                  alt=""
-                  fill
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                  className="object-cover"
-                />
+                <SafeImage src={src} alt="" />
               </div>
             ))}
           </div>

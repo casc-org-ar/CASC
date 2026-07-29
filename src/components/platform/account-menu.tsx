@@ -118,7 +118,10 @@ function ProfileOverlay({ onClose }: { onClose: () => void }) {
       aria-label="Ajustes de cuenta"
     >
       <div onClick={(e) => e.stopPropagation()}>
-        <UserProfile appearance={clerkAppearance} />
+        {/* hash routing: <UserProfile> runs inside this modal, not on its own
+            route. Without it Clerk treats the current path as a catch-all and
+            probes a non-existent child URL (the ...catchall_check 404). */}
+        <UserProfile routing="hash" appearance={clerkAppearance} />
       </div>
     </div>,
     document.body,
