@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { getDataLayer } from "@/lib/data";
+import { getPublicWriteDataLayer } from "@/lib/data";
 import {
   MAX_CV_BYTES,
   sanitizeCvFilename,
@@ -181,7 +181,7 @@ export async function submitCandidato(
     : undefined;
 
   try {
-    await getDataLayer().candidatos.create({
+    await getPublicWriteDataLayer().candidatos.create({
       nombre,
       email,
       telefono: parsed.data.telefono,

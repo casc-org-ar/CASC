@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { getDataLayer } from "@/lib/data";
+import { getPublicWriteDataLayer } from "@/lib/data";
 import { checkRateLimit } from "@/lib/security/rate-limit";
 
 /**
@@ -87,9 +87,14 @@ export async function enviarSolicitudAsociacion(
   }
 
   try {
-    await getDataLayer().solicitudes.create({ ...parsed.data, gestion: "nueva" });
+    await getPublicWriteDataLayer().solicitudes.create({
+      ...parsed.data,
+      gestion: "nueva",
+    });
     return { ok: true };
-  } catch {
+  } catch (err) {
+    // Log the real cause to the server (never to the user); no personal data.
+    console.error("[solicitud] insert failed:", err);
     return {
       ok: false,
       error: "No pudimos enviar tu solicitud. Intentá de nuevo.",
@@ -114,9 +119,13 @@ export async function enviarConsultaContacto(
   }
 
   try {
-    await getDataLayer().consultas.create({ ...parsed.data, gestion: "nueva" });
+    await getPublicWriteDataLayer().consultas.create({
+      ...parsed.data,
+      gestion: "nueva",
+    });
     return { ok: true };
-  } catch {
+  } catch (err) {
+    console.error("[consulta] insert failed:", err);
     return {
       ok: false,
       error: "No pudimos enviar tu consulta. Intentá de nuevo.",

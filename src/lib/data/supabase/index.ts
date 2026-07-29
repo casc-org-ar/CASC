@@ -1,4 +1,12 @@
-import type { BlogRepository, DataLayer, HotelRepository, NoticiaRepository } from "@/lib/data/repositories";
+import type {
+  BlogRepository,
+  CandidatoRepository,
+  ConsultaRepository,
+  DataLayer,
+  HotelRepository,
+  NoticiaRepository,
+  SolicitudRepository,
+} from "@/lib/data/repositories";
 import { SupabaseContentRepository } from "@/lib/data/supabase/content-repository";
 import { createPublicSupabaseClient } from "@/lib/data/supabase/client";
 import {
@@ -75,3 +83,32 @@ export const publicHoteles: HotelRepository = new SupabaseContentRepository(
   asc,
   createPublicSupabaseClient,
 );
+
+/**
+ * PUBLIC WRITE repositories for the anonymous website (contact/membership forms
+ * and the public CV upload). They use the anonymous client because the sender
+ * is a logged-out visitor — the authenticated client would try to read a Clerk
+ * token that doesn't exist and the INSERT would fail. RLS (0003/0007) allows
+ * `anon` to INSERT (only) into exactly these three tables.
+ */
+export const publicCandidatos: CandidatoRepository =
+  new SupabaseContentRepository(
+    "candidatos",
+    candidatoMapper,
+    { column: "created_at", ascending: false },
+    createPublicSupabaseClient,
+  );
+export const publicSolicitudes: SolicitudRepository =
+  new SupabaseContentRepository(
+    "solicitudes",
+    solicitudMapper,
+    { column: "created_at", ascending: false },
+    createPublicSupabaseClient,
+  );
+export const publicConsultas: ConsultaRepository =
+  new SupabaseContentRepository(
+    "consultas",
+    consultaMapper,
+    { column: "created_at", ascending: false },
+    createPublicSupabaseClient,
+  );
