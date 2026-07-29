@@ -10,6 +10,7 @@ import {
 import { areasInteres, skillsDisponibles } from "@/lib/data/bolsa-trabajo";
 import { clerkEnabled } from "@/lib/auth/flag";
 import { BUCKETS, uploadFile } from "@/lib/data/supabase/storage";
+import { checkRateLimit } from "@/lib/security/rate-limit";
 import type { Disponibilidad } from "@/lib/types/domain";
 
 /**
@@ -72,6 +73,15 @@ export async function submitCandidato(
   _prev: SubmitState,
   formData: FormData,
 ): Promise<SubmitState> {
+  // Throttle before doing any work (validation, storage) so an abuser can't
+  // flood uploads. Fail open if the limiter is unavailable.
+  if (!(await checkRateLimit("cv"))) {
+    return {
+      ok: false,
+      error: "Hiciste demasiados envíos. Esperá unos minutos e intentá de nuevo.",
+    };
+  }
+
   // Validate all text fields at once with the schema (required, email format,
   // valid área, and length caps on optionals).
   const parsed = candidatoTextSchema.safeParse({

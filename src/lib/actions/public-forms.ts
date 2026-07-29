@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { getDataLayer } from "@/lib/data";
+import { checkRateLimit } from "@/lib/security/rate-limit";
 
 /**
  * Public server actions for the site's inbound forms (membership requests and
@@ -66,6 +67,10 @@ export async function enviarSolicitudAsociacion(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  if (!(await checkRateLimit("form"))) {
+    return { ok: false, error: "Demasiados envíos. Esperá unos minutos." };
+  }
+
   const parsed = solicitudSchema.safeParse(
     fromForm(formData, [
       "sector",
@@ -97,6 +102,10 @@ export async function enviarConsultaContacto(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  if (!(await checkRateLimit("form"))) {
+    return { ok: false, error: "Demasiados envíos. Esperá unos minutos." };
+  }
+
   const parsed = consultaSchema.safeParse(
     fromForm(formData, ["nombre", "email", "empresa", "mensaje"]),
   );
