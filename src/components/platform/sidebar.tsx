@@ -62,23 +62,44 @@ export function Sidebar({ user, open, onNavigate }: SidebarProps) {
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {items.map((item) => {
           const active =
-            pathname === item.href ||
-            (item.href !== `/${section}` && pathname.startsWith(item.href));
+            !item.external &&
+            (pathname === item.href ||
+              (item.href !== `/${section}` && pathname.startsWith(item.href)));
           const Icon = item.icon;
-          return (
+          const className = cn(
+            "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+            active
+              ? "bg-primary text-white"
+              : "text-blue-100 hover:bg-white/10",
+          );
+          const inner = (
+            <>
+              <Icon className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
+              {item.label}
+            </>
+          );
+
+          // External links (e.g. the stats dashboard) open in a new tab with a
+          // plain anchor; internal routes use next/link for client navigation.
+          return item.external ? (
+            <a
+              key={item.href}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onNavigate}
+              className={className}
+            >
+              {inner}
+            </a>
+          ) : (
             <Link
               key={item.href}
               href={item.href}
               onClick={onNavigate}
-              className={cn(
-                "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                active
-                  ? "bg-primary text-white"
-                  : "text-blue-100 hover:bg-white/10",
-              )}
+              className={className}
             >
-              <Icon className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
-              {item.label}
+              {inner}
             </Link>
           );
         })}
