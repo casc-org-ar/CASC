@@ -13,6 +13,7 @@ import {
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { platformEnabled } from "@/lib/auth/flag";
 import { mainNav, isNavGroup, type NavItem } from "./nav-data";
 
 /** Pathname portion of a nav href, stripping query and hash. */
@@ -78,6 +79,9 @@ export function SiteHeader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const activeCategoria = searchParams.get("categoria");
+  // Hide the platform entry point until the internal login is ready in this
+  // environment (e.g. before Clerk's production DNS is verified).
+  const showIngresar = platformEnabled();
 
   const panelVariants: Variants = {
     hidden: { opacity: 0, y: prefersReducedMotion ? 0 : -8 },
@@ -220,14 +224,16 @@ export function SiteHeader() {
               aria-hidden="true"
             />
           </ButtonLink>
-          <ButtonLink href="/login">Ingresar</ButtonLink>
+          {showIngresar && <ButtonLink href="/login">Ingresar</ButtonLink>}
         </div>
 
         {/* Mobile: Ingresar visible + toggle */}
         <div className="flex items-center gap-2 lg:hidden">
-          <ButtonLink href="/login" size="sm">
-            Ingresar
-          </ButtonLink>
+          {showIngresar && (
+            <ButtonLink href="/login" size="sm">
+              Ingresar
+            </ButtonLink>
+          )}
           <button
             type="button"
             onClick={() => setMobileOpen((v) => !v)}
