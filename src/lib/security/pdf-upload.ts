@@ -61,10 +61,8 @@ export async function validateCvFile(file: File): Promise<PdfValidationResult> {
     };
   }
 
-  // Antivirus scan. Storage is now real (Supabase Storage, Fase 3), so this is
-  // the last stub in the chain: `scanFile` returns clean until a scanner is
-  // wired (Fase 4 — security). The seam is already here so enabling it is a
-  // one-line change and the flow above never needs rewriting.
+  // Antivirus scan (VirusTotal when VIRUSTOTAL_API_KEY is set; otherwise a
+  // no-op that relies on the layers above). Rejects flagged files.
   const scan = await scanFile(file);
   if (!scan.clean) {
     return {
@@ -77,14 +75,64 @@ export async function validateCvFile(file: File): Promise<PdfValidationResult> {
 }
 
 /**
- * Antivirus scan seam. No scanner is wired yet (Fase 4 — security), so this
- * returns clean. Replace the body with a call to a scanner (ClamAV,
- * Cloudmersive, VirusTotal, …) — uploads are now persisted for real, so this
- * is the remaining gap before public CV uploads are fully hardened.
+ * Antivirus scan. Wired to VirusTotal (API v3) behind an env var:
+ *
+ *  - No VIRUSTOTAL_API_KEY set  → scanning is disabled, the file is treated as
+ *    clean. This keeps local/dev and un-provisioned environments working; the
+ *    other PDF layers (magic bytes, size, sanitized name, attachment download)
+ *    still apply.
+ *  - Key set → the file is uploaded, its analysis polled, and it is rejected if
+ *    any engine flags it malicious.
+ *
+ * FAIL CLOSED (when enabled): unlike rate limiting, a scanner error/timeout
+ * here rejects the upload. A possibly-malicious CV that couldn't be verified
+ * should not reach a recruiter's machine — better to ask the user to retry.
  */
+const VT_API = "https://www.virustotal.com/api/v3";
+const VT_POLL_MS = 2000;
+const VT_MAX_POLLS = 10; // ~20s ceiling
+
 async function scanFile(file: File): Promise<{ clean: boolean }> {
-  // Not-yet-wired scanner: treat any real file as clean until Fase 4.
-  return { clean: file.size >= 0 };
+  const apiKey = process.env.VIRUSTOTAL_API_KEY;
+  if (!apiKey) {
+    // Scanning disabled — rely on the other PDF layers.
+    return { clean: true };
+  }
+
+  try {
+    // 1) Upload the file, get an analysis id.
+    const form = new FormData();
+    form.append("file", file);
+    const up = await fetch(`${VT_API}/files`, {
+      method: "POST",
+      headers: { "x-apikey": apiKey },
+      body: form,
+    });
+    if (!up.ok) return { clean: false }; // fail closed
+    const analysisId = (await up.json())?.data?.id as string | undefined;
+    if (!analysisId) return { clean: false };
+
+    // 2) Poll the analysis until it completes.
+    for (let i = 0; i < VT_MAX_POLLS; i++) {
+      const res = await fetch(`${VT_API}/analyses/${analysisId}`, {
+        headers: { "x-apikey": apiKey },
+      });
+      if (!res.ok) return { clean: false };
+      const body = await res.json();
+      const attr = body?.data?.attributes;
+      if (attr?.status === "completed") {
+        const malicious = Number(attr?.stats?.malicious ?? 0);
+        const suspicious = Number(attr?.stats?.suspicious ?? 0);
+        return { clean: malicious === 0 && suspicious === 0 };
+      }
+      await new Promise((r) => setTimeout(r, VT_POLL_MS));
+    }
+    // Timed out without a verdict → fail closed.
+    return { clean: false };
+  } catch {
+    // Network/other error → fail closed (do not accept an unverified file).
+    return { clean: false };
+  }
 }
 
 /**

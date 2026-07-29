@@ -51,8 +51,37 @@ Usa Upstash Redis porque en Vercel serverless un limitador en memoria no sirve
 
 Al superar el límite, el usuario ve "Demasiados envíos, esperá unos minutos".
 
+## Capa 4 — Antivirus de CVs (seam listo, requiere env var)
+
+La carga pública de CV acepta PDFs de desconocidos. Antes de que un reclutador
+descargue uno, se escanea con VirusTotal (API v3). Ya existían otras capas
+(magic bytes, tamaño, nombre saneado, descarga como attachment); esta cierra el
+riesgo de un PDF con exploit.
+
+### Setup (una vez, cuando se quiera activar)
+
+1. Crear cuenta gratuita en virustotal.com y obtener la API key (Community).
+2. Poner la env var (en `.env.local` para dev y en Vercel para producción):
+
+   ```
+   VIRUSTOTAL_API_KEY=...
+   ```
+
+### Comportamiento
+
+- Sin la key: el escaneo queda **desactivado** (el CV se acepta si pasa las
+  demás capas). Ideal para dev.
+- Con la key: el archivo se sube a VirusTotal, se espera el veredicto (~hasta
+  20s) y se **rechaza** si algún motor lo marca malicioso o sospechoso.
+- **FAIL CLOSED**: si el escaneo falla o se agota el tiempo, el CV se rechaza
+  (a diferencia del rate limiting). Un archivo que no se pudo verificar no debe
+  llegar a la máquina de un reclutador.
+
+> Consideración (ley 25.326): activar VirusTotal envía el CV (dato personal de
+> un tercero) a un servicio externo. Evaluar/contemplar esto antes de habilitarlo
+> en producción; el free tier de VirusTotal comparte muestras públicamente en
+> algunos planes — revisar los términos para datos personales.
+
 ## Pendiente
 
-- Capa 4 — Antivirus de CVs (el seam `scanFile` está listo en
-  `src/lib/security/pdf-upload.ts`; falta enchufar un scanner real).
 - Capa 5 — Logging de eventos de seguridad + auditoría de dependencias.
