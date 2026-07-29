@@ -1,0 +1,91 @@
+========================================================================
+TICKET — CONFIGURACIÓN DNS PARA casc.org.ar (PRODUCCIÓN)
+========================================================================
+
+Solicito la configuración de los siguientes registros DNS en el dominio
+casc.org.ar. Son 7 registros en total: 2 para el sitio web (Vercel) y 5
+para el sistema de autenticación (Clerk).
+
+IMPORTANTE (leer antes de aplicar):
+- Todos los valores/target deben coincidir EXACTAMENTE, carácter por
+  carácter. Un punto de más o de menos y el registro no funciona.
+- Si el DNS se administra en Cloudflare (o cualquier proveedor con "proxy"):
+  los 5 registros de Clerk deben quedar en modo DNS-only, NO proxied
+  (la nube naranja APAGADA / gris). Si quedan proxied, Clerk no verifica.
+- Los registros CNAME de tipo host raíz no aplican acá; todos los CNAME son
+  de subdominios.
+
+
+------------------------------------------------------------------------
+BLOQUE 1 — SITIO WEB (Vercel)
+------------------------------------------------------------------------
+Estos dos registros hacen que casc.org.ar y www.casc.org.ar muestren el
+sitio.
+
+1) Tipo:   A
+   Host:   @        (el dominio raíz, casc.org.ar)
+   Valor:  216.198.79.1
+
+   (Valor tomado del panel de Vercel para este dominio.)
+
+2) Tipo:   CNAME
+   Host:   www
+   Valor:  cname.vercel-dns.com
+
+
+------------------------------------------------------------------------
+BLOQUE 2 — AUTENTICACIÓN (Clerk)
+------------------------------------------------------------------------
+Estos cinco registros habilitan el login y el envío de correos
+(invitaciones) del sistema. Recordar: en Cloudflare, DNS-only (no proxied).
+
+3) Tipo:   CNAME
+   Host:   accounts
+   Valor:  accounts.clerk.services
+
+4) Tipo:   CNAME
+   Host:   clerk
+   Valor:  frontend-api.clerk.services
+
+5) Tipo:   CNAME
+   Host:   clk._domainkey
+   Valor:  dkim1.f91c6z2884gd.clerk.services
+
+6) Tipo:   CNAME
+   Host:   clk2._domainkey
+   Valor:  dkim2.f91c6z2884gd.clerk.services
+
+7) Tipo:   CNAME
+   Host:   clkmail
+   Valor:  mail.f91c6z2884gd.clerk.services
+
+
+------------------------------------------------------------------------
+NOTAS SOBRE EL FORMATO DEL HOST
+------------------------------------------------------------------------
+- Los "Host" de arriba están escritos en formato RELATIVO al dominio
+  (relativos a casc.org.ar).
+- Si la interfaz del proveedor pide el host COMPLETO (FQDN), usar:
+    @                -> casc.org.ar
+    www              -> www.casc.org.ar
+    accounts         -> accounts.casc.org.ar
+    clerk            -> clerk.casc.org.ar
+    clk._domainkey   -> clk._domainkey.casc.org.ar
+    clk2._domainkey  -> clk2._domainkey.casc.org.ar
+    clkmail          -> clkmail.casc.org.ar
+
+
+------------------------------------------------------------------------
+DESPUÉS DE APLICAR
+------------------------------------------------------------------------
+- La propagación DNS puede tardar de unos minutos a varias horas.
+- Una vez propagado:
+    * Vercel verifica el dominio automáticamente y emite el certificado
+      HTTPS (registros 1 y 2).
+    * En el panel de Clerk hay que volver a ejecutar "Verify" para los
+      registros 3 a 7. Si alguno sigue "unverified" pasado un rato,
+      revisar: que se haya agregado, que NO esté proxied (Cloudflare), y
+      que el valor coincida exacto.
+
+Gracias.
+========================================================================
