@@ -39,6 +39,70 @@ const associateCategoryRedirects = [
   },
 ];
 
+/**
+ * Content-Security-Policy — the core XSS defense. Allowlists exactly the
+ * external origins this app needs and denies everything else (fail closed).
+ *
+ * What each source enables:
+ *  - Clerk (auth): its FAPI domain + protection/challenge domains. `'unsafe-
+ *    inline'` on style-src is required by Clerk's runtime CSS-in-JS (per Clerk's
+ *    CSP docs). script-src keeps `'unsafe-inline'` too — Next's inline runtime
+ *    bootstrap needs it without a nonce pipeline; tightening to a nonce is a
+ *    later hardening step.
+ *  - Supabase (data): connect-src to the project host for queries + realtime
+ *    (wss). img-src covers Storage-served images.
+ *  - YouTube: frame-src for the institutional video embed (nocookie domain).
+ *  - Images: `https:` so admin-pasted external content images (SafeImage) load;
+ *    `data:` for inline/base64 assets.
+ *
+ * NEXT_PUBLIC_* values are inlined at build time. The Clerk/Supabase hosts come
+ * from env so dev and prod (different domains) each get a correct policy.
+ */
+const clerkFapi =
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.startsWith("pk_live_")
+    ? "https://clerk.casc.org.ar"
+    : "https://*.clerk.accounts.dev";
+const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+
+// React uses eval() ONLY in development (debugging/stack traces); it never does
+// in production. So `'unsafe-eval'` is allowed in dev and stays OUT of the prod
+// policy — where it would be a real XSS amplifier.
+const scriptEval = process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : "";
+
+const csp = [
+  `default-src 'self'`,
+  `script-src 'self' 'unsafe-inline'${scriptEval} ${clerkFapi} https://*.protect.clerk.com https://challenges.cloudflare.com`,
+  `style-src 'self' 'unsafe-inline'`,
+  `img-src 'self' data: https:`,
+  `font-src 'self' data:`,
+  `connect-src 'self' ${clerkFapi} https://*.protect.clerk.com ${supabaseHost} wss://${supabaseHost.replace(/^https?:\/\//, "")}`,
+  `frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com https://*.protect.clerk.com`,
+  `worker-src 'self' blob:`,
+  `object-src 'none'`,
+  `base-uri 'self'`,
+  `form-action 'self'`,
+  `frame-ancestors 'none'`,
+  `upgrade-insecure-requests`,
+]
+  .filter(Boolean)
+  .join("; ");
+
+/** Static security headers applied to every response. */
+const securityHeaders = [
+  { key: "Content-Security-Policy", value: csp },
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=31536000; includeSubDomains; preload",
+  },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "geolocation=(), camera=(), microphone=(), payment=()",
+  },
+];
+
 const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
@@ -73,6 +137,9 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
     ];
+  },
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }];
   },
 };
 
