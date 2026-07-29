@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
 import type { RegionSlug } from "@/components/public/asociados-directory";
 import { MAP_VIEWBOX, provincePaths } from "@/lib/data/argentina-map";
+import { MALVINAS_PATH } from "@/lib/data/malvinas-path";
 
 export interface MapDelegation {
   region: string;
@@ -112,14 +113,30 @@ export function DelegacionesMap({
             );
           })}
 
-          {/* Label for the Malvinas so the two small islands read clearly. */}
-          <text
-            x={264}
-            y={824}
-            className="pointer-events-none fill-ink-muted text-[9px] font-semibold"
+          {/* Islas Malvinas — real outline (client SVG), scaled and placed to
+              the southeast. Coloured and selectable as part of Patagonia, so it
+              highlights and reacts to selection like the mainland provinces. */}
+          <g
+            transform="translate(214 798) scale(0.017) translate(-538.2 -934.22)"
+            className="cursor-pointer"
+            onMouseEnter={() => setHoverRegion("patagonia")}
+            onMouseLeave={() => setHoverRegion(null)}
+            onClick={() => setSelectedRegion("patagonia")}
           >
-            Malvinas
-          </text>
+            <path
+              d={MALVINAS_PATH}
+              className={cn(
+                "transition-all duration-200",
+                isProvinceLit("patagonia")
+                  ? "fill-casc-navy-500 stroke-white"
+                  : "fill-casc-blue-300 stroke-white hover:fill-casc-navy-700",
+                highlight !== null &&
+                  !isProvinceLit("patagonia") &&
+                  "opacity-40",
+              )}
+              strokeWidth={60}
+            />
+          </g>
         </svg>
 
         <p className="mt-2 text-center text-xs text-ink-muted">

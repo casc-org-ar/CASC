@@ -166,14 +166,4 @@ export const provincePaths: ProvincePath[] = [
     region: "norte",
     d: "M181.8 138.8L175.9 138L172.6 140L172.4 138.9L166.4 137.7L164.8 134.7L158.2 135.8L157.4 141.8L150 138.4L148.4 147.8L154.4 151.9L154.5 156.5L148.7 164.5L151.9 166.4L152.3 172.3L155.2 180.1L156.7 178.1L159.8 183.8L164.3 179.8L168 182.2L168.6 180.5L170.7 180.6L172.5 177.7L170.8 173.4L172.2 171.6L170.9 170.8L171.8 166.9L174.2 166.3L177.2 154L179.2 153.2L179.8 149.8L181.7 150.3L181.8 138.8Z",
   },
-  {
-    // Islas Malvinas — southeast of Tierra del Fuego, separated from the
-    // mainland (their true relative position). Simplified geometry: the two
-    // main islands (Gran Malvina to the west, Soledad to the east). Argentine
-    // territory, grouped with the Patagonia delegation.
-    iso: "AR-MALVINAS",
-    name: "Islas Malvinas",
-    region: "patagonia",
-    d: "M236.5 818.2L240.8 816.5L243.5 819L242.2 822.8L244.6 825.6L241.3 828.4L237.8 826.9L236.2 823.1L238.4 820.9L236.5 818.2ZM247.2 815.4L252.6 814.1L257.4 816.8L256.1 820.7L258.3 823.9L255.2 827.6L250.4 828.2L247.6 825.1L249.3 821.4L246.8 818.9L247.2 815.4Z",
-  },
 ];

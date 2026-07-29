@@ -83,6 +83,38 @@ andar" — intentar romperlo:
 
 ---
 
+## Sembrar el contenido real (seed)
+
+Al pasar del mock a Supabase, la base arranca vacía: el contenido real que se
+había migrado del sitio legacy (noticias, beneficios, informes, webinars, etc.)
+deja de verse porque vivía en el código del mock, no en la base. El script de
+seed carga ese mismo contenido en Supabase como filas reales, que después se
+editan/borran desde el panel.
+
+Requisito: la **service_role key** en `.env.local` (bypassa RLS para insertar
+como sistema). Agregala así (además de las que ya tenés):
+
+```
+# En el dashboard de Supabase → Settings → API Keys → service_role (secret).
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+```
+
+> Es una clave secreta: nunca se commitea ni se expone al browser. Solo el
+> script la usa, localmente.
+
+Correr una vez:
+
+```
+pnpm seed
+```
+
+Inserta las 10 entidades y muestra cuántos registros por tabla. Las imágenes del
+seed son rutas locales (`/assets/...`), así que se migran como texto — no hace
+falta subir nada a Storage. Si volvés a correrlo, DUPLICA los registros (inserta
+de nuevo); para re-sembrar limpio, vaciá las tablas antes.
+
+---
+
 ## Pendiente para próximas tandas
 
 - **Webhook `invitation.accepted`**: marcar el socio como "aceptada" y linkear
