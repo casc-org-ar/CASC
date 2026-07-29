@@ -121,7 +121,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/alto-comahue-shopping.webp",
     "direccion": "Dr. Ramon y Ruta Provincial N°7 Ciudad de Neuquén, Neuquén",
-    "telefono": "(299)434 0200 Página Web: www.altocomahue.com.ar",
+    "telefono": "(299) 434 0200",
+    "web": "www.altocomahue.com.ar",
     "inauguracion": "17 de Marzo de 2015",
     "visitas": "340.643",
     "locales": "111"
@@ -168,7 +169,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/annuar-shopping.webp",
     "direccion": "Belgrano 563 San Salvador de Jujuy, Jujuy",
-    "telefono": "(54 0388) 423-6178 Instagram: @annuarshopping",
+    "telefono": "(54 0388) 423-6178",
+    "contacto": "Instagram: @annuarshopping",
     "inauguracion": "14 de octubre de 2009",
     "visitas": "242.000",
     "locales": "67"
@@ -179,6 +181,7 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/appa.webp",
+    "web": "www.weareappa.com",
     "actividad": "&iexcl;appa! es la plataforma lider en fidelizaci&oacute;n y gesti&oacute;n digital para centros comerciales, dise&ntilde;ada para optimizar la operaci&oacute;n y reducir costos. Elimina las filas en stands de promociones y minimiza la necesidad de personal operativo a trav&eacute;s de inteligencia artificial para la validaci&oacute;n autom&aacute;tica de facturas, integra de forma nativa el control de parking y barreras, permitiendo al usuario obtener beneficios mientras que el shopping accede a un ecosistema de insights y data en tiempo real, permitiendo impactar a los clientes mediante canales de comunicaci&oacute;n segmentados basados en su comportamiento real de compra."
   },
   {
@@ -277,6 +280,7 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/clash.webp",
+    "web": "www.clash.com.ar",
     "contacto": "Juan Marcos Aviano &ndash; Director Comercial &amp; MKT Redes sociales: X: https://x.com/ClashBeneficios Facebook: https://www.facebook.com/clash.beneficios Youtube: https://www.youtube.com/@clashbeneficios Instagram: https://www.instagram.com/clash.beneficios",
     "actividad": "Clash conecta a centros comerciales con sus visitantes a trav&eacute;s de promociones claras, organizadas y visibles. Es una soluci&oacute;n integral que profesionaliza la comunicaci&oacute;n de los beneficios de los locatarios, centraliz&aacute;ndolos en un solo lugar y acompa&ntilde;ando al shopping con tecnolog&iacute;a, soporte operativo y acciones comerciales. Adem&aacute;s, forma parte de un ecosistema donde miles de personas consultan cada mes todas las promociones bancarias y extrabancarias en supermercados, estaciones de servicio y otros rubros clave. Clash permite al centro comercial ganar visibilidad real y conectar con el consumidor justo cuando est&aacute; buscando d&oacute;nde aprovechar sus beneficios."
   },
@@ -344,7 +348,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/distrito-arcos-premium-outlet.webp",
     "direccion": "Paraguay 4979, Capital Federal",
-    "telefono": "(5411) 5789-2700 Página Web: www.distritoarcos.com.ar",
+    "telefono": "(5411) 5789-2700",
+    "web": "www.distritoarcos.com.ar",
     "inauguracion": "18 de Diciembre de 2014",
     "visitas": "151.952",
     "locales": "67"
@@ -379,7 +384,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/espacio-san-juan-shopping.webp",
     "direccion": "Av. José Ignacio de la Roza Nro.806 Rivadavia, San Juan",
-    "telefono": "2644238611 Página Web: www.espaciosanjuan.com",
+    "telefono": "2644238611",
+    "web": "www.espaciosanjuan.com",
     "inauguracion": "01 de Noviembre de 2014",
     "visitas": "85.000",
     "locales": "54"
@@ -405,6 +411,7 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/euler.webp",
+    "web": "www.eulerlabs.tech",
     "contacto": "Herman Moldovan - Director Redes : linkedin -&gt; www.linkedin.com/company/eulerlabs",
     "actividad": "Eulerlabs es una empresa de tecnolog&iacute;a dedicada a la medici&oacute;n, an&aacute;lisis y optimizaci&oacute;n del desempe&ntilde;o de centros comerciales . Brindamos soluciones que permiten entender el comportamiento de los visitantes , evaluar la performance de los locales y mejorar la gesti&oacute;n comercial y operativa del shopping, a partir de datos objetivos y confiables. Nuestra plataforma integra informaci&oacute;n de flujo peatonal, ocupaci&oacute;n, permanencia , junto con datos de ventas y contexto, para acompa&ntilde;ar la toma de decisiones estrat&eacute;gicas. Sectores o especialidades en los que opera Eulerlabs opera principalmente en el sector retail y centros comerciales , especializ&aacute;ndose en: Shopping centers Gesti&oacute;n y auditor&iacute;a de locales Medici&oacute;n de flujo peatonal y ocupaci&oacute;n An&aacute;lisis de performance comercial y operativa Integraci&oacute;n de datos f&iacute;sicos y comerciales en una &uacute;nica plataforma Valor diferencial / Propuesta de valor El principal diferencial de Eulerlabs es la combinaci&oacute;n de experiencia, cobertura y foco en resultados de negocio . Contamos con m&aacute;s de 15 a&ntilde;os de experiencia trabajando con shopping centers y tenemos presencia en casi la totalidad de los shoppings del pa&iacute;s , lo que nos permite conocer en profundidad su operaci&oacute;n, desaf&iacute;os y necesidades. Ofrecemos a nuestros clientes: Datos confiables y comparables entre locales y centros comerciales Una mirada objetiva para gestionar, auditar y optimizar la performance Una soluci&oacute;n desarrollada espec&iacute;ficamente para el negocio de shoppings"
   },
@@ -414,7 +421,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/factory-parque-brown.webp",
     "direccion": "Av. Cruz y Escalada (1407) Capital Federal, Buenos Aires",
-    "telefono": "(54 11) 4630-4373 Página Web: www.parquebrown.factoryshopping.com.ar",
+    "telefono": "(54 11) 4630-4373",
+    "web": "www.parquebrown.factoryshopping.com.ar",
     "inauguracion": "8 de diciembre de 1992",
     "visitas": "500.000",
     "locales": "96"
@@ -425,7 +433,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/factory-quilmes.webp",
     "direccion": "Av. Calchaquí 3950 (1878) Quilmes, Buenos Aires",
-    "telefono": "(5411) 4229-4000 Página Web: www.quilmes.factoryshopping.com.ar",
+    "telefono": "(5411) 4229-4000",
+    "web": "www.quilmes.factoryshopping.com.ar",
     "inauguracion": "11 de diciembre de 1997",
     "visitas": "900.000",
     "locales": "76"
@@ -436,7 +445,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/factory-san-martin.webp",
     "direccion": "San Lorenzo e Industria (1650) San Martín, Buenos Aires",
-    "telefono": "(5411) 5789-1600 Página Web: www.sanmartin.factoryshopping.com.ar",
+    "telefono": "(5411) 5789-1600",
+    "web": "www.sanmartin.factoryshopping.com.ar",
     "inauguracion": "16 de diciembre de 1994",
     "visitas": "285.000",
     "locales": "37"
@@ -445,7 +455,10 @@ export const asociados: Asociado[] = [
     "slug": "fondamenta",
     "name": "Fondamenta",
     "category": "Proveedores de servicios",
-    "logo": "/assets/asociados/logos/fondamenta.webp"
+    "logo": "/assets/asociados/logos/fondamenta.webp",
+    "telefono": "11-5451-9624",
+    "web": "https://www.instagram.com/fondamentaestudio",
+    "contacto": "fondamentaestudio@gmail.com"
   },
   {
     "slug": "galerias-pacifico",
@@ -483,7 +496,10 @@ export const asociados: Asociado[] = [
     "slug": "la-barraca-mall",
     "name": "La Barraca Mall",
     "category": "Shopping Centers",
-    "logo": "/assets/asociados/logos/la-barraca-mall.webp"
+    "logo": "/assets/asociados/logos/la-barraca-mall.webp",
+    "direccion": "Las Cañas 1833 - (5519) Guaymallén - Pcia. de Mendoza",
+    "telefono": "0261 804 2400",
+    "web": "https://www.cioffigrupo.com/labarracamall"
   },
   {
     "slug": "maschwitz-mall",
@@ -639,7 +655,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/parque-avellaneda-shopping.webp",
     "direccion": "Autopista Buenos Aires – La Plata Km. 9 (1872) Sarandí – Avellaneda, Buenos Aires",
-    "telefono": "(54 11) 4115 – 1172 Página Web: www.parqueavellanedashopping.com.ar",
+    "telefono": "(54 11) 4115 – 1172",
+    "web": "www.parqueavellanedashopping.com.ar",
     "inauguracion": "1 de noviembre de 1998",
     "visitas": "73.000",
     "locales": "78"
@@ -693,7 +710,10 @@ export const asociados: Asociado[] = [
     "slug": "paseo-del-jockey",
     "name": "Paseo del Jockey",
     "category": "Shopping Centers",
-    "logo": "/assets/asociados/logos/paseo-del-jockey.webp"
+    "logo": "/assets/asociados/logos/paseo-del-jockey.webp",
+    "direccion": "Bv. Elías Yofre 1050 - (5000) Córdoba - Pcia. de Córdoba",
+    "telefono": "0351 554 0351",
+    "web": "www.paseodeljockey.com"
   },
   {
     "slug": "paseo-libertad-lugones",
@@ -725,7 +745,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/paseo-libertad-salta.webp",
     "direccion": "Av. Tavella y Av. Ex Combatientes de Malvinas Rotonda Limache, Salta Capital",
-    "telefono": "(0387) 4269700 Página Web: www.paseosalta.com.ar",
+    "telefono": "(0387) 4269700",
+    "web": "www.paseosalta.com.ar",
     "inauguracion": "23 de junio de 2000",
     "visitas": "352.615",
     "locales": "92"
@@ -736,7 +757,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/paseo-libertad-san-juan.webp",
     "direccion": "Scalabrini Ortiz y Av. Circunvalación San Juan",
-    "telefono": "(54 264) 429-2207 Página Web: www.paseosanjuan.com.ar",
+    "telefono": "(54 264) 429-2207",
+    "web": "www.paseosanjuan.com.ar",
     "inauguracion": "29 de septiembre de 1999",
     "visitas": "353.255",
     "locales": "108"
@@ -769,6 +791,9 @@ export const asociados: Asociado[] = [
     "name": "Paso del Paraná",
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/paso-del-parana.webp",
+    "direccion": "Corrientes 687 - Paraná - Pcia. de Entre Ríos",
+    "telefono": "0343 534 3685",
+    "contacto": "Instagram: @pasodelparana",
     "visitas": "180.000",
     "locales": "67"
   },
@@ -871,7 +896,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/portal-palermo.webp",
     "direccion": "Av. Int. Bullrich y Cerviño (1425) Capital Federal, Buenos Aires",
-    "telefono": "(54 11) 4778-8000 Página Web: www.portalpalermo.com.ar",
+    "telefono": "(54 11) 4778-8000",
+    "web": "www.portalpalermo.com.ar",
     "inauguracion": "04 de Octubre de 1996",
     "visitas": "28.000",
     "locales": "43"
@@ -960,7 +986,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/puerto-plaza.webp",
     "direccion": "Remolcador Meteoro N°250-Dique 2 Puerto de Santa Fe, Pcia. de Santa Fe",
-    "telefono": "0342-4547966 Página Web: www.puertoplaza.com.ar",
+    "telefono": "0342-4547966",
+    "web": "www.puertoplaza.com.ar",
     "inauguracion": "Octubre 2020",
     "visitas": "22.000",
     "locales": "36"
@@ -1011,7 +1038,8 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/san-justo-shopping.webp",
     "direccion": "Juan Manuel de Rosas 3910 (1754) San Justo, Buenos Aires",
-    "telefono": "(5411) 4480-2800 Página Web: www.sanjustoshopping.com.ar",
+    "telefono": "(5411) 4480-2800",
+    "web": "www.sanjustoshopping.com.ar",
     "inauguracion": "02 de Diciembre de 2009",
     "visitas": "600.000",
     "locales": "92"
