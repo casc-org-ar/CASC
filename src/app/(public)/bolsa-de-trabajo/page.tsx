@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ArrowUpRight, Briefcase, Search, Users } from "lucide-react";
 import { PageHero } from "@/components/public/page-hero";
 import { JoinCta } from "@/components/public/join-cta";
-import { CvForm } from "@/components/public/cv-form";
 import { ButtonAnchor } from "@/components/ui/button";
 import { LINKEDIN_CASC_URL } from "@/lib/data/bolsa-trabajo";
 
@@ -100,19 +99,25 @@ export default function BolsaDeTrabajoPage() {
         </div>
       </section>
 
-      {/* Formulario de carga de CV. */}
+      {/* Carga de CV — deshabilitada por ahora ("próximamente"). La sección se
+          mantiene visible para anticipar la funcionalidad, pero el formulario NO
+          se muestra hasta encuadrar el tratamiento de datos personales (ley
+          25.326). Reactivar reponiendo <CvForm /> cuando esté habilitado. */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-            Cargá tu CV
+        <div className="rounded-2xl border border-dashed border-primary/40 bg-surface/60 px-6 py-12 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+            <Briefcase className="h-4 w-4" aria-hidden="true" />
+            Próximamente
+          </span>
+          <h2 className="mt-5 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+            Carga de CV
           </h2>
-          <p className="mt-2 text-sm leading-6 text-ink-muted">
-            Los campos con <span className="text-accent">*</span> son
-            obligatorios.
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-ink-muted">
+            Estamos terminando de preparar la Bolsa de Trabajo para que puedas
+            sumar tu CV de forma segura. Muy pronto vas a poder cargar tu perfil
+            y conectar con las empresas asociadas a la Cámara.
           </p>
         </div>
-
-        <CvForm />
       </section>
 
       <JoinCta />

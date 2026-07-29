@@ -12,6 +12,7 @@ import {
   type ContentCarouselItem,
 } from "@/components/public/content-carousel";
 import { HeroCarousel } from "@/components/public/hero-carousel";
+import { CountUpNumber } from "@/components/public/count-up-number";
 import { CardCover } from "@/components/shared/card-cover";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -36,6 +37,18 @@ import { cn } from "@/lib/utils";
  * DataLayer (empty until the panel publishes). Capacitaciones use the real
  * activities migrated from the legacy site.
  */
+
+/**
+ * Headline industry figures for the Home, curated from the "Datos del sector"
+ * page. Big values use a compact unit (M/mil) with the count-up over the small
+ * number so the animation stays legible (e.g. 30 → "+30 M").
+ */
+const industriaStats: { value: number; suffix: string; label: string }[] = [
+  { value: 142, suffix: "", label: "Centros y paseos comerciales" },
+  { value: 5, suffix: " M m²", label: "de Área Bruta Locativa" },
+  { value: 30, suffix: " M", label: "de visitas mensuales" },
+  { value: 64, suffix: " mil", label: "puestos de trabajo" },
+];
 
 const heroSlides = [
   {
@@ -140,6 +153,32 @@ export default async function HomePage() {
       {/* Hero */}
       <HeroCarousel slides={heroSlides} />
 
+      {/* Datos de la industria — cifras destacadas al inicio de la Home, con
+          contadores animados. Los valores reflejan los de "Datos del sector". */}
+      <section className="border-b border-border bg-casc-navy-900 text-white">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-blue-200/80">
+            La industria en números
+          </p>
+          <h2 className="mt-3 text-center text-2xl font-extrabold tracking-tight sm:text-3xl">
+            Una industria que no para de crecer
+          </h2>
+          <dl className="mt-10 grid grid-cols-2 gap-6 sm:gap-8 lg:grid-cols-4">
+            {industriaStats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <dd className="text-3xl font-extrabold tracking-tight text-accent sm:text-4xl">
+                  +<CountUpNumber value={stat.value} />
+                  {stat.suffix}
+                </dd>
+                <dt className="mt-2 text-sm leading-5 text-blue-100/80">
+                  {stat.label}
+                </dt>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
       {/* ¿Qué es la CASC? */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <HomeSectionHeader
@@ -170,10 +209,13 @@ export default async function HomePage() {
               <p className="mt-4 text-lg leading-8 text-ink-muted">
                 La Cámara Argentina de Shopping Centers es una entidad sin fines
                 de lucro que desde hace más de 35 años representa, conecta y
-                acompaña a los centros comerciales del país. Trabajamos para
-                promover buenas prácticas, impulsar la profesionalización del
-                sector y consolidar un espacio de diálogo entre operadores,
-                desarrolladores, retailers, proveedores y organismos públicos.
+                acompaña a los centros comerciales del país.
+              </p>
+              <p className="mt-4 text-lg leading-8 text-ink-muted">
+                Trabajamos para promover buenas prácticas, impulsar la
+                profesionalización del sector y consolidar un espacio de diálogo
+                entre operadores, desarrolladores, retailers, proveedores y
+                organismos públicos.
               </p>
             </div>
 
@@ -213,9 +255,10 @@ export default async function HomePage() {
           />
 
           {/* DomeGallery (React Bits) — logos de shopping centers en esfera 3D.
-              Fondo suave detrás de la esfera para que se aprecie mejor su volumen. */}
+              Fondo oscuro (navy de marca) detrás de la esfera: da contraste para
+              que el volumen y los logos de la esfera se aprecien mejor. */}
           <div
-            className="relative overflow-hidden rounded-2xl border border-border bg-linear-to-b from-casc-blue-300/25 via-surface to-white"
+            className="relative overflow-hidden rounded-2xl border border-border bg-linear-to-b from-casc-navy-900 via-casc-navy-700 to-casc-navy-900"
             style={{ height: 520 }}
           >
             <DomeGallery
@@ -224,7 +267,7 @@ export default async function HomePage() {
                 alt: s.name,
                 href: `/asociados/${s.slug}`,
               }))}
-              overlayBlurColor="#eef1f6"
+              overlayBlurColor="#0b2535"
               grayscale={false}
               fit={0.6}
               minRadius={400}

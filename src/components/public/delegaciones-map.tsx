@@ -4,6 +4,7 @@ import { useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, MapPin, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ButtonLink } from "@/components/ui/button";
 import type { RegionSlug } from "@/components/public/asociados-directory";
 import { MAP_VIEWBOX, provincePaths } from "@/lib/data/argentina-map";
 
@@ -60,17 +61,18 @@ export function DelegacionesMap({
   }
 
   /**
-   * Whether a province should light up for the highlighted region. CABA is a
-   * dot inside Buenos Aires, so highlighting either metropolitan delegation
-   * (CABA or GBA) paints both provinces — otherwise CABA would highlight
-   * nothing visible. Each still links to its own delegate.
+   * Whether a province should light up for the highlighted region.
+   *
+   * The two metropolitan delegations (CABA and GBA) share the CABA dot on the
+   * map: the GBA "24 partidos" have no separate geometry (Buenos Aires province
+   * belongs to Pampeana), so highlighting either metro delegation lights the
+   * CABA path. Each still links to its own delegate via the list.
    */
   function isProvinceLit(provinceRegion: RegionSlug): boolean {
     if (highlight === null) return false;
     const metro: RegionSlug[] = ["caba", "gba"];
-    if (metro.includes(highlight)) {
-      return metro.includes(provinceRegion);
-    }
+    // Both metro delegations light the CABA path (the only metro geometry).
+    if (metro.includes(highlight)) return provinceRegion === "caba";
     return provinceRegion === highlight;
   }
 
@@ -109,10 +111,19 @@ export function DelegacionesMap({
               />
             );
           })}
+
+          {/* Label for the Malvinas so the two small islands read clearly. */}
+          <text
+            x={264}
+            y={824}
+            className="pointer-events-none fill-ink-muted text-[9px] font-semibold"
+          >
+            Malvinas
+          </text>
         </svg>
 
         <p className="mt-2 text-center text-xs text-ink-muted">
-          Tocá una provincia para ver su delegación
+          Tocá una provincia para ver su Delegación
         </p>
       </div>
 
@@ -181,60 +192,79 @@ export function DelegacionesMap({
           : ""}
       </p>
 
-      {/* Full-screen modal for the selected region. */}
+      {/* Detail modal for the selected region. */}
       {selected && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label={`Delegación ${selected.region}`}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="animate-fade-in fixed inset-0 z-50 flex items-center justify-center p-4"
         >
-          {/* Scrim — clicking outside closes. */}
+          {/* Scrim — clicking outside closes. Soft dim, no heavy blur. */}
           <button
             type="button"
             aria-label="Cerrar"
             onClick={() => setSelectedRegion(null)}
-            className="absolute inset-0 h-full w-full cursor-default bg-casc-navy-900/60 backdrop-blur-sm"
+            className="absolute inset-0 h-full w-full cursor-default bg-casc-navy-900/50"
           />
 
-          <div className="card-depth relative z-10 w-full max-w-md rounded-2xl border border-border bg-white p-6 shadow-2xl">
-            <button
-              type="button"
-              onClick={() => setSelectedRegion(null)}
-              aria-label="Cerrar"
-              className="absolute right-4 top-4 rounded-md p-1.5 text-ink-muted transition-colors hover:bg-surface hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <X className="h-5 w-5" aria-hidden="true" />
-            </button>
+          <div className="animate-fade-in-up relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+            {/* Header: region identity + close, on a tinted band. */}
+            <div className="flex items-start justify-between gap-3 border-b border-border bg-surface/60 px-6 py-5">
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <MapPin className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                    Delegación
+                  </p>
+                  <h2 className="text-xl font-extrabold tracking-tight text-ink">
+                    {selected.region}
+                  </h2>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedRegion(null)}
+                aria-label="Cerrar"
+                className="-mr-1.5 -mt-1 shrink-0 rounded-md p-1.5 text-ink-muted transition-colors hover:bg-white hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <X className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
 
-            <p className="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-ink">
-              <MapPin className="h-6 w-6 shrink-0 text-primary" aria-hidden="true" />
-              {selected.region}
-            </p>
-            <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-              {selected.role}
-            </p>
-            <p className="mt-1 text-lg font-bold text-ink">{selected.name}</p>
-            <p className="text-sm text-ink-muted">{selected.org}</p>
+            {/* Body: delegate + coverage. */}
+            <div className="px-6 py-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-muted">
+                {selected.role}
+              </p>
+              <p className="mt-1 text-lg font-bold text-ink">{selected.name}</p>
+              <p className="text-sm text-ink-muted">{selected.org}</p>
 
-            <ul className="mt-4 flex flex-wrap gap-1.5">
-              {selected.coverage.map((area) => (
-                <li
-                  key={area}
-                  className="rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium leading-tight text-ink-muted"
-                >
-                  {area}
-                </li>
-              ))}
-            </ul>
+              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.14em] text-ink-muted">
+                Provincias que representa
+              </p>
+              <ul className="mt-2 flex flex-wrap gap-1.5">
+                {selected.coverage.map((area) => (
+                  <li
+                    key={area}
+                    className="rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium leading-tight text-ink-muted"
+                  >
+                    {area}
+                  </li>
+                ))}
+              </ul>
 
-            <Link
-              href={hrefFor(selected.regionSlug)}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-            >
-              Ver asociados de la región
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
+              <ButtonLink
+                href={hrefFor(selected.regionSlug)}
+                size="lg"
+                className="mt-6 w-full"
+              >
+                Ver asociados de la región
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </ButtonLink>
+            </div>
           </div>
         </div>
       )}

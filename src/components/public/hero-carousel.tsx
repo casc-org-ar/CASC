@@ -72,9 +72,11 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
     setIndex(((i % slides.length) + slides.length) % slides.length);
 
   return (
-    <section className="relative w-full overflow-hidden bg-surface">
-      {/* Full-bleed. Ratios: mobile 750×1100 (~0.68) · tablet 1280×900 (~1.42) · desktop 1920×700 (~2.74) */}
-      <div className="relative aspect-75/110 w-full md:aspect-128/90 lg:aspect-192/70">
+    <section className="relative mx-auto w-full overflow-hidden bg-surface">
+      {/* Full-bleed. Ratios: mobile 750×1100 (~0.68) · tablet 1280×900 (~1.42) · desktop 1920×700 (~2.74).
+          max-height caps how tall the banner gets on wide screens (a request to
+          shrink it a bit) without changing the artwork ratio or cropping. */}
+      <div className="relative mx-auto aspect-75/110 max-h-[78vh] w-full md:aspect-128/90 md:max-h-[70vh] lg:aspect-192/70 lg:max-h-140">
         {slides.map((slide, i) => {
           const active = i === index;
           const inner = <SlidePicture slide={slide} />;

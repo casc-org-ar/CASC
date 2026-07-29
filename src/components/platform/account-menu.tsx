@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { LogOut, Settings } from "lucide-react";
+import Link from "next/link";
+import { Home, LogOut, Settings } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 import { SignOutButton, UserProfile, useUser } from "@clerk/nextjs";
@@ -60,6 +61,15 @@ function ClerkAccount({ user }: { user: CurrentUser }) {
           </p>
         </div>
       </div>
+
+      {/* Back to the public website (leaving the portal, without logging out). */}
+      <Link
+        href="/"
+        className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-blue-100 transition-colors hover:bg-white/10"
+      >
+        <Home className="h-4 w-4 shrink-0" />
+        Volver al sitio
+      </Link>
 
       <button
         onClick={() => setSettingsOpen(true)}
@@ -148,6 +158,15 @@ function MockAccount({ user }: { user: CurrentUser }) {
           </p>
         </div>
       </div>
+
+      {/* Back to the public website (leaving the portal). */}
+      <Link
+        href="/"
+        className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-blue-100 transition-colors hover:bg-white/10"
+      >
+        <Home className="h-4 w-4 shrink-0" />
+        Volver al sitio
+      </Link>
 
       <button
         onClick={() => setSettingsOpen(true)}

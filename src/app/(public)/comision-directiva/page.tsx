@@ -313,7 +313,7 @@ export default function ComisionDirectivaPage() {
           </div>
 
           <div className="mt-10 border-t border-border pt-8">
-            <h3 className="mb-6 text-lg font-bold tracking-tight text-ink">
+            <h3 className="mb-6 text-center text-lg font-bold tracking-tight text-ink">
               Vocales
             </h3>
             <MemberGrid members={directors} columns="lg:grid-cols-3" />
@@ -347,10 +347,6 @@ export default function ComisionDirectivaPage() {
         {/* Staff anchor referenced by the header menu. */}
         <SectionBlock id="staff" className="scroll-mt-24 bg-bg">
           <SectionHeader title="Staff" icon={BriefcaseBusiness} />
-          <p className="mb-6 max-w-3xl text-sm leading-6 text-ink-muted">
-            La Gerencia General no integra la Comisión Directiva: conduce la
-            gestión operativa y administrativa de la Cámara.
-          </p>
           <MemberGrid members={staff} columns="lg:grid-cols-2" />
         </SectionBlock>
       </section>

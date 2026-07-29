@@ -44,7 +44,7 @@ export function SectionSwitcher({
         {viewingSocio ? (
           <>
             <ArrowLeftRight className="h-3.5 w-3.5 shrink-0" />
-            Volver al panel de administración
+            Volver al panel admin
           </>
         ) : (
           <>

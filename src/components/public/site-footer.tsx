@@ -60,7 +60,7 @@ export function SiteFooter() {
           stack (brand first, then the menu), and the menu itself collapses
           from three columns to two, then one on the narrowest screens.
         */}
-        <div className="grid gap-10 border-b border-white/15 pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-12">
+        <div className="grid gap-10 border-b border-white/15 pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-20 xl:gap-28">
           <div className="flex max-w-md flex-col">
             <Link
               href="/"

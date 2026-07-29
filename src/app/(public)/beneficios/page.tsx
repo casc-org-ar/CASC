@@ -158,9 +158,10 @@ export default function BeneficiosPage() {
                   dentro de la Cámara.
                 </p>
 
-                {/* Leads to the membership request, not the platform login. */}
+                {/* Panel access = platform login, not the Cámara membership
+                    request (which is a different flow, /como-asociarse). */}
                 <div className="mt-auto pt-6">
-                  <ButtonLink href="/como-asociarse" size="lg">
+                  <ButtonLink href="/login" size="lg">
                     Solicitar unirse
                     <ArrowRight
                       className="h-4 w-4"

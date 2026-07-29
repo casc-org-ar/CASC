@@ -31,11 +31,11 @@ export const metadata: Metadata = {
 const resumen = [
   {
     icon: Globe,
-    text: "Nuestro principal objetivo es consensuar el interés global de todos los Shopping Centers asociados por encima del interés particular, empresario o regional.",
+    text: "Nuestro principal objetivo es consensuar el interés de todos los Shopping Centers asociados por encima del interés particular, empresario o regional.",
   },
   {
     icon: Building2,
-    text: "En la actualidad, más del 60% de los Shoppings distribuidos en las distintas provincias del País, se encuentran nucleados en nuestra entidad, posicionándose la Cámara como la voz encargada de representar a la industria ante las autoridades y la opinión pública.",
+    text: "En la actualidad, más del 60% de los Shoppings distribuidos en las distintas provincias del País, se encuentran nucleados en nuestra entidad, siendo la Cámara la institución que los representa frente a las autoridades y a la opinión pública.",
   },
   {
     icon: Handshake,
@@ -88,7 +88,7 @@ export default function NosotrosPage() {
               La Cámara Argentina de Shopping Centers (CASC) es una entidad sin
               fines de lucro que representa a los principales Centros
               Comerciales, Retailers y Empresas proveedoras de servicios de
-              Argentina desde hace más de 30 años, promoviendo una industria
+              Argentina desde hace más de 35 años, promoviendo una industria
               sólida, profesional y en permanente evolución.
             </p>
           </div>
@@ -186,21 +186,6 @@ export default function NosotrosPage() {
             />
           </div>
         </div>
-      </section>
-
-      {/* Frase institucional */}
-      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
-        <p className="flex items-center justify-center gap-4 text-center text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-          <span
-            aria-hidden="true"
-            className="hidden h-px w-10 shrink-0 bg-accent sm:block"
-          />
-          Representamos a los Shopping Centers de Argentina
-          <span
-            aria-hidden="true"
-            className="hidden h-px w-10 shrink-0 bg-accent sm:block"
-          />
-        </p>
       </section>
 
       <JoinCta />

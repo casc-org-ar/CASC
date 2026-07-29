@@ -15,7 +15,7 @@ import { ButtonLink } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Delegaciones Regionales — CASC",
   description:
-    "Delegaciones regionales de la Cámara Argentina de Shopping Centers y sus delegados.",
+    "Delegaciones Regionales de la Cámara Argentina de Shopping Centers y sus Delegados.",
 };
 
 /**
@@ -37,7 +37,7 @@ const delegates: MapDelegation[] = [
     name: "Marcelo Chane",
     org: "Nuevo Quilmes Plaza",
     regionSlug: "gba",
-    coverage: ["Provincia de Buenos Aires"],
+    coverage: ["24 partidos del Gran Buenos Aires"],
   },
   {
     region: "Pampeana",
@@ -45,7 +45,13 @@ const delegates: MapDelegation[] = [
     name: "Fernando Monedero",
     org: "Grupo Libertad",
     regionSlug: "pampeana",
-    coverage: ["Córdoba", "Santa Fe", "Entre Ríos", "La Pampa", "Corrientes"],
+    coverage: [
+      "Córdoba",
+      "Santa Fe",
+      "Entre Ríos",
+      "La Pampa",
+      "Interior de Buenos Aires",
+    ],
   },
   {
     region: "Cuyo",
@@ -53,7 +59,7 @@ const delegates: MapDelegation[] = [
     name: "Diego Lago",
     org: "Palmares Mall",
     regionSlug: "cuyo",
-    coverage: ["Mendoza", "San Juan", "San Luis", "La Rioja"],
+    coverage: ["Mendoza", "San Juan", "San Luis"],
   },
   {
     region: "Norte",
@@ -67,9 +73,11 @@ const delegates: MapDelegation[] = [
       "Tucumán",
       "Santiago del Estero",
       "Catamarca",
+      "La Rioja",
       "Chaco",
       "Formosa",
       "Misiones",
+      "Corrientes",
     ],
   },
   {
@@ -93,7 +101,7 @@ export default function DelegacionesRegionalesPage() {
     <>
       <PageHero
         title="Delegaciones Regionales"
-        subtitle="La Cámara organiza su representación en seis delegaciones que cubren todo el país. Cada una cuenta con un delegado que articula la relación entre los centros comerciales de su región y la Cámara."
+        subtitle="La Cámara organiza su representación en seis Delegaciones que cubren todo el país. Cada una cuenta con un Delegado que articula la relación entre los centros comerciales de su Región y la Cámara."
       />
 
       {/* Interactive map + delegation cards — the single source for delegates. */}
@@ -104,7 +112,7 @@ export default function DelegacionesRegionalesPage() {
               Representación federal
             </p>
             <h2 className="mt-1 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-              {delegates.length} delegaciones en todo el país
+              {delegates.length} Delegaciones en todo el país
             </h2>
           </div>
           <ButtonLink
