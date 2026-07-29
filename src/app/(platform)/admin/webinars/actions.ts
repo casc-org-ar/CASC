@@ -3,33 +3,25 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth/guard";
 import { getDataLayer } from "@/lib/data";
-import type { PublicationStatus } from "@/lib/types/domain";
+import { webinarSchema } from "@/lib/validation/admin-schemas";
 
 /**
- * Server actions for the admin Webinars module. They write to the mock
- * repository and revalidate the listing so the demo reflects changes live.
- * When Supabase lands, these are untouched — the repository swaps behind them.
+ * Server actions for the admin Webinars module. They write through the
+ * DataLayer and revalidate the listing so changes reflect live.
  */
 
-/** Extract webinar fields from a submitted form. */
+/** Validate + normalize the form. Throws on invalid input (the form catches). */
 function parseWebinarForm(formData: FormData) {
-  const materialAdjuntoUrl = String(
-    formData.get("materialAdjuntoUrl") ?? "",
-  ).trim();
-  const portadaUrl = String(formData.get("portadaUrl") ?? "").trim();
-  return {
-    titulo: String(formData.get("titulo") ?? "").trim(),
-    descripcion: String(formData.get("descripcion") ?? "").trim(),
-    fecha: String(formData.get("fecha") ?? ""),
-    videoUrl: String(formData.get("videoUrl") ?? "").trim(),
-    portadaUrl: portadaUrl || undefined,
-    categoria: String(formData.get("categoria") ?? "").trim(),
-    materialAdjuntoUrl: materialAdjuntoUrl || undefined,
-    status: (String(formData.get("status") ?? "borrador") ===
-    "publicado"
-      ? "publicado"
-      : "borrador") as PublicationStatus,
-  };
+  return webinarSchema.parse({
+    titulo: formData.get("titulo") ?? "",
+    descripcion: formData.get("descripcion") ?? "",
+    fecha: formData.get("fecha") ?? "",
+    videoUrl: formData.get("videoUrl") ?? "",
+    portadaUrl: formData.get("portadaUrl") ?? "",
+    categoria: formData.get("categoria") ?? "",
+    materialAdjuntoUrl: formData.get("materialAdjuntoUrl") ?? "",
+    status: formData.get("status") ?? "borrador",
+  });
 }
 
 export async function createWebinar(formData: FormData): Promise<void> {

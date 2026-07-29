@@ -1,5 +1,6 @@
 "use server";
 
+import { z } from "zod";
 import { getDataLayer } from "@/lib/data";
 import {
   MAX_CV_BYTES,
@@ -26,7 +27,6 @@ export interface SubmitState {
   error?: string;
 }
 
-const areaValues = new Set<string>(areasInteres);
 const skillValues = new Set<string>(skillsDisponibles);
 const disponibilidadValues: Disponibilidad[] = [
   "full-time",
@@ -40,26 +40,60 @@ function parseExperiencia(value: FormDataEntryValue | null): number | undefined 
   return n;
 }
 
+/** Capped optional text: trimmed, length-limited, empty → undefined. */
+const optionalText = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max)
+    .transform((s) => s || undefined)
+    .optional();
+
+/**
+ * Text-field schema for a candidate submission. The CV file, skills dedupe and
+ * numeric experience keep their bespoke handling below; this schema covers the
+ * plain text fields — including capping the optional ones, which previously
+ * went in unbounded.
+ */
+const candidatoTextSchema = z.object({
+  nombre: z.string().trim().min(1).max(120),
+  email: z.string().trim().min(1).max(200).email(),
+  puestoBuscado: z.string().trim().min(1).max(200),
+  areaInteres: z.enum(
+    areasInteres as unknown as [string, ...string[]],
+  ),
+  telefono: optionalText(40),
+  nivelEducativo: optionalText(120),
+  ciudad: optionalText(120),
+  provincia: optionalText(120),
+});
+
 export async function submitCandidato(
   _prev: SubmitState,
   formData: FormData,
 ): Promise<SubmitState> {
-  const nombre = String(formData.get("nombre") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim();
-  const puestoBuscado = String(formData.get("puestoBuscado") ?? "").trim();
-  const areaInteres = String(formData.get("areaInteres") ?? "").trim();
+  // Validate all text fields at once with the schema (required, email format,
+  // valid área, and length caps on optionals).
+  const parsed = candidatoTextSchema.safeParse({
+    nombre: formData.get("nombre") ?? "",
+    email: formData.get("email") ?? "",
+    puestoBuscado: formData.get("puestoBuscado") ?? "",
+    areaInteres: formData.get("areaInteres") ?? "",
+    telefono: formData.get("telefono") ?? "",
+    nivelEducativo: formData.get("nivelEducativo") ?? "",
+    ciudad: formData.get("ciudad") ?? "",
+    provincia: formData.get("provincia") ?? "",
+  });
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error:
+        "Revisá los campos obligatorios y que el email y el área sean válidos.",
+    };
+  }
+  const { nombre, email, puestoBuscado, areaInteres } = parsed.data;
   const consentimiento = formData.get("consentimiento") === "on";
 
-  // Required text fields.
-  if (!nombre || !email || !puestoBuscado) {
-    return { ok: false, error: "Completá los campos obligatorios." };
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { ok: false, error: "Ingresá un email válido." };
-  }
-  if (!areaValues.has(areaInteres)) {
-    return { ok: false, error: "Elegí un área de interés válida." };
-  }
   if (!consentimiento) {
     return {
       ok: false,
@@ -140,16 +174,15 @@ export async function submitCandidato(
     await getDataLayer().candidatos.create({
       nombre,
       email,
-      telefono: String(formData.get("telefono") ?? "").trim() || undefined,
+      telefono: parsed.data.telefono,
       puestoBuscado,
       areaInteres,
       skills,
       aniosExperiencia: parseExperiencia(formData.get("aniosExperiencia")),
-      nivelEducativo:
-        String(formData.get("nivelEducativo") ?? "").trim() || undefined,
+      nivelEducativo: parsed.data.nivelEducativo,
       disponibilidad,
-      ciudad: String(formData.get("ciudad") ?? "").trim() || undefined,
-      provincia: String(formData.get("provincia") ?? "").trim() || undefined,
+      ciudad: parsed.data.ciudad,
+      provincia: parsed.data.provincia,
       // Real storage: the private-bucket object path (mock: a placeholder).
       // The original filename is kept separately for the recruiter's download.
       cvUrl,

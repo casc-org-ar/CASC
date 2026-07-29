@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth/guard";
 import { getDataLayer } from "@/lib/data";
-import type { PublicationStatus } from "@/lib/types/domain";
+import { informeSchema } from "@/lib/validation/admin-schemas";
 
 /**
  * Server actions for the admin Informes module. Same shape as Webinars —
@@ -12,18 +12,15 @@ import type { PublicationStatus } from "@/lib/types/domain";
  */
 
 function parseInformeForm(formData: FormData) {
-  return {
-    titulo: String(formData.get("titulo") ?? "").trim(),
-    descripcion: String(formData.get("descripcion") ?? "").trim(),
-    categoria: String(formData.get("categoria") ?? "").trim(),
-    archivoUrl: String(formData.get("archivoUrl") ?? "").trim(),
-    portadaUrl:
-      String(formData.get("portadaUrl") ?? "").trim() || undefined,
-    fecha: String(formData.get("fecha") ?? ""),
-    status: (String(formData.get("status") ?? "borrador") === "publicado"
-      ? "publicado"
-      : "borrador") as PublicationStatus,
-  };
+  return informeSchema.parse({
+    titulo: formData.get("titulo") ?? "",
+    descripcion: formData.get("descripcion") ?? "",
+    categoria: formData.get("categoria") ?? "",
+    archivoUrl: formData.get("archivoUrl") ?? "",
+    portadaUrl: formData.get("portadaUrl") ?? "",
+    fecha: formData.get("fecha") ?? "",
+    status: formData.get("status") ?? "borrador",
+  });
 }
 
 export async function createInforme(formData: FormData): Promise<void> {

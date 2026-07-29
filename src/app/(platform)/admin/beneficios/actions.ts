@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth/guard";
 import { getDataLayer } from "@/lib/data";
-import type { PublicationStatus } from "@/lib/types/domain";
+import { hotelSchema } from "@/lib/validation/admin-schemas";
 
 /**
  * Server actions for the admin Beneficios (hoteles) module. Same shape as the
@@ -29,22 +29,20 @@ function parseEstrellas(value: FormDataEntryValue | null): number | undefined {
 }
 
 function parseHotelForm(formData: FormData) {
-  return {
+  return hotelSchema.parse({
     nombre: String(formData.get("nombre") ?? "").trim(),
     estrellas: parseEstrellas(formData.get("estrellas")),
     ciudad: String(formData.get("ciudad") ?? "").trim(),
-    direccion: String(formData.get("direccion") ?? "").trim() || undefined,
-    telefono: String(formData.get("telefono") ?? "").trim() || undefined,
-    web: String(formData.get("web") ?? "").trim() || undefined,
-    logoUrl: String(formData.get("logoUrl") ?? "").trim() || undefined,
+    direccion: String(formData.get("direccion") ?? ""),
+    telefono: String(formData.get("telefono") ?? ""),
+    web: String(formData.get("web") ?? ""),
+    logoUrl: String(formData.get("logoUrl") ?? ""),
     descuento: String(formData.get("descuento") ?? "").trim(),
     beneficios: parseLines(formData.get("beneficios")),
-    reservas: String(formData.get("reservas") ?? "").trim() || undefined,
-    nota: String(formData.get("nota") ?? "").trim() || undefined,
-    status: (String(formData.get("status") ?? "borrador") === "publicado"
-      ? "publicado"
-      : "borrador") as PublicationStatus,
-  };
+    reservas: String(formData.get("reservas") ?? ""),
+    nota: String(formData.get("nota") ?? ""),
+    status: String(formData.get("status") ?? "borrador"),
+  });
 }
 
 export async function createHotel(formData: FormData): Promise<void> {

@@ -1,16 +1,21 @@
 "use server";
 
+import { z } from "zod";
 import { getDataLayer } from "@/lib/data";
-import type { SectorSolicitud } from "@/lib/types/domain";
 
 /**
  * Public server actions for the site's inbound forms (membership requests and
  * contact enquiries).
  *
- * These are PUBLIC endpoints: anyone can call them, so every field is
- * validated and length-capped here at the boundary. They only ever WRITE —
- * nothing on the public site reads these records back. The CASC team manages
- * them from the admin panel.
+ * These are PUBLIC endpoints: anyone can call them (server actions are public
+ * HTTP endpoints), so every field is validated with a schema at the boundary
+ * before anything is written. They only ever WRITE — nothing on the public site
+ * reads these back. The CASC team manages them from the admin panel.
+ *
+ * Validation uses Zod: length caps stop unbounded payloads, `.email()` rejects
+ * malformed addresses, and `.trim()` normalizes. Unknown/extra fields are
+ * ignored (not merged into the record), and a failed parse returns a friendly
+ * message instead of throwing.
  */
 
 export interface FormState {
@@ -18,27 +23,42 @@ export interface FormState {
   error?: string;
 }
 
-/** Cap free text so a hostile caller can't store unbounded payloads. */
+/** Field length caps — a hostile caller can't store unbounded text. */
 const MAX = { corto: 120, medio: 200, largo: 2000 } as const;
 
-const SECTORES: SectorSolicitud[] = [
-  "Shopping center",
-  "Proveedor de servicio",
-  "Retailer",
-];
-
-function texto(
-  formData: FormData,
-  campo: string,
-  max: number,
-): string {
-  return String(formData.get(campo) ?? "")
+/** Optional free-text field: trimmed, capped, empty becomes undefined. */
+const optionalText = (max: number) =>
+  z
+    .string()
     .trim()
-    .slice(0, max);
-}
+    .max(max)
+    .transform((s) => s || undefined)
+    .optional();
 
-function emailValido(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const emailField = z.string().trim().min(1).max(MAX.medio).email();
+
+const solicitudSchema = z.object({
+  sector: z.enum(["Shopping center", "Proveedor de servicio", "Retailer"]),
+  empresa: z.string().trim().min(1).max(MAX.medio),
+  contacto: z.string().trim().min(1).max(MAX.medio),
+  email: emailField,
+  cargo: optionalText(MAX.medio),
+  telefono: optionalText(MAX.corto),
+  mensaje: optionalText(MAX.largo),
+});
+
+const consultaSchema = z.object({
+  nombre: z.string().trim().min(1).max(MAX.medio),
+  email: emailField,
+  empresa: optionalText(MAX.medio),
+  mensaje: z.string().trim().min(1).max(MAX.largo),
+});
+
+/** Pull the schema's fields out of FormData into a plain object for parsing. */
+function fromForm(formData: FormData, keys: string[]): Record<string, unknown> {
+  const obj: Record<string, unknown> = {};
+  for (const key of keys) obj[key] = formData.get(key) ?? "";
+  return obj;
 }
 
 /** Membership request from /como-asociarse. */
@@ -46,32 +66,23 @@ export async function enviarSolicitudAsociacion(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  const sector = texto(formData, "sector", MAX.corto) as SectorSolicitud;
-  const empresa = texto(formData, "empresa", MAX.medio);
-  const contacto = texto(formData, "contacto", MAX.medio);
-  const email = texto(formData, "email", MAX.medio);
-
-  if (!SECTORES.includes(sector)) {
-    return { ok: false, error: "Elegí un sector válido." };
-  }
-  if (!empresa || !contacto || !email) {
-    return { ok: false, error: "Completá los campos obligatorios." };
-  }
-  if (!emailValido(email)) {
-    return { ok: false, error: "Ingresá un email válido." };
+  const parsed = solicitudSchema.safeParse(
+    fromForm(formData, [
+      "sector",
+      "empresa",
+      "contacto",
+      "email",
+      "cargo",
+      "telefono",
+      "mensaje",
+    ]),
+  );
+  if (!parsed.success) {
+    return { ok: false, error: "Revisá los campos e intentá de nuevo." };
   }
 
   try {
-    await getDataLayer().solicitudes.create({
-      sector,
-      empresa,
-      contacto,
-      cargo: texto(formData, "cargo", MAX.medio) || undefined,
-      telefono: texto(formData, "telefono", MAX.corto) || undefined,
-      email,
-      mensaje: texto(formData, "mensaje", MAX.largo) || undefined,
-      gestion: "nueva",
-    });
+    await getDataLayer().solicitudes.create({ ...parsed.data, gestion: "nueva" });
     return { ok: true };
   } catch {
     return {
@@ -86,25 +97,15 @@ export async function enviarConsultaContacto(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  const nombre = texto(formData, "nombre", MAX.medio);
-  const email = texto(formData, "email", MAX.medio);
-  const mensaje = texto(formData, "mensaje", MAX.largo);
-
-  if (!nombre || !email || !mensaje) {
-    return { ok: false, error: "Completá los campos obligatorios." };
-  }
-  if (!emailValido(email)) {
-    return { ok: false, error: "Ingresá un email válido." };
+  const parsed = consultaSchema.safeParse(
+    fromForm(formData, ["nombre", "email", "empresa", "mensaje"]),
+  );
+  if (!parsed.success) {
+    return { ok: false, error: "Revisá los campos e intentá de nuevo." };
   }
 
   try {
-    await getDataLayer().consultas.create({
-      nombre,
-      empresa: texto(formData, "empresa", MAX.medio) || undefined,
-      email,
-      mensaje,
-      gestion: "nueva",
-    });
+    await getDataLayer().consultas.create({ ...parsed.data, gestion: "nueva" });
     return { ok: true };
   } catch {
     return {

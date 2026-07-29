@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth/guard";
 import { getDataLayer } from "@/lib/data";
 import { getInvitations } from "@/lib/invitations";
-import type { MemberState, UserRole } from "@/lib/types/domain";
+import { socioSchema } from "@/lib/validation/admin-schemas";
+import type { UserRole } from "@/lib/types/domain";
 
 /**
  * Server actions for the admin Socios (users) module. Members carry
@@ -18,19 +19,14 @@ import type { MemberState, UserRole } from "@/lib/types/domain";
  * here, and Clerk's acceptance webhook later), never typed by the admin.
  */
 function parseSocioForm(formData: FormData) {
-  const cargo = String(formData.get("cargo") ?? "").trim();
-  return {
+  return socioSchema.parse({
     nombre: String(formData.get("nombre") ?? "").trim(),
     shopping: String(formData.get("shopping") ?? "").trim(),
     email: String(formData.get("email") ?? "").trim(),
-    cargo: cargo || undefined,
-    estado: (String(formData.get("estado") ?? "activo") === "inactivo"
-      ? "inactivo"
-      : "activo") as MemberState,
-    role: (String(formData.get("role") ?? "socio") === "admin"
-      ? "admin"
-      : "socio") as UserRole,
-  };
+    cargo: String(formData.get("cargo") ?? ""),
+    estado: String(formData.get("estado") ?? "activo"),
+    role: String(formData.get("role") ?? "socio"),
+  });
 }
 
 /** Result surfaced to the client so the manager can show the admin notification. */

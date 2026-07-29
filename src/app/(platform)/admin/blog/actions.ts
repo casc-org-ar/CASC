@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth/guard";
 import { getDataLayer } from "@/lib/data";
-import type { PublicationStatus } from "@/lib/types/domain";
+import { blogSchema } from "@/lib/validation/admin-schemas";
 
 /**
  * Server actions for the admin Blog module. New entity — full CRUD. The
@@ -40,24 +40,23 @@ function parseImagenes(formData: FormData): string[] | undefined {
 function parseBlogForm(formData: FormData) {
   const titulo = String(formData.get("titulo") ?? "").trim();
   const slugInput = String(formData.get("slug") ?? "").trim();
-  const portadaUrl = String(formData.get("portadaUrl") ?? "").trim();
   const tagsRaw = String(formData.get("tags") ?? "").trim();
-  return {
+  // Build with the module's transformations (slug, gallery, tags), then
+  // validate the result — throws on invalid input (the form catches it).
+  return blogSchema.parse({
     titulo,
     slug: slugInput ? slugify(slugInput) : slugify(titulo),
     bajada: String(formData.get("bajada") ?? "").trim(),
     cuerpo: String(formData.get("cuerpo") ?? "").trim(),
-    portadaUrl: portadaUrl || undefined,
+    portadaUrl: String(formData.get("portadaUrl") ?? "").trim(),
     imagenes: parseImagenes(formData),
     autor: String(formData.get("autor") ?? "").trim(),
     tags: tagsRaw
       ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean)
       : [],
     fecha: String(formData.get("fecha") ?? ""),
-    status: (String(formData.get("status") ?? "borrador") === "publicado"
-      ? "publicado"
-      : "borrador") as PublicationStatus,
-  };
+    status: String(formData.get("status") ?? "borrador"),
+  });
 }
 
 export async function createBlogPost(formData: FormData): Promise<void> {

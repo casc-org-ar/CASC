@@ -3,22 +3,19 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth/guard";
 import { getDataLayer } from "@/lib/data";
-import type { PublicationStatus } from "@/lib/types/domain";
+import { newsletterSchema } from "@/lib/validation/admin-schemas";
 
 /** Server actions for the admin Newsletter module. Same pattern as the rest. */
 
 function parseNewsletterForm(formData: FormData) {
-  const adjuntoUrl = String(formData.get("adjuntoUrl") ?? "").trim();
-  return {
-    titulo: String(formData.get("titulo") ?? "").trim(),
-    edicion: String(formData.get("edicion") ?? "").trim(),
-    contenido: String(formData.get("contenido") ?? "").trim() || undefined,
-    adjuntoUrl: adjuntoUrl || undefined,
-    fecha: String(formData.get("fecha") ?? ""),
-    status: (String(formData.get("status") ?? "borrador") === "publicado"
-      ? "publicado"
-      : "borrador") as PublicationStatus,
-  };
+  return newsletterSchema.parse({
+    titulo: formData.get("titulo") ?? "",
+    edicion: formData.get("edicion") ?? "",
+    contenido: formData.get("contenido") ?? "",
+    adjuntoUrl: formData.get("adjuntoUrl") ?? "",
+    fecha: formData.get("fecha") ?? "",
+    status: formData.get("status") ?? "borrador",
+  });
 }
 
 export async function createNewsletter(formData: FormData): Promise<void> {
