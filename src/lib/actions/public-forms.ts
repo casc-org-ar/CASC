@@ -87,7 +87,7 @@ export async function enviarSolicitudAsociacion(
   }
 
   try {
-    await getPublicWriteDataLayer().solicitudes.create({
+    await getPublicWriteDataLayer().solicitudes.createNoReturn({
       ...parsed.data,
       gestion: "nueva",
     });
@@ -107,12 +107,7 @@ export async function enviarConsultaContacto(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  // DIAGNÓSTICO TEMPORAL (logs a Vercel, no al navegador). Quitar cuando el
-  // formulario quede confirmado en producción.
-  console.log("[consulta] action START");
-
   if (!(await checkRateLimit("form"))) {
-    console.log("[consulta] blocked by rate limit");
     return { ok: false, error: "Demasiados envíos. Esperá unos minutos." };
   }
 
@@ -120,17 +115,14 @@ export async function enviarConsultaContacto(
     fromForm(formData, ["nombre", "email", "empresa", "mensaje"]),
   );
   if (!parsed.success) {
-    console.log("[consulta] validation failed:", parsed.error.issues);
     return { ok: false, error: "Revisá los campos e intentá de nuevo." };
   }
 
   try {
-    console.log("[consulta] about to insert via", getPublicWriteDataLayer);
-    await getPublicWriteDataLayer().consultas.create({
+    await getPublicWriteDataLayer().consultas.createNoReturn({
       ...parsed.data,
       gestion: "nueva",
     });
-    console.log("[consulta] insert OK");
     return { ok: true };
   } catch (err) {
     console.error("[consulta] insert failed:", err);

@@ -181,7 +181,7 @@ export async function submitCandidato(
     : undefined;
 
   try {
-    await getPublicWriteDataLayer().candidatos.create({
+    await getPublicWriteDataLayer().candidatos.createNoReturn({
       nombre,
       email,
       telefono: parsed.data.telefono,

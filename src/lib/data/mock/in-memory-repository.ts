@@ -38,6 +38,11 @@ export class InMemoryContentRepository<T extends BaseEntity>
     return { ...entity };
   }
 
+  /** Same as create for the mock; the distinction only matters under RLS. */
+  async createNoReturn(input: CreateInput<T>): Promise<void> {
+    await this.create(input);
+  }
+
   async update(id: string, input: UpdateInput<T>): Promise<T> {
     const index = this.store.findIndex((item) => item.id === id);
     if (index === -1) {

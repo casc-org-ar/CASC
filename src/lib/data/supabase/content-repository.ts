@@ -91,6 +91,24 @@ export class SupabaseContentRepository<T extends BaseEntity>
     return this.mapper.fromRow(data);
   }
 
+  /**
+   * Insert without reading the row back. A returning `.select()` re-reads the
+   * inserted row and applies the SELECT RLS policy — but anonymous public
+   * writers (contact/membership forms, CV upload) have INSERT permission and no
+   * SELECT policy on those tables, so a returning insert fails RLS on the
+   * read-back even though the write is allowed. Public forms don't need the
+   * created row, so they use this instead of `create`.
+   */
+  async createNoReturn(input: CreateInput<T>): Promise<void> {
+    const supabase = this.client();
+    const { error } = await supabase
+      .from(this.table)
+      .insert(this.mapper.toRow(input));
+
+    if (error)
+      throw new Error(`[${this.table}] create failed: ${error.message}`);
+  }
+
   async update(id: string, input: UpdateInput<T>): Promise<T> {
     const supabase = this.client();
     const { data, error } = await supabase

@@ -41,6 +41,13 @@ export interface ContentRepository<T extends BaseEntity> {
   list(): Promise<T[]>;
   getById(id: string): Promise<T | null>;
   create(input: CreateInput<T>): Promise<T>;
+  /**
+   * Insert without returning the created row. Needed for public/anonymous
+   * writes (contact & membership forms, CV upload): those callers have INSERT
+   * permission but no SELECT policy, so a returning insert would fail RLS on
+   * the read-back. They don't need the row, so they use this.
+   */
+  createNoReturn(input: CreateInput<T>): Promise<void>;
   update(id: string, input: UpdateInput<T>): Promise<T>;
   remove(id: string): Promise<void>;
 }
