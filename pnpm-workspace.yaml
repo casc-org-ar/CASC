@@ -1,0 +1,10 @@
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+
+# pnpm 11 ya no lee "pnpm.overrides" de package.json: viven acá.
+# Son fixes de vulnerabilidades (commit 5659330), no bajar estas versiones.
+overrides:
+  brace-expansion: '>=1.1.16'
+  postcss: '>=8.5.12'
+  sharp: '>=0.35.0'
