@@ -22,6 +22,19 @@ import { checkRateLimit } from "@/lib/security/rate-limit";
 export interface FormState {
   ok: boolean;
   error?: string;
+  /**
+   * The raw values the user submitted, echoed back on failure so the form can
+   * re-populate its fields instead of clearing them (better UX on error).
+   * Undefined on success or first render.
+   */
+  values?: Record<string, string>;
+}
+
+/** Read the given fields from FormData as raw strings, for echoing back. */
+function rawValues(formData: FormData, keys: string[]): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const key of keys) out[key] = String(formData.get(key) ?? "");
+  return out;
 }
 
 /** Field length caps — a hostile caller can't store unbounded text. */
@@ -63,27 +76,30 @@ function fromForm(formData: FormData, keys: string[]): Record<string, unknown> {
 }
 
 /** Membership request from /como-asociarse. */
+const SOLICITUD_FIELDS = [
+  "sector",
+  "empresa",
+  "contacto",
+  "email",
+  "cargo",
+  "telefono",
+  "mensaje",
+];
+
 export async function enviarSolicitudAsociacion(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  // Captured up front so every failure path can echo the user's input back.
+  const values = rawValues(formData, SOLICITUD_FIELDS);
+
   if (!(await checkRateLimit("form"))) {
-    return { ok: false, error: "Demasiados envíos. Esperá unos minutos." };
+    return { ok: false, error: "Demasiados envíos. Esperá unos minutos.", values };
   }
 
-  const parsed = solicitudSchema.safeParse(
-    fromForm(formData, [
-      "sector",
-      "empresa",
-      "contacto",
-      "email",
-      "cargo",
-      "telefono",
-      "mensaje",
-    ]),
-  );
+  const parsed = solicitudSchema.safeParse(fromForm(formData, SOLICITUD_FIELDS));
   if (!parsed.success) {
-    return { ok: false, error: "Revisá los campos e intentá de nuevo." };
+    return { ok: false, error: "Revisá los campos e intentá de nuevo.", values };
   }
 
   try {
@@ -98,24 +114,27 @@ export async function enviarSolicitudAsociacion(
     return {
       ok: false,
       error: "No pudimos enviar tu solicitud. Intentá de nuevo.",
+      values,
     };
   }
 }
 
 /** General enquiry from /contacto. */
+const CONSULTA_FIELDS = ["nombre", "email", "empresa", "mensaje"];
+
 export async function enviarConsultaContacto(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  const values = rawValues(formData, CONSULTA_FIELDS);
+
   if (!(await checkRateLimit("form"))) {
-    return { ok: false, error: "Demasiados envíos. Esperá unos minutos." };
+    return { ok: false, error: "Demasiados envíos. Esperá unos minutos.", values };
   }
 
-  const parsed = consultaSchema.safeParse(
-    fromForm(formData, ["nombre", "email", "empresa", "mensaje"]),
-  );
+  const parsed = consultaSchema.safeParse(fromForm(formData, CONSULTA_FIELDS));
   if (!parsed.success) {
-    return { ok: false, error: "Revisá los campos e intentá de nuevo." };
+    return { ok: false, error: "Revisá los campos e intentá de nuevo.", values };
   }
 
   try {
@@ -129,6 +148,7 @@ export async function enviarConsultaContacto(
     return {
       ok: false,
       error: "No pudimos enviar tu consulta. Intentá de nuevo.",
+      values,
     };
   }
 }

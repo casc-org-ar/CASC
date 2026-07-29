@@ -43,6 +43,9 @@ export function AssociateForm() {
     );
   }
 
+  // Echoed-back values so a failed submit keeps what the user typed.
+  const v = state.values ?? {};
+
   return (
     <form action={formAction} className="space-y-5">
       <div>
@@ -53,7 +56,7 @@ export function AssociateForm() {
           id="sector"
           name="sector"
           required
-          defaultValue=""
+          defaultValue={v.sector ?? ""}
           className={fieldClass}
         >
           <option value="" disabled>
@@ -74,6 +77,7 @@ export function AssociateForm() {
           id="empresa"
           name="empresa"
           required
+          defaultValue={v.empresa ?? ""}
           className={fieldClass}
         />
       </div>
@@ -88,6 +92,7 @@ export function AssociateForm() {
             id="contacto"
             name="contacto"
             required
+            defaultValue={v.contacto ?? ""}
             className={fieldClass}
           />
         </div>
@@ -95,7 +100,12 @@ export function AssociateForm() {
           <label htmlFor="cargo" className={labelClass}>
             Cargo
           </label>
-          <input id="cargo" name="cargo" className={fieldClass} />
+          <input
+            id="cargo"
+            name="cargo"
+            defaultValue={v.cargo ?? ""}
+            className={fieldClass}
+          />
         </div>
       </div>
 
@@ -109,6 +119,7 @@ export function AssociateForm() {
             name="telefono"
             type="tel"
             required
+            defaultValue={v.telefono ?? ""}
             className={fieldClass}
           />
         </div>
@@ -121,6 +132,7 @@ export function AssociateForm() {
             name="email"
             type="email"
             required
+            defaultValue={v.email ?? ""}
             placeholder="Ingresar correo electrónico"
             className={fieldClass}
           />
@@ -164,6 +176,7 @@ export function AssociateForm() {
           id="mensaje"
           name="mensaje"
           rows={4}
+          defaultValue={v.mensaje ?? ""}
           placeholder="Escribir..."
           className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"
         />

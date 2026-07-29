@@ -38,6 +38,11 @@ export function ContactForm() {
     );
   }
 
+  // Values echoed back by the action on failure, so the fields keep what the
+  // user typed instead of clearing. `defaultValue` + a state-derived key make
+  // the inputs re-mount with those values after an error.
+  const v = state.values ?? {};
+
   return (
     <form action={formAction} className="space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
@@ -52,6 +57,7 @@ export function ContactForm() {
             id="nombre"
             name="nombre"
             required
+            defaultValue={v.nombre ?? ""}
             className="min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
         </div>
@@ -65,6 +71,7 @@ export function ContactForm() {
           <input
             id="empresa"
             name="empresa"
+            defaultValue={v.empresa ?? ""}
             className="min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
         </div>
@@ -82,6 +89,7 @@ export function ContactForm() {
           name="email"
           type="email"
           required
+          defaultValue={v.email ?? ""}
           placeholder="Ingresar correo electrónico"
           className="min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"
         />
@@ -99,6 +107,7 @@ export function ContactForm() {
           name="mensaje"
           rows={5}
           required
+          defaultValue={v.mensaje ?? ""}
           placeholder="Escribir..."
           className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"
         />
