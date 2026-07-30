@@ -66,7 +66,9 @@ export default function RootLayout({
     <html lang="es" className={`${inter.variable} h-full`}>
       {/* Browser extensions (ColorZilla, password managers) inject attributes
           on <body> before hydration; suppress the mismatch on this node only. */}
-      <body className="min-h-full" suppressHydrationWarning>
+      {/* overflow-x-hidden: safety net so a stray wide element can't cause
+          accidental horizontal scroll on mobile. */}
+      <body className="min-h-full overflow-x-hidden" suppressHydrationWarning>
         <TitleRotator />
         {children}
       </body>
