@@ -1,4 +1,5 @@
 import "server-only";
+import { headers } from "next/headers";
 import { clerkClient } from "@clerk/nextjs/server";
 import type { InvitationService } from "@/lib/invitations/types";
 
@@ -20,16 +21,23 @@ import type { InvitationService } from "@/lib/invitations/types";
  * out of scope for this port.
  */
 
-/** Absolute base URL of the app; Clerk requires an absolute redirectUrl. */
-function appBaseUrl(): string {
-  const url = process.env.NEXT_PUBLIC_APP_URL;
-  if (!url) {
-    throw new Error(
-      "Missing NEXT_PUBLIC_APP_URL — required to build the invitation " +
-        "redirect URL (Clerk needs an absolute URL).",
-    );
+/**
+ * Absolute base URL of the app; Clerk requires an absolute redirectUrl.
+ * Prefers NEXT_PUBLIC_APP_URL, then derives it from the request headers (host +
+ * proto, which Vercel sets), so a missing env var no longer 500s the alta de
+ * socio. Falls back to the production domain as a last resort.
+ */
+async function appBaseUrl(): Promise<string> {
+  const fromEnv = process.env.NEXT_PUBLIC_APP_URL;
+  if (fromEnv) return fromEnv.replace(/\/$/, "");
+
+  const h = await headers();
+  const host = h.get("host");
+  if (host) {
+    const proto = h.get("x-forwarded-proto") ?? "https";
+    return `${proto}://${host}`;
   }
-  return url.replace(/\/$/, "");
+  return "https://casc.org.ar";
 }
 
 export const clerkInvitations: InvitationService = {
@@ -37,7 +45,7 @@ export const clerkInvitations: InvitationService = {
     const client = await clerkClient();
     const invitation = await client.invitations.createInvitation({
       emailAddress: email,
-      redirectUrl: `${appBaseUrl()}/sign-up`,
+      redirectUrl: `${await appBaseUrl()}/sign-up`,
       publicMetadata: { role },
       // Resending to an address with a pending invitation should replace it
       // rather than error out.

@@ -14,6 +14,7 @@ import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { platformEnabled } from "@/lib/auth/flag";
+import { IngresarButton } from "./ingresar-button";
 import { mainNav, isNavGroup, type NavItem } from "./nav-data";
 
 /** Pathname portion of a nav href, stripping query and hash. */
@@ -224,16 +225,12 @@ export function SiteHeader() {
               aria-hidden="true"
             />
           </ButtonLink>
-          {showIngresar && <ButtonLink href="/login">Ingresar</ButtonLink>}
+          {showIngresar && <IngresarButton />}
         </div>
 
         {/* Mobile: Ingresar visible + toggle */}
         <div className="flex items-center gap-2 lg:hidden">
-          {showIngresar && (
-            <ButtonLink href="/login" size="sm">
-              Ingresar
-            </ButtonLink>
-          )}
+          {showIngresar && <IngresarButton size="sm" />}
           <button
             type="button"
             onClick={() => setMobileOpen((v) => !v)}

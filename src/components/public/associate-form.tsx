@@ -7,6 +7,7 @@ import {
   enviarSolicitudAsociacion,
   type FormState,
 } from "@/lib/actions/public-forms";
+import { emailField, requiredField } from "./form-validation";
 
 const fieldClass =
   "min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15";
@@ -55,7 +56,7 @@ export function AssociateForm() {
         <select
           id="sector"
           name="sector"
-          required
+          {...requiredField("Elegí un sector.")}
           defaultValue={v.sector ?? ""}
           className={fieldClass}
         >
@@ -76,7 +77,7 @@ export function AssociateForm() {
         <input
           id="empresa"
           name="empresa"
-          required
+          {...requiredField("Ingresá la empresa o razón social.")}
           defaultValue={v.empresa ?? ""}
           className={fieldClass}
         />
@@ -91,7 +92,7 @@ export function AssociateForm() {
           <input
             id="contacto"
             name="contacto"
-            required
+            {...requiredField("Ingresá el nombre del contacto.")}
             defaultValue={v.contacto ?? ""}
             className={fieldClass}
           />
@@ -118,8 +119,8 @@ export function AssociateForm() {
             id="telefono"
             name="telefono"
             type="tel"
-            required
-            defaultValue={v.telefono ?? ""}
+            {...requiredField("Ingresá un teléfono de contacto.")}
+            defaultValue={v.telefono ?? "+54 9 "}
             className={fieldClass}
           />
         </div>
@@ -131,7 +132,10 @@ export function AssociateForm() {
             id="email"
             name="email"
             type="email"
-            required
+            {...emailField({
+              missing: "Ingresá un email de contacto.",
+              invalid: "Ingresá un email válido.",
+            })}
             defaultValue={v.email ?? ""}
             placeholder="Ingresar correo electrónico"
             className={fieldClass}

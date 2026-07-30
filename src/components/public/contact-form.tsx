@@ -7,6 +7,7 @@ import {
   enviarConsultaContacto,
   type FormState,
 } from "@/lib/actions/public-forms";
+import { emailField, requiredField } from "./form-validation";
 
 const initialState: FormState = { ok: false };
 
@@ -56,7 +57,7 @@ export function ContactForm() {
           <input
             id="nombre"
             name="nombre"
-            required
+            {...requiredField("Ingresá tu nombre y apellido.")}
             defaultValue={v.nombre ?? ""}
             className="min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
@@ -88,7 +89,10 @@ export function ContactForm() {
           id="email"
           name="email"
           type="email"
-          required
+          {...emailField({
+            missing: "Ingresá tu correo electrónico.",
+            invalid: "Ingresá un correo electrónico válido.",
+          })}
           defaultValue={v.email ?? ""}
           placeholder="Ingresar correo electrónico"
           className="min-h-12 w-full rounded-lg border border-border bg-bg px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"
@@ -106,7 +110,7 @@ export function ContactForm() {
           id="mensaje"
           name="mensaje"
           rows={5}
-          required
+          {...requiredField("Escribí tu mensaje.")}
           defaultValue={v.mensaje ?? ""}
           placeholder="Escribir..."
           className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/15"

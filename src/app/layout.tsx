@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import { esES } from "@clerk/localizations";
+import { clerkEsLocalization } from "@/lib/auth/clerk-localization";
 import "./globals.css";
 import { TitleRotator } from "@/components/shared/title-rotator";
 import { clerkAppearance } from "@/lib/auth/clerk-appearance";
@@ -41,7 +41,7 @@ export default function RootLayout({
   );
 
   return clerkOn ? (
-    <ClerkProvider localization={esES} appearance={clerkAppearance}>
+    <ClerkProvider localization={clerkEsLocalization} appearance={clerkAppearance}>
       {tree}
     </ClerkProvider>
   ) : (

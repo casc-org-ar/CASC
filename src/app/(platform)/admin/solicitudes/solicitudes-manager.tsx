@@ -20,6 +20,16 @@ import {
   setSolicitudGestion,
 } from "./actions";
 
+/**
+ * Gmail "compose" URL with the recipient prefilled. Opened in a new tab so the
+ * admin can reply from Gmail — more reliable than mailto:, which does nothing
+ * when the browser has no default mail client configured.
+ */
+function gmailComposeUrl(to: string, subject: string): string {
+  const params = new URLSearchParams({ view: "cm", fs: "1", to, su: subject });
+  return `https://mail.google.com/mail/?${params.toString()}`;
+}
+
 const GESTION_LABEL: Record<GestionStatus, string> = {
   nueva: "Nueva",
   "en-proceso": "En proceso",
@@ -329,7 +339,14 @@ export function SolicitudesManager({
 
             <div className="flex justify-end border-t border-border pt-4">
               <a
-                href={`mailto:${detalle.email}`}
+                href={gmailComposeUrl(
+                  detalle.email,
+                  "empresa" in detalle && "sector" in detalle
+                    ? "Tu solicitud de asociación — CASC"
+                    : "Tu consulta — CASC",
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
               >
                 <Mail className="h-4 w-4" aria-hidden />
