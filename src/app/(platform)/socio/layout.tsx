@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PlatformShell } from "@/components/platform/platform-shell";
 import { getAuth } from "@/lib/auth";
+import { getMemberEstado } from "@/lib/auth/member-status";
 import { clerkEnabled } from "@/lib/auth/flag";
 
 /**
@@ -32,6 +33,13 @@ export default async function SocioLayout({
   const user = await getAuth().getCurrentUser();
 
   if (!user) redirect("/login");
+
+  // A member set to "inactivo" (given de baja) keeps their Clerk account but
+  // must not reach the platform. Admins have no `estado` (null) → never gated.
+  if (user.role === "socio") {
+    const estado = await getMemberEstado(user.email);
+    if (estado === "inactivo") redirect("/cuenta-inactiva");
+  }
 
   return (
     <PlatformShell

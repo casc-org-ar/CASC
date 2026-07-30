@@ -29,10 +29,10 @@ function ClerkAwareIngresar({ size }: { size?: "sm" }) {
   const { isSignedIn } = useUser();
 
   if (isSignedIn) {
-    // Land on /socio; the socio layout forwards admins to their panel. /login
-    // is also session-aware and routes by role, so either target works.
+    // /login is session-aware and routes by role (admin → /admin, socio →
+    // /socio), so each user reaches their own panel without a detour.
     return (
-      <ButtonLink href="/socio" size={size}>
+      <ButtonLink href="/login" size={size}>
         Ir al panel
         <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </ButtonLink>

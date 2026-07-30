@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { getPublicWriteDataLayer } from "@/lib/data";
 import { checkRateLimit } from "@/lib/security/rate-limit";
+import { verifyRecaptcha } from "@/lib/security/recaptcha";
 import { securityLog } from "@/lib/security/security-log";
 
 /**
@@ -98,6 +99,18 @@ export async function enviarSolicitudAsociacion(
     return { ok: false, error: "Demasiados envíos. Esperá unos minutos.", values };
   }
 
+  const captchaOk = await verifyRecaptcha(
+    String(formData.get("recaptchaToken") ?? ""),
+    "solicitud",
+  );
+  if (!captchaOk) {
+    return {
+      ok: false,
+      error: "No pudimos verificar que no seas un bot. Recargá e intentá de nuevo.",
+      values,
+    };
+  }
+
   const parsed = solicitudSchema.safeParse(fromForm(formData, SOLICITUD_FIELDS));
   if (!parsed.success) {
     return { ok: false, error: "Revisá los campos e intentá de nuevo.", values };
@@ -134,6 +147,18 @@ export async function enviarConsultaContacto(
 
   if (!(await checkRateLimit("form"))) {
     return { ok: false, error: "Demasiados envíos. Esperá unos minutos.", values };
+  }
+
+  const captchaOk = await verifyRecaptcha(
+    String(formData.get("recaptchaToken") ?? ""),
+    "consulta",
+  );
+  if (!captchaOk) {
+    return {
+      ok: false,
+      error: "No pudimos verificar que no seas un bot. Recargá e intentá de nuevo.",
+      values,
+    };
   }
 
   const parsed = consultaSchema.safeParse(fromForm(formData, CONSULTA_FIELDS));

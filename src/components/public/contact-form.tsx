@@ -7,6 +7,8 @@ import {
   enviarConsultaContacto,
   type FormState,
 } from "@/lib/actions/public-forms";
+import { useRecaptchaAction } from "@/lib/hooks/use-recaptcha";
+import { RecaptchaNotice } from "./recaptcha-notice";
 import { emailField, requiredField } from "./form-validation";
 
 const initialState: FormState = { ok: false };
@@ -21,6 +23,7 @@ export function ContactForm() {
     enviarConsultaContacto,
     initialState,
   );
+  const guardedAction = useRecaptchaAction(formAction, "consulta");
 
   if (state.ok) {
     return (
@@ -45,7 +48,7 @@ export function ContactForm() {
   const v = state.values ?? {};
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form action={guardedAction} className="space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label
@@ -135,6 +138,8 @@ export function ContactForm() {
         {pending ? "Enviando…" : "Enviar"}
         <Send className="h-4 w-4" strokeWidth={1.8} aria-hidden />
       </Button>
+
+      <RecaptchaNotice />
     </form>
   );
 }

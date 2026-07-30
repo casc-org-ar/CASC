@@ -14,16 +14,31 @@ import { BlogPreview, type BlogDraft } from "./blog-preview";
 interface BlogFormProps {
   post?: BlogPost;
   onDone: () => void;
+  /**
+   * Optional controlled preview state. When provided, the parent owns the
+   * toggle (e.g. to render the "Vista previa" button in the modal header).
+   * When omitted, the form manages preview with its own internal state.
+   */
+  preview?: boolean;
+  onPreviewChange?: (preview: boolean) => void;
 }
 
-export function BlogForm({ post, onDone }: BlogFormProps) {
+export function BlogForm({
+  post,
+  onDone,
+  preview: previewProp,
+  onPreviewChange,
+}: BlogFormProps) {
   const [pending, startTransition] = useTransition();
   // Mocked cover upload: picking a file fills portadaUrl with a fake path.
   const [portadaUrl, setPortadaUrl] = useState(post?.portadaUrl ?? "");
   // Gallery images: each can be an uploaded file (mocked path) or a pasted link.
   const [imagenes, setImagenes] = useState<string[]>(post?.imagenes ?? []);
   const [nuevoLink, setNuevoLink] = useState("");
-  const [preview, setPreview] = useState(false);
+  // Preview: controlled by the parent when props are passed, otherwise local.
+  const [previewLocal, setPreviewLocal] = useState(false);
+  const preview = previewProp ?? previewLocal;
+  const setPreview = onPreviewChange ?? setPreviewLocal;
   const toast = useToast();
 
   // Live draft mirrors the controlled fields so the preview reflects them.
@@ -245,19 +260,13 @@ export function BlogForm({ post, onDone }: BlogFormProps) {
         </FormField>
       </div>
 
-      <div className="flex justify-between gap-2 pt-2">
-        <Button type="button" variant="ghost" onClick={() => setPreview(true)}>
-          <Eye className="h-4 w-4" />
-          Vista previa
+      <div className="flex justify-end gap-2 pt-2">
+        <Button type="button" variant="secondary" onClick={onDone}>
+          Cancelar
         </Button>
-        <div className="flex gap-2">
-          <Button type="button" variant="secondary" onClick={onDone}>
-            Cancelar
-          </Button>
-          <Button type="submit" disabled={pending}>
-            {post ? "Guardar cambios" : "Crear artículo"}
-          </Button>
-        </div>
+        <Button type="submit" disabled={pending}>
+          {post ? "Guardar cambios" : "Crear artículo"}
+        </Button>
       </div>
     </form>
   );
