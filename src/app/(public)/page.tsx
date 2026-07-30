@@ -13,6 +13,7 @@ import {
 } from "@/components/public/content-carousel";
 import { HeroCarousel } from "@/components/public/hero-carousel";
 import { CountUpNumber } from "@/components/public/count-up-number";
+import { OrganizationJsonLd } from "@/components/public/organization-jsonld";
 import { CardCover } from "@/components/shared/card-cover";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -150,6 +151,8 @@ export default async function HomePage() {
 
   return (
     <>
+      <OrganizationJsonLd />
+
       {/* Hero */}
       <HeroCarousel slides={heroSlides} />
 

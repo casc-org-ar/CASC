@@ -18,10 +18,43 @@ const inter = Inter({
   weight: ["300", "400", "700"],
 });
 
+/** Public site origin. Env override for previews; production default. */
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://casc.org.ar";
+
 export const metadata: Metadata = {
-  title: "CASC — Plataforma institucional",
+  // Resolves relative OG/canonical URLs against the real domain.
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Cámara Argentina de Shopping Centers",
+    template: "%s — CASC",
+  },
   description:
-    "Plataforma interna de la Cámara Argentina de Shopping Centers.",
+    "La Cámara Argentina de Shopping Centers (CASC) representa a los centros comerciales, retailers y proveedores del país. Más de 35 años acompañando a la industria.",
+  applicationName: "CASC",
+  openGraph: {
+    type: "website",
+    locale: "es_AR",
+    siteName: "Cámara Argentina de Shopping Centers",
+    url: siteUrl,
+    title: "Cámara Argentina de Shopping Centers",
+    description:
+      "Representamos a los centros comerciales, retailers y proveedores de la Argentina.",
+    images: [
+      {
+        url: "/assets/banners/banner-1-1.webp",
+        width: 1920,
+        height: 700,
+        alt: "Cámara Argentina de Shopping Centers",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cámara Argentina de Shopping Centers",
+    description:
+      "Representamos a los centros comerciales, retailers y proveedores de la Argentina.",
+    images: ["/assets/banners/banner-1-1.webp"],
+  },
 };
 
 export default function RootLayout({
