@@ -153,11 +153,17 @@ export default async function SocioHomePage() {
 function FeaturedCard({ item }: { item: FeedItem }) {
   const Icon = item.icon;
   const showCover = item.tipo !== "Informe";
+  // Gender agreement: "Noticia" is feminine → "destacada"; Webinar/Informe
+  // are masculine → "destacado".
+  const tag =
+    item.tipo === "Noticia"
+      ? "Noticia destacada"
+      : `${item.tipo} destacado`;
   return (
     <Link href={item.href} className="group block">
       <Card
         interactive
-        className="mx-auto flex max-w-2xl flex-col overflow-hidden p-0"
+        className="flex max-w-2xl flex-col overflow-hidden p-0"
       >
         {showCover && item.imagen ? (
           <div className="relative h-48 overflow-hidden bg-surface sm:h-56">
@@ -168,14 +174,14 @@ function FeaturedCard({ item }: { item: FeedItem }) {
             />
             <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-casc-navy-900">
               <Icon className="h-3.5 w-3.5" />
-              {item.tipo} destacada
+              {tag}
             </span>
           </div>
         ) : (
           <div className="relative flex h-48 items-center justify-center bg-casc-navy-900 sm:h-56">
             <Icon className="h-12 w-12 text-accent" />
             <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-casc-navy-900">
-              {item.tipo} destacado
+              {tag}
             </span>
           </div>
         )}
