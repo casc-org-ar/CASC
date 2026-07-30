@@ -144,7 +144,12 @@ export default async function SocioHomePage() {
   );
 }
 
-/** Large hero card for the single most recent novelty. */
+/**
+ * Featured card: the single most recent novelty (across noticias/webinars/
+ * informes, by date). Contained layout — a capped-height cover on top and the
+ * text below — instead of a full-width banner with the image on the side, which
+ * read as too heavy. The "Destacado" tag makes the highlight explicit.
+ */
 function FeaturedCard({ item }: { item: FeedItem }) {
   const Icon = item.icon;
   const showCover = item.tipo !== "Informe";
@@ -152,37 +157,38 @@ function FeaturedCard({ item }: { item: FeedItem }) {
     <Link href={item.href} className="group block">
       <Card
         interactive
-        className="grid gap-0 overflow-hidden p-0 md:grid-cols-2"
+        className="mx-auto flex max-w-2xl flex-col overflow-hidden p-0"
       >
         {showCover && item.imagen ? (
-          <div className="relative min-h-52 overflow-hidden bg-surface">
+          <div className="relative h-48 overflow-hidden bg-surface sm:h-56">
             <SafeImage
               src={item.imagen}
               alt={item.titulo}
               className="transition-transform duration-300 group-hover:scale-105"
             />
-          </div>
-        ) : (
-          <div className="flex min-h-52 items-center justify-center bg-casc-navy-900">
-            <Icon className="h-12 w-12 text-accent" />
-          </div>
-        )}
-        <div className="flex flex-col justify-center p-6">
-          <div className="mb-3 flex items-center gap-2 text-primary">
-            <Icon className="h-4 w-4" />
-            <span className="text-xs font-medium uppercase tracking-wide">
+            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-casc-navy-900">
+              <Icon className="h-3.5 w-3.5" />
               {item.tipo} destacada
             </span>
           </div>
+        ) : (
+          <div className="relative flex h-48 items-center justify-center bg-casc-navy-900 sm:h-56">
+            <Icon className="h-12 w-12 text-accent" />
+            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-casc-navy-900">
+              {item.tipo} destacado
+            </span>
+          </div>
+        )}
+        <div className="flex flex-col p-6">
           <h2 className="text-xl font-bold tracking-tight text-ink">
             {item.titulo}
           </h2>
-          <p className="mt-2 line-clamp-3 text-sm text-ink-muted">
+          <p className="mt-2 line-clamp-2 text-sm text-ink-muted">
             {item.descripcion}
           </p>
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
             Ver más
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </span>
         </div>
       </Card>

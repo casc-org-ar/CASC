@@ -54,7 +54,8 @@ export const mainNav: NavItem[] = [
   },
   { label: "Actividades", href: "/actividades" },
   { label: "Beneficios", href: "/beneficios" },
-  { label: "Bolsa de trabajo", href: "/bolsa-de-trabajo" },
+  // Bolsa de trabajo oculta del sitio público por ahora (encuadre legal
+  // pendiente). La página existe pero no se enlaza desde ningún menú.
   { label: "Contacto", href: "/contacto" },
 ];
 
@@ -95,7 +96,7 @@ export const footerColumns: NavGroup[] = [
     children: [
       { label: "Actividades", href: "/actividades" },
       { label: "Noticias", href: "/noticias" },
-      { label: "Bolsa de trabajo", href: "/bolsa-de-trabajo" },
+      // Bolsa de trabajo oculta del sitio público por ahora (encuadre legal).
       { label: "Contacto", href: "/contacto" },
     ],
   },

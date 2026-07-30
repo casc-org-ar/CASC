@@ -21,7 +21,7 @@ const STATIC_ROUTES: {
   { path: "/actividades", changeFrequency: "weekly", priority: 0.7 },
   { path: "/noticias", changeFrequency: "daily", priority: 0.8 },
   { path: "/como-asociarse", changeFrequency: "monthly", priority: 0.9 },
-  { path: "/bolsa-de-trabajo", changeFrequency: "weekly", priority: 0.6 },
+  // /bolsa-de-trabajo se omite a propósito (oculta por encuadre legal).
   { path: "/contacto", changeFrequency: "yearly", priority: 0.5 },
   { path: "/estatuto", changeFrequency: "yearly", priority: 0.3 },
   { path: "/terminos-y-condiciones", changeFrequency: "yearly", priority: 0.2 },

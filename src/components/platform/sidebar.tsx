@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ExternalLink } from "lucide-react";
 import { AccountMenu } from "@/components/platform/account-menu";
 import { SectionSwitcher } from "@/components/platform/section-switcher";
 import { getNavForRole } from "@/lib/platform/navigation";
@@ -76,6 +77,12 @@ export function Sidebar({ user, open, onNavigate }: SidebarProps) {
             <>
               <Icon className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
               {item.label}
+              {item.external && (
+                <ExternalLink
+                  className="ml-auto h-3.5 w-3.5 shrink-0 opacity-70"
+                  aria-hidden="true"
+                />
+              )}
             </>
           );
 

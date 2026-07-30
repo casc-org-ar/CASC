@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Eye, EyeOff, FileDown } from "lucide-react";
+import { Download, Eye, EyeOff, FileDown } from "lucide-react";
 import { DataTable, type Column } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
 import type { Candidato } from "@/lib/types/domain";
 import { getCvUrl } from "@/lib/actions/cv-download";
+import { downloadFile, toCsv } from "@/lib/utils/csv-export";
 import {
   deleteCandidato,
   setCandidatoStatus,
@@ -121,8 +122,59 @@ export function BolsaTrabajoManager({
     },
   ];
 
+  /**
+   * Export ALL candidates to CSV with every field, so the CASC team can manage
+   * the pool in Excel / Google Sheets. Runs client-side over the loaded rows.
+   */
+  const exportarCsv = () => {
+    const disponibilidadLabel: Record<string, string> = {
+      "full-time": "Full-time",
+      "part-time": "Part-time",
+      ambas: "Full o part-time",
+    };
+    const csv = toCsv(candidatos, [
+      { header: "Nombre", value: (c) => c.nombre },
+      { header: "Email", value: (c) => c.email },
+      { header: "Teléfono", value: (c) => c.telefono },
+      { header: "Puesto buscado", value: (c) => c.puestoBuscado },
+      { header: "Área de interés", value: (c) => c.areaInteres },
+      { header: "Habilidades", value: (c) => c.skills },
+      { header: "Años de experiencia", value: (c) => c.aniosExperiencia },
+      { header: "Nivel educativo", value: (c) => c.nivelEducativo },
+      {
+        header: "Disponibilidad",
+        value: (c) =>
+          c.disponibilidad ? disponibilidadLabel[c.disponibilidad] : "",
+      },
+      { header: "Ciudad", value: (c) => c.ciudad },
+      { header: "Provincia", value: (c) => c.provincia },
+      {
+        header: "Estado",
+        value: (c) => (c.status === "publicado" ? "Aprobado" : "Pendiente"),
+      },
+      { header: "Fecha de carga", value: (c) => c.createdAt?.slice(0, 10) },
+    ]);
+    const fecha = new Date().toISOString().slice(0, 10);
+    downloadFile(csv, `candidatos-casc-${fecha}.csv`);
+    toast.success("CSV descargado.");
+  };
+
   return (
     <>
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <p className="text-sm text-ink-muted">
+          {candidatos.length} candidato{candidatos.length === 1 ? "" : "s"}
+        </p>
+        <Button
+          variant="secondary"
+          onClick={exportarCsv}
+          disabled={candidatos.length === 0}
+        >
+          <Download className="h-4 w-4" />
+          Descargar CSV
+        </Button>
+      </div>
+
       <DataTable
         rows={candidatos}
         columns={columns}

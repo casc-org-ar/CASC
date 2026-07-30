@@ -6,6 +6,7 @@ import {
   Home,
   Inbox,
   LayoutDashboard,
+  Mail,
   Newspaper,
   PenSquare,
   Users,
@@ -37,6 +38,7 @@ const NAV: Record<UserRole, NavItem[]> = {
     { label: "Webinars", href: "/admin/webinars", icon: Video },
     { label: "Informes", href: "/admin/informes", icon: FileText },
     { label: "Noticias", href: "/admin/noticias", icon: Newspaper },
+    { label: "Newsletter", href: "/admin/newsletter", icon: Mail },
     { label: "Beneficios", href: "/admin/beneficios", icon: BadgePercent },
     { label: "Bolsa de trabajo", href: "/admin/bolsa-de-trabajo", icon: Briefcase },
     { label: "Solicitudes", href: "/admin/solicitudes", icon: Inbox },
@@ -49,8 +51,9 @@ const NAV: Record<UserRole, NavItem[]> = {
     { label: "Webinars", href: "/socio/webinars", icon: Video },
     { label: "Informes", href: "/socio/informes", icon: FileText },
     { label: "Noticias", href: "/socio/noticias", icon: Newspaper },
+    { label: "Newsletter", href: "/socio/newsletter", icon: Mail },
     { label: "Beneficios", href: "/socio/beneficios", icon: BadgePercent },
-    { label: "Bolsa de trabajo", href: "/socio/bolsa-de-trabajo", icon: Briefcase },
+    // Bolsa de trabajo: solo admin. Los socios no la ven (pedido del cliente).
     ESTADISTICAS,
   ],
 };
