@@ -34,11 +34,14 @@ export default async function SocioLayout({
 
   if (!user) redirect("/login");
 
-  // A member set to "inactivo" (given de baja) keeps their Clerk account but
-  // must not reach the platform. Admins have no `estado` (null) → never gated.
+  // A member reaches the platform only while they have an ACTIVE socios row.
+  // Their Clerk account outlives the socios record, so we must gate on the
+  // record, not just on being signed in: a member given de baja (estado
+  // "inactivo") OR deleted entirely (no row → null) is bounced out. Admins
+  // have role "admin" and no socios row, so they skip this check entirely.
   if (user.role === "socio") {
     const estado = await getMemberEstado(user.email);
-    if (estado === "inactivo") redirect("/cuenta-inactiva");
+    if (estado !== "activo") redirect("/cuenta-inactiva");
   }
 
   return (
