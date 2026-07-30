@@ -82,6 +82,45 @@ riesgo de un PDF con exploit.
 > en producción; el free tier de VirusTotal comparte muestras públicamente en
 > algunos planes — revisar los términos para datos personales.
 
-## Pendiente
+## Capa 5 — Logging de eventos de seguridad + auditoría de dependencias (hecho)
 
-- Capa 5 — Logging de eventos de seguridad + auditoría de dependencias.
+### Logging de eventos de seguridad
+
+Helper `securityLog(event, context)` en `src/lib/security/security-log.ts`:
+registra eventos relevantes a los logs del servidor (Vercel), de forma
+estructurada y greppable. **Regla dura: nunca loguea secretos ni datos
+personales** — solo el TIPO de evento y contexto no identificante. Para emails
+existe `maskEmail` (ej. `m***@dominio.com`).
+
+Eventos que registra hoy:
+- `auth.role_denied` — `requireRole` rechazó a un caller (guarda de rol).
+- `ratelimit.exceeded` — un endpoint público alcanzó su límite.
+- `write.failed` — una escritura pública (contacto/asociarse/CV) falló.
+
+Sink actual: `console` (a los logs de Vercel). Se puede cambiar por un servicio
+de observabilidad (Sentry/Axiom) sin tocar los call sites.
+
+### Auditoría de dependencias
+
+`pnpm audit` reporta 7 vulnerabilidades (6 high, 1 moderate) en **postcss,
+sharp y brace-expansion**. Conclusión tras revisarlas:
+
+- Son **transitivas de Next.js / eslint**, no dependencias directas del código.
+- Su superficie es **build-time (postcss/sharp) o dev-tooling
+  (brace-expansion)** — no son explotables en el runtime de producción de esta
+  app (no se procesa CSS ni imágenes de usuarios no confiables en runtime; el
+  sitio usa `<img>` plano para imágenes externas, no `next/image`).
+- Se resolverán solas cuando Next actualice sus dependencias fijadas. Forzar los
+  overrides rompería el build de Next (usa APIs de esas versiones).
+
+Postura: **riesgo reconocido y aceptado** para esta etapa. Re-auditar al
+actualizar Next. (Auditar es evaluar el riesgo real, no forzar el número a
+cero a costa de romper el build.)
+
+---
+
+## Estado: Fase 4 completa
+
+Las 5 capas están implementadas. Pendientes de ACTIVACIÓN por configuración
+(no de código): rate limiting (env vars de Upstash) y antivirus (VIRUSTOTAL_API_KEY),
+ambos documentados arriba y con fail-open/fail-closed definido.

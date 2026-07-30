@@ -2,6 +2,7 @@ import "server-only";
 import { headers } from "next/headers";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { securityLog } from "@/lib/security/security-log";
 
 /**
  * Rate limiting for public endpoints (CV upload, contact/membership forms).
@@ -66,6 +67,7 @@ export async function checkRateLimit(kind: LimiterKind): Promise<boolean> {
   try {
     const ip = await clientIp();
     const { success } = await limiters[kind].limit(ip);
+    if (!success) securityLog("ratelimit.exceeded", { kind });
     return success;
   } catch {
     // Upstash unreachable → allow rather than block everyone.

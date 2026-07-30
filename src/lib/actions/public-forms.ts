@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { getPublicWriteDataLayer } from "@/lib/data";
 import { checkRateLimit } from "@/lib/security/rate-limit";
+import { securityLog } from "@/lib/security/security-log";
 
 /**
  * Public server actions for the site's inbound forms (membership requests and
@@ -110,7 +111,10 @@ export async function enviarSolicitudAsociacion(
     return { ok: true };
   } catch (err) {
     // Log the real cause to the server (never to the user); no personal data.
-    console.error("[solicitud] insert failed:", err);
+    securityLog("write.failed", {
+      entity: "solicitudes",
+      message: err instanceof Error ? err.message : "unknown",
+    });
     return {
       ok: false,
       error: "No pudimos enviar tu solicitud. Intentá de nuevo.",
@@ -144,7 +148,10 @@ export async function enviarConsultaContacto(
     });
     return { ok: true };
   } catch (err) {
-    console.error("[consulta] insert failed:", err);
+    securityLog("write.failed", {
+      entity: "consultas",
+      message: err instanceof Error ? err.message : "unknown",
+    });
     return {
       ok: false,
       error: "No pudimos enviar tu consulta. Intentá de nuevo.",

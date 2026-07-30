@@ -11,6 +11,7 @@ import { areasInteres, skillsDisponibles } from "@/lib/data/bolsa-trabajo";
 import { clerkEnabled } from "@/lib/auth/flag";
 import { BUCKETS, uploadFile } from "@/lib/data/supabase/storage";
 import { checkRateLimit } from "@/lib/security/rate-limit";
+import { securityLog } from "@/lib/security/security-log";
 import type { Disponibilidad } from "@/lib/types/domain";
 
 /**
@@ -202,7 +203,11 @@ export async function submitCandidato(
       status: "borrador",
     });
     return { ok: true };
-  } catch {
+  } catch (err) {
+    securityLog("write.failed", {
+      entity: "candidatos",
+      message: err instanceof Error ? err.message : "unknown",
+    });
     return {
       ok: false,
       error: "No pudimos registrar tu postulación. Intentá de nuevo.",
