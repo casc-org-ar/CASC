@@ -71,8 +71,8 @@ const objetivos = [
   },
 ];
 
-const PROPUESTA_PDF =
-  "https://casc.nuovasuite.com/storage/casc70152122/Propuesta_valor_CASC_23_12_25.pdf";
+// PDF alojado en nuestro propio sitio (antes apuntaba al dominio viejo).
+const PROPUESTA_PDF = "/assets/banners/Propuesta_valor_CASC_23_12_25.pdf";
 
 export default function NosotrosPage() {
   return (
