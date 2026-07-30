@@ -27,7 +27,7 @@ import {
   sponsors,
 } from "@/lib/data/home-content";
 import { getPublicDataLayer } from "@/lib/data";
-import { onlyPublished } from "@/lib/data/published";
+import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 import { cn } from "@/lib/utils";
 
 /**
@@ -144,8 +144,11 @@ function HomeSectionHeader({
 }
 
 export default async function HomePage() {
-  // Noticias section is fed by published blog posts from the panel.
-  const noticias = onlyPublished(await getPublicDataLayer().blog.list())
+  // Noticias section is fed by published blog posts marked for the public site.
+  const noticias = byVisibilidad(
+    onlyPublished(await getPublicDataLayer().blog.list()),
+    "publico",
+  )
     .sort((a, b) => (a.fecha < b.fecha ? 1 : -1))
     .slice(0, 3);
 

@@ -6,7 +6,7 @@ import { ArrowLeft, CalendarDays, UserRound } from "lucide-react";
 import { JoinCta } from "@/components/public/join-cta";
 import { ShareButtons } from "@/components/public/share-buttons";
 import { getPublicDataLayer } from "@/lib/data";
-import { onlyPublished } from "@/lib/data/published";
+import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 import type { BlogPost } from "@/lib/types/domain";
 
 /**
@@ -16,12 +16,18 @@ import type { BlogPost } from "@/lib/types/domain";
  */
 
 async function getPost(slug: string): Promise<BlogPost | null> {
-  const posts = onlyPublished(await getPublicDataLayer().blog.list());
+  const posts = byVisibilidad(
+    onlyPublished(await getPublicDataLayer().blog.list()),
+    "publico",
+  );
   return posts.find((p) => p.slug === slug) ?? null;
 }
 
 export async function generateStaticParams() {
-  const posts = onlyPublished(await getPublicDataLayer().blog.list());
+  const posts = byVisibilidad(
+    onlyPublished(await getPublicDataLayer().blog.list()),
+    "publico",
+  );
   return posts.map((p) => ({ slug: p.slug }));
 }
 

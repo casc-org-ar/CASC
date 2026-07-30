@@ -7,10 +7,17 @@ import { Badge, StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
-import type { BlogPost } from "@/lib/types/domain";
+import type { BlogPost, Visibilidad } from "@/lib/types/domain";
 import { deleteBlogPost } from "./actions";
 import { BlogForm } from "./blog-form";
 import { BlogPreview } from "./blog-preview";
+
+/** Human label for each audience, shown in the manager table. */
+const VISIBILIDAD_LABEL: Record<Visibilidad, string> = {
+  ambos: "Socios y público",
+  socios: "Solo socios",
+  publico: "Solo público",
+};
 
 const columns: Column<BlogPost>[] = [
   {
@@ -31,6 +38,14 @@ const columns: Column<BlogPost>[] = [
           </Badge>
         ))}
       </div>
+    ),
+  },
+  {
+    header: "Visibilidad",
+    cell: (p) => (
+      <Badge tone={p.visibilidad === "socios" ? "muted" : "accent"}>
+        {VISIBILIDAD_LABEL[p.visibilidad]}
+      </Badge>
     ),
   },
   {

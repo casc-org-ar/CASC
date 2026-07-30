@@ -7,7 +7,7 @@ import { CardCover } from "@/components/shared/card-cover";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { getPublicDataLayer } from "@/lib/data";
-import { onlyPublished } from "@/lib/data/published";
+import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 
 /**
  * Public news listing. Reads published blog posts from the panel — the same
@@ -21,9 +21,10 @@ export const metadata: Metadata = {
 };
 
 export default async function NoticiasPage() {
-  const posts = onlyPublished(await getPublicDataLayer().blog.list()).sort((a, b) =>
-    b.fecha.localeCompare(a.fecha),
-  );
+  const posts = byVisibilidad(
+    onlyPublished(await getPublicDataLayer().blog.list()),
+    "publico",
+  ).sort((a, b) => b.fecha.localeCompare(a.fecha));
 
   return (
     <>

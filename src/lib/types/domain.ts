@@ -11,6 +11,13 @@
 /** Publication state for any content entity. */
 export type PublicationStatus = "borrador" | "publicado";
 
+/**
+ * Where an editorial article is shown. Unifies blog + noticias into one entity:
+ * "socios" only in the members panel, "publico" only on the public site,
+ * "ambos" in both.
+ */
+export type Visibilidad = "socios" | "publico" | "ambos";
+
 /** Roles resolved by the auth layer. */
 export type UserRole = "admin" | "socio";
 
@@ -83,6 +90,8 @@ export interface BlogPost extends BaseEntity {
   imagenes?: string[]; // gallery images shown in the article body
   autor: string;
   tags: string[];
+  /** Audience: members panel, public site, or both. Defaults to "publico". */
+  visibilidad: Visibilidad;
   fecha: string;
   status: PublicationStatus;
 }
