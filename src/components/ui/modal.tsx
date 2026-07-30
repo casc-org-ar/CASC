@@ -20,6 +20,8 @@ interface ModalProps {
   title: string;
   /** Controls the dialog width. Defaults to "md". */
   size?: ModalSize;
+  /** Optional actions rendered in the header, just left of the close button. */
+  headerActions?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -29,6 +31,7 @@ export function Modal({
   onClose,
   title,
   size = "md",
+  headerActions,
   children,
 }: ModalProps) {
   const mounted = useHydrated();
@@ -64,13 +67,16 @@ export function Modal({
           <h2 className="text-lg font-bold tracking-tight text-ink">
             {title}
           </h2>
-          <button
-            onClick={onClose}
-            className="rounded-md p-1 text-ink-muted hover:bg-surface hover:text-ink"
-            aria-label="Cerrar"
-          >
-            <X className="h-5 w-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {headerActions}
+            <button
+              onClick={onClose}
+              className="rounded-md p-1 text-ink-muted hover:bg-surface hover:text-ink"
+              aria-label="Cerrar"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </div>
         <div className="px-6 py-5">{children}</div>
       </div>
