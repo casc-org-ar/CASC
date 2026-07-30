@@ -86,9 +86,31 @@ Confirmar que estén TODAS (Settings → Environment Variables → Production). 
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | `sb_publishable_...` | Supabase |
 | `NEXT_PUBLIC_APP_URL` | `https://casc.org.ar` | Redirect de invitaciones |
 | `NEXT_PUBLIC_PLATFORM_ENABLED` | `true` | Muestra "Ingresar" en el sitio |
-| `SUPABASE_SERVICE_ROLE_KEY` | `sb_secret_...` | Solo si corrés el seed / webhooks |
+| `SUPABASE_SERVICE_ROLE_KEY` | `sb_secret_...` | Seed y webhook de invitaciones |
+| `CLERK_WEBHOOK_SIGNING_SECRET` | `whsec_...` | Verifica el webhook (paso 6) |
 | `UPSTASH_REDIS_REST_URL` / `_TOKEN` | (de Upstash) | Rate limiting (opcional) |
 | `VIRUSTOTAL_API_KEY` | (de VirusTotal) | Antivirus de CVs (opcional) |
+
+---
+
+## 6. Webhook de aceptación de invitación (opcional pero recomendado)
+
+Cierra el ciclo: cuando un socio acepta la invitación y crea su cuenta, el
+webhook linkea su `clerk_user_id` en la tabla `socios` y pasa su estado a
+"aceptada" (sin esto, el admin ve "enviada" para siempre aunque el socio ya
+haya entrado).
+
+Requisitos:
+1. `SUPABASE_SERVICE_ROLE_KEY` en Vercel (el webhook escribe saltando RLS).
+2. Clerk (producción) → **Configure → Webhooks → Add Endpoint**:
+   - URL: `https://casc.org.ar/api/webhooks/clerk`
+   - Evento: **`user.created`**.
+3. Clerk muestra un **Signing Secret** → copiarlo a Vercel como
+   `CLERK_WEBHOOK_SIGNING_SECRET`.
+4. Redeploy (o esperar el próximo).
+
+Sin configurar: la invitación sigue funcionando (el socio entra con su rol);
+solo que el estado en el panel no se auto-actualiza a "aceptada".
 
 ---
 

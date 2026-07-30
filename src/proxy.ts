@@ -29,8 +29,12 @@ export const config = {
   matcher: [
     // Skip Next internals and static assets unless found in search params.
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes.
-    "/(api|trpc)(.*)",
+    // API/trpc routes, EXCEPT the Clerk webhook: it arrives server-to-server
+    // with no Clerk session and verifies its own signature, so the middleware
+    // must not touch it. Matcher forbids capturing groups, so api and trpc are
+    // listed separately with a non-capturing negative lookahead.
+    "/api/((?!webhooks).*)",
+    "/trpc/(.*)",
     "/__clerk/(.*)",
   ],
 };
