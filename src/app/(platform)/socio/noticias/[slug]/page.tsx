@@ -37,8 +37,13 @@ export default async function NoticiaDetailPage({
       </Link>
 
       {noticia.portadaUrl && (
-        <div className="relative mb-6 h-64 w-full overflow-hidden rounded-xl bg-surface md:h-80">
-          <SafeImage src={noticia.portadaUrl} alt={noticia.titulo} />
+        <div className="mb-6 w-full overflow-hidden rounded-xl bg-surface">
+          <SafeImage
+            src={noticia.portadaUrl}
+            alt={noticia.titulo}
+            fit="contain"
+            className="max-h-[70vh] w-full object-contain"
+          />
         </div>
       )}
 

@@ -21,10 +21,18 @@ export function SafeImage({
   src,
   alt,
   className,
+  fit = "cover",
 }: {
   src?: string;
   alt: string;
   className?: string;
+  /**
+   * How the image fills its box. "cover" (default) crops to fill — right for
+   * uniform card thumbnails. "contain" shows the whole image at its natural
+   * proportions without cropping or stretching — right for the article detail,
+   * where the real photo must be shown intact, not distorted.
+   */
+  fit?: "cover" | "contain";
 }) {
   const [failed, setFailed] = useState(false);
 
@@ -43,7 +51,11 @@ export function SafeImage({
       src={src}
       alt={alt}
       onError={() => setFailed(true)}
-      className={cn("h-full w-full object-cover", className)}
+      className={cn(
+        "h-full w-full",
+        fit === "contain" ? "object-contain" : "object-cover",
+        className,
+      )}
     />
   );
 }

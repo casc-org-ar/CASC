@@ -115,8 +115,13 @@ export default async function NoticiaPage({
         </header>
 
         {post.portadaUrl && (
-          <div className="relative mt-8 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-surface">
-            <SafeImage src={post.portadaUrl} alt={post.titulo} />
+          <div className="mt-8 w-full overflow-hidden rounded-2xl border border-border bg-surface">
+            <SafeImage
+              src={post.portadaUrl}
+              alt={post.titulo}
+              fit="contain"
+              className="max-h-[70vh] w-full object-contain"
+            />
           </div>
         )}
 
