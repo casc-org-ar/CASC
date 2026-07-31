@@ -60,12 +60,6 @@ const heroSlides = [
     href: "/assets/banners/Propuesta_valor_CASC_23_12_25.pdf",
   },
   {
-    desktop: "/assets/banners/banner-1-1.webp",
-    tablet: "/assets/banners/banner-1-2.webp",
-    mobile: "/assets/banners/banner-1-3.webp",
-    alt: "Cámara Argentina de Shopping Centers",
-  },
-  {
     desktop: "/assets/banners/banner-3-1.webp",
     tablet: "/assets/banners/banner-3-2.webp",
     mobile: "/assets/banners/banner-3-3.webp",
