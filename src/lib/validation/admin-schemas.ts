@@ -80,6 +80,9 @@ export const blogSchema = z.object({
   imagenes: z.array(z.string().max(1000)).max(30).optional(),
   autor: req(LIMITS.corto),
   tags: z.array(z.string().trim().max(60)).max(30),
+  // Audience selector. Defaults to "publico" so a payload without the field
+  // (older form, direct action call) keeps the pre-unification behaviour.
+  visibilidad: z.enum(["socios", "publico", "ambos"]).default("publico"),
   fecha,
   status,
 });

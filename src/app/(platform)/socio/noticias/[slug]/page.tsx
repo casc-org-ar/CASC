@@ -4,18 +4,27 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { SafeImage } from "@/components/shared/safe-image";
 import { getDataLayer } from "@/lib/data";
+import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 
-/** Individual news article page (read-only, published only). */
+/**
+ * Individual article page for members (read-only). Resolves by slug — the same
+ * URL scheme as the public site — and only surfaces articles that are published
+ * and flagged for the socios audience.
+ */
 export default async function NoticiaDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
-  const noticia = await getDataLayer().noticias.getById(id);
+  const { slug } = await params;
+  const noticias = byVisibilidad(
+    onlyPublished(await getDataLayer().blog.list()),
+    "socios",
+  );
+  const noticia = noticias.find((n) => n.slug === slug);
 
-  // A socio must never reach a draft or a missing item.
-  if (!noticia || noticia.status !== "publicado") notFound();
+  // A socio must never reach a draft, a public-only article, or a missing item.
+  if (!noticia) notFound();
 
   return (
     <article>
@@ -27,14 +36,14 @@ export default async function NoticiaDetailPage({
         Volver a noticias
       </Link>
 
-      {noticia.imagenUrl && (
+      {noticia.portadaUrl && (
         <div className="relative mb-6 h-64 w-full overflow-hidden rounded-xl bg-surface md:h-80">
-          <SafeImage src={noticia.imagenUrl} alt={noticia.titulo} />
+          <SafeImage src={noticia.portadaUrl} alt={noticia.titulo} />
         </div>
       )}
 
       <div className="flex items-center gap-3">
-        {noticia.categoria && <Badge tone="accent">{noticia.categoria}</Badge>}
+        {noticia.tags[0] && <Badge tone="accent">{noticia.tags[0]}</Badge>}
         <p className="text-sm text-ink-muted">
           {new Date(noticia.fecha).toLocaleDateString("es-AR", {
             day: "numeric",

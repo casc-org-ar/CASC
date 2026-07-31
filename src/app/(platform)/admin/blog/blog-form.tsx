@@ -237,6 +237,22 @@ export function BlogForm({
         </FormField>
       </div>
 
+      <FormField label="¿Dónde se muestra?" htmlFor="visibilidad">
+        <Select
+          id="visibilidad"
+          name="visibilidad"
+          defaultValue={post?.visibilidad ?? "ambos"}
+        >
+          <option value="ambos">Socios y sitio público</option>
+          <option value="socios">Solo panel de socios</option>
+          <option value="publico">Solo sitio público (Noticias)</option>
+        </Select>
+        <p className="mt-1.5 text-xs text-ink-muted">
+          Elegí si el artículo aparece en el panel de socios, en el sitio web
+          público (Noticias), o en ambos.
+        </p>
+      </FormField>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Fecha" htmlFor="fecha">
           <Input

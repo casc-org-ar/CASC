@@ -54,6 +54,7 @@ function parseBlogForm(formData: FormData) {
     tags: tagsRaw
       ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean)
       : [],
+    visibilidad: String(formData.get("visibilidad") ?? "publico"),
     fecha: String(formData.get("fecha") ?? ""),
     status: String(formData.get("status") ?? "borrador"),
   });

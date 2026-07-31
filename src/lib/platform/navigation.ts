@@ -36,13 +36,15 @@ const NAV: Record<UserRole, NavItem[]> = {
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { label: "Webinars", href: "/admin/webinars", icon: Video },
     { label: "Informes", href: "/admin/informes", icon: FileText },
-    { label: "Noticias", href: "/admin/noticias", icon: Newspaper },
+    // Noticias unificadas en Blog: un artículo se marca con visibilidad
+    // (socios / público / ambos). El admin de Noticias sale del menú; la
+    // página y la tabla `noticias` quedan solo para lectura histórica.
     { label: "Newsletter", href: "/admin/newsletter", icon: Mail },
     { label: "Beneficios", href: "/admin/beneficios", icon: BadgePercent },
     // Bolsa de trabajo oculta también del admin por ahora (encuadre legal).
     // La página y la moderación existen; solo se saca del menú.
     { label: "Solicitudes", href: "/admin/solicitudes", icon: Inbox },
-    { label: "Blog", href: "/admin/blog", icon: PenSquare },
+    { label: "Noticias y Blog", href: "/admin/blog", icon: PenSquare },
     { label: "Socios", href: "/admin/socios", icon: Users },
     ESTADISTICAS,
   ],

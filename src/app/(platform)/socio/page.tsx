@@ -8,7 +8,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getAuth } from "@/lib/auth";
 import { getDataLayer } from "@/lib/data";
-import { onlyPublished } from "@/lib/data/published";
+import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 
 export const metadata = { title: "Inicio" };
 
@@ -32,17 +32,20 @@ export default async function SocioHomePage() {
     getAuth().getCurrentUser(),
     data.webinars.list(),
     data.informes.list(),
-    data.noticias.list(),
+    data.blog.list(),
   ]);
 
-  const noticiasFeed: FeedItem[] = onlyPublished(noticias).map((n) => ({
+  const noticiasFeed: FeedItem[] = byVisibilidad(
+    onlyPublished(noticias),
+    "socios",
+  ).map((n) => ({
     tipo: "Noticia",
     icon: Newspaper,
     titulo: n.titulo,
     descripcion: n.bajada,
     fecha: n.fecha,
-    imagen: n.imagenUrl,
-    href: `/socio/noticias/${n.id}`,
+    imagen: n.portadaUrl,
+    href: `/socio/noticias/${n.slug}`,
   }));
   const webinarsFeed: FeedItem[] = onlyPublished(webinars).map((w) => ({
     tipo: "Webinar",
