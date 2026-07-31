@@ -113,6 +113,28 @@ export function DelegacionesMap({
             );
           })}
 
+          {/* CABA/GBA metro marker. The real CABA geometry is a ~4px speck
+              inside Buenos Aires — invisible when lit. So the two metro
+              delegations get a visible dot at CABA's location instead, which
+              highlights (and is clickable) like a province. Placed at the
+              centroid of the CABA path (~303, 353). */}
+          <circle
+            cx={303}
+            cy={353}
+            r={6}
+            className={cn(
+              "cursor-pointer transition-all duration-200",
+              isProvinceLit("caba")
+                ? "fill-casc-navy-500 stroke-white"
+                : "fill-casc-blue-300 stroke-white hover:fill-casc-navy-700",
+              highlight !== null && !isProvinceLit("caba") && "opacity-40",
+            )}
+            strokeWidth={1.5}
+            onMouseEnter={() => setHoverRegion("caba")}
+            onMouseLeave={() => setHoverRegion(null)}
+            onClick={() => setSelectedRegion("caba")}
+          />
+
           {/* Islas Malvinas — real outline (client SVG), scaled and placed to
               the southeast. Coloured and selectable as part of Patagonia, so it
               highlights and reacts to selection like the mainland provinces. */}
