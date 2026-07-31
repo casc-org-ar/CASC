@@ -71,12 +71,12 @@ const scriptEval = process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : "
 
 const csp = [
   `default-src 'self'`,
-  `script-src 'self' 'unsafe-inline'${scriptEval} ${clerkFapi} https://*.protect.clerk.com https://challenges.cloudflare.com`,
+  `script-src 'self' 'unsafe-inline'${scriptEval} ${clerkFapi} https://*.protect.clerk.com https://challenges.cloudflare.com https://www.google.com https://www.gstatic.com`,
   `style-src 'self' 'unsafe-inline'`,
   `img-src 'self' data: https:`,
   `font-src 'self' data:`,
-  `connect-src 'self' ${clerkFapi} https://*.protect.clerk.com ${supabaseHost} wss://${supabaseHost.replace(/^https?:\/\//, "")}`,
-  `frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com https://*.protect.clerk.com`,
+  `connect-src 'self' ${clerkFapi} https://*.protect.clerk.com ${supabaseHost} wss://${supabaseHost.replace(/^https?:\/\//, "")} https://www.google.com`,
+  `frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com https://*.protect.clerk.com https://www.google.com`,
   `worker-src 'self' blob:`,
   `object-src 'none'`,
   `base-uri 'self'`,

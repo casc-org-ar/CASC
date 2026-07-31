@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PlatformShell } from "@/components/platform/platform-shell";
 import { getAuth } from "@/lib/auth";
+import { getMemberEstado } from "@/lib/auth/member-status";
 import { clerkEnabled } from "@/lib/auth/flag";
 
 /**
@@ -32,6 +33,16 @@ export default async function SocioLayout({
   const user = await getAuth().getCurrentUser();
 
   if (!user) redirect("/login");
+
+  // A member reaches the platform only while they have an ACTIVE socios row.
+  // Their Clerk account outlives the socios record, so we must gate on the
+  // record, not just on being signed in: a member given de baja (estado
+  // "inactivo") OR deleted entirely (no row → null) is bounced out. Admins
+  // have role "admin" and no socios row, so they skip this check entirely.
+  if (user.role === "socio") {
+    const estado = await getMemberEstado(user.email);
+    if (estado !== "activo") redirect("/cuenta-inactiva");
+  }
 
   return (
     <PlatformShell

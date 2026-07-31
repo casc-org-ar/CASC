@@ -64,12 +64,16 @@ export function BlogManager({ posts }: { posts: BlogPost[] }) {
   const [editing, setEditing] = useState<BlogPost | null>(null);
   const [creating, setCreating] = useState(false);
   const [previewing, setPreviewing] = useState<BlogPost | null>(null);
+  // Preview state for the create/edit form, lifted here so the toggle button
+  // can live in the modal header next to the close button.
+  const [formPreview, setFormPreview] = useState(false);
   const [, startTransition] = useTransition();
   const toast = useToast();
 
   const closeModal = () => {
     setCreating(false);
     setEditing(null);
+    setFormPreview(false);
   };
 
   const onDelete = (p: BlogPost) => {
@@ -114,8 +118,24 @@ export function BlogManager({ posts }: { posts: BlogPost[] }) {
         onClose={closeModal}
         title={editing ? "Editar artículo" : "Nuevo artículo"}
         size="xl"
+        headerActions={
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setFormPreview((v) => !v)}
+          >
+            <Eye className="h-4 w-4" />
+            {formPreview ? "Editar" : "Vista previa"}
+          </Button>
+        }
       >
-        <BlogForm post={editing ?? undefined} onDone={closeModal} />
+        <BlogForm
+          post={editing ?? undefined}
+          onDone={closeModal}
+          preview={formPreview}
+          onPreviewChange={setFormPreview}
+        />
       </Modal>
 
       <Modal

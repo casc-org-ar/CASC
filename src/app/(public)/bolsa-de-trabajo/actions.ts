@@ -11,6 +11,7 @@ import { areasInteres, skillsDisponibles } from "@/lib/data/bolsa-trabajo";
 import { clerkEnabled } from "@/lib/auth/flag";
 import { BUCKETS, uploadFile } from "@/lib/data/supabase/storage";
 import { checkRateLimit } from "@/lib/security/rate-limit";
+import { verifyRecaptcha } from "@/lib/security/recaptcha";
 import { securityLog } from "@/lib/security/security-log";
 import type { Disponibilidad } from "@/lib/types/domain";
 
@@ -80,6 +81,15 @@ export async function submitCandidato(
     return {
       ok: false,
       error: "Hiciste demasiados envíos. Esperá unos minutos e intentá de nuevo.",
+    };
+  }
+
+  if (
+    !(await verifyRecaptcha(String(formData.get("recaptchaToken") ?? ""), "cv"))
+  ) {
+    return {
+      ok: false,
+      error: "No pudimos verificar que no seas un bot. Recargá e intentá de nuevo.",
     };
   }
 

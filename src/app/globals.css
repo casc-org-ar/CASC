@@ -348,3 +348,13 @@ html {
     scroll-behavior: auto !important;
   }
 }
+
+/**
+ * Hide the floating reCAPTCHA badge. Google allows this ONLY when the required
+ * attribution ("protegido por reCAPTCHA" + privacy/terms links) is shown near
+ * the form instead — see <RecaptchaNotice />, rendered under every public form.
+ * Removing that notice would break Google's terms, so keep them together.
+ */
+.grecaptcha-badge {
+  visibility: hidden;
+}

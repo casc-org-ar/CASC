@@ -9,6 +9,8 @@ import {
   skillsDisponibles,
 } from "@/lib/data/bolsa-trabajo";
 import { submitCandidato, type SubmitState } from "@/app/(public)/bolsa-de-trabajo/actions";
+import { useRecaptchaAction } from "@/lib/hooks/use-recaptcha";
+import { RecaptchaNotice } from "./recaptcha-notice";
 
 const initialState: SubmitState = { ok: false };
 
@@ -27,6 +29,7 @@ export function CvForm() {
     submitCandidato,
     initialState,
   );
+  const guardedAction = useRecaptchaAction(formAction, "cv");
   const [fileName, setFileName] = useState<string | null>(null);
   const [showOtros, setShowOtros] = useState(false);
 
@@ -51,7 +54,7 @@ export function CvForm() {
 
   return (
     <form
-      action={formAction}
+      action={guardedAction}
       className="rounded-2xl border border-border bg-white p-6 sm:p-8"
     >
       <div className="grid gap-5 sm:grid-cols-2">
@@ -273,6 +276,8 @@ export function CvForm() {
           <Send className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
+
+      <RecaptchaNotice />
     </form>
   );
 }
