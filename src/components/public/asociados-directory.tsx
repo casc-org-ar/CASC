@@ -195,6 +195,10 @@ function buildDirectoryHref(filters: AsociadosDirectoryFilters): string {
 }
 
 function AsociadoCard({ asociado }: { asociado: AsociadoDirectoryItem }) {
+  const isProveedor = asociado.category === "Proveedores de servicios";
+  // Providers all share the same category, so repeating "Proveedores de
+  // servicios" over every name is noise — omit the meta line for them. Shopping
+  // Centers show their region; the rest show their category.
   const meta =
     asociado.category === "Shopping Centers" && asociado.regionLabel
       ? asociado.regionLabel
@@ -228,41 +232,26 @@ function AsociadoCard({ asociado }: { asociado: AsociadoDirectoryItem }) {
         </div>
 
         <div className="flex flex-1 flex-col p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-            {meta}
-          </p>
-          <h3 className="mt-2 text-base font-bold leading-6 text-ink">
+          {/* Providers omit the repeated category line; others keep their meta. */}
+          {!isProveedor && (
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+              {meta}
+            </p>
+          )}
+          <h3
+            className={cn(
+              "text-base font-bold leading-6 text-ink",
+              !isProveedor && "mt-2",
+            )}
+          >
             {asociado.name}
           </h3>
 
-          {asociado.direccion && (
-            <p className="mt-2 text-sm leading-5 text-ink-muted">
-              {asociado.direccion}
-            </p>
-          )}
-
-          {/* Contact details, shown when the associate has them on file. */}
-          {(asociado.contacto || asociado.telefono || asociado.web) && (
-            <ul className="mt-3 space-y-1.5">
-              {asociado.contacto && (
-                <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
-                  <UserRound
-                    className="mt-0.5 h-4 w-4 shrink-0 text-accent"
-                    aria-hidden="true"
-                  />
-                  <span>{asociado.contacto}</span>
-                </li>
-              )}
-              {asociado.telefono && (
-                <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
-                  <Phone
-                    className="mt-0.5 h-4 w-4 shrink-0 text-accent"
-                    aria-hidden="true"
-                  />
-                  <span>{asociado.telefono}</span>
-                </li>
-              )}
-              {asociado.web && (
+          {/* Providers show only their website under the logo; the full contact
+              lives in the ficha. Other categories show address + contact. */}
+          {isProveedor ? (
+            asociado.web && (
+              <ul className="mt-3">
                 <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
                   <Globe
                     className="mt-0.5 h-4 w-4 shrink-0 text-accent"
@@ -270,8 +259,49 @@ function AsociadoCard({ asociado }: { asociado: AsociadoDirectoryItem }) {
                   />
                   <span className="truncate">{asociado.web}</span>
                 </li>
+              </ul>
+            )
+          ) : (
+            <>
+              {asociado.direccion && (
+                <p className="mt-2 text-sm leading-5 text-ink-muted">
+                  {asociado.direccion}
+                </p>
               )}
-            </ul>
+
+              {/* Contact details, shown when the associate has them on file. */}
+              {(asociado.contacto || asociado.telefono || asociado.web) && (
+                <ul className="mt-3 space-y-1.5">
+                  {asociado.contacto && (
+                    <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
+                      <UserRound
+                        className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                        aria-hidden="true"
+                      />
+                      <span>{asociado.contacto}</span>
+                    </li>
+                  )}
+                  {asociado.telefono && (
+                    <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
+                      <Phone
+                        className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                        aria-hidden="true"
+                      />
+                      <span>{asociado.telefono}</span>
+                    </li>
+                  )}
+                  {asociado.web && (
+                    <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
+                      <Globe
+                        className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                        aria-hidden="true"
+                      />
+                      <span className="truncate">{asociado.web}</span>
+                    </li>
+                  )}
+                </ul>
+              )}
+            </>
           )}
 
           <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-medium text-primary">

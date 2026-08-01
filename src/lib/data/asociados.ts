@@ -182,7 +182,7 @@ export const asociados: Asociado[] = [
     "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/appa.webp",
     "web": "www.weareappa.com",
-    "actividad": "&iexcl;appa! es la plataforma lider en fidelizaci&oacute;n y gesti&oacute;n digital para centros comerciales, dise&ntilde;ada para optimizar la operaci&oacute;n y reducir costos. Elimina las filas en stands de promociones y minimiza la necesidad de personal operativo a trav&eacute;s de inteligencia artificial para la validaci&oacute;n autom&aacute;tica de facturas, integra de forma nativa el control de parking y barreras, permitiendo al usuario obtener beneficios mientras que el shopping accede a un ecosistema de insights y data en tiempo real, permitiendo impactar a los clientes mediante canales de comunicaci&oacute;n segmentados basados en su comportamiento real de compra."
+    "actividad": "¡appa! es la plataforma lider en fidelización y gestión digital para centros comerciales, diseñada para optimizar la operación y reducir costos. Elimina las filas en stands de promociones y minimiza la necesidad de personal operativo a través de inteligencia artificial para la validación automática de facturas, integra de forma nativa el control de parking y barreras, permitiendo al usuario obtener beneficios mientras que el shopping accede a un ecosistema de insights y data en tiempo real, permitiendo impactar a los clientes mediante canales de comunicación segmentados basados en su comportamiento real de compra."
   },
   {
     "slug": "artisdeco",
@@ -281,8 +281,8 @@ export const asociados: Asociado[] = [
     "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/clash.webp",
     "web": "www.clash.com.ar",
-    "contacto": "Juan Marcos Aviano &ndash; Director Comercial &amp; MKT Redes sociales: X: https://x.com/ClashBeneficios Facebook: https://www.facebook.com/clash.beneficios Youtube: https://www.youtube.com/@clashbeneficios Instagram: https://www.instagram.com/clash.beneficios",
-    "actividad": "Clash conecta a centros comerciales con sus visitantes a trav&eacute;s de promociones claras, organizadas y visibles. Es una soluci&oacute;n integral que profesionaliza la comunicaci&oacute;n de los beneficios de los locatarios, centraliz&aacute;ndolos en un solo lugar y acompa&ntilde;ando al shopping con tecnolog&iacute;a, soporte operativo y acciones comerciales. Adem&aacute;s, forma parte de un ecosistema donde miles de personas consultan cada mes todas las promociones bancarias y extrabancarias en supermercados, estaciones de servicio y otros rubros clave. Clash permite al centro comercial ganar visibilidad real y conectar con el consumidor justo cuando est&aacute; buscando d&oacute;nde aprovechar sus beneficios."
+    "contacto": "Juan Marcos Aviano – Director Comercial & MKT Redes sociales: X: https://x.com/ClashBeneficios Facebook: https://www.facebook.com/clash.beneficios Youtube: https://www.youtube.com/@clashbeneficios Instagram: https://www.instagram.com/clash.beneficios",
+    "actividad": "Clash conecta a centros comerciales con sus visitantes a través de promociones claras, organizadas y visibles. Es una solución integral que profesionaliza la comunicación de los beneficios de los locatarios, centralizándolos en un solo lugar y acompañando al shopping con tecnología, soporte operativo y acciones comerciales. Además, forma parte de un ecosistema donde miles de personas consultan cada mes todas las promociones bancarias y extrabancarias en supermercados, estaciones de servicio y otros rubros clave. Clash permite al centro comercial ganar visibilidad real y conectar con el consumidor justo cuando está buscando dónde aprovechar sus beneficios."
   },
   {
     "slug": "comision-directiva",
@@ -334,7 +334,7 @@ export const asociados: Asociado[] = [
   },
   {
     "slug": "di-desing",
-    "name": "Di Desing",
+    "name": "Di Design",
     "category": "Proveedores de servicios",
     "rubro": "Arquitectura y desarrollo",
     "logo": "/assets/asociados/logos/di-desing.webp",
@@ -412,8 +412,8 @@ export const asociados: Asociado[] = [
     "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/euler.webp",
     "web": "www.eulerlabs.tech",
-    "contacto": "Herman Moldovan - Director Redes : linkedin -&gt; www.linkedin.com/company/eulerlabs",
-    "actividad": "Eulerlabs es una empresa de tecnolog&iacute;a dedicada a la medici&oacute;n, an&aacute;lisis y optimizaci&oacute;n del desempe&ntilde;o de centros comerciales . Brindamos soluciones que permiten entender el comportamiento de los visitantes , evaluar la performance de los locales y mejorar la gesti&oacute;n comercial y operativa del shopping, a partir de datos objetivos y confiables. Nuestra plataforma integra informaci&oacute;n de flujo peatonal, ocupaci&oacute;n, permanencia , junto con datos de ventas y contexto, para acompa&ntilde;ar la toma de decisiones estrat&eacute;gicas. Sectores o especialidades en los que opera Eulerlabs opera principalmente en el sector retail y centros comerciales , especializ&aacute;ndose en: Shopping centers Gesti&oacute;n y auditor&iacute;a de locales Medici&oacute;n de flujo peatonal y ocupaci&oacute;n An&aacute;lisis de performance comercial y operativa Integraci&oacute;n de datos f&iacute;sicos y comerciales en una &uacute;nica plataforma Valor diferencial / Propuesta de valor El principal diferencial de Eulerlabs es la combinaci&oacute;n de experiencia, cobertura y foco en resultados de negocio . Contamos con m&aacute;s de 15 a&ntilde;os de experiencia trabajando con shopping centers y tenemos presencia en casi la totalidad de los shoppings del pa&iacute;s , lo que nos permite conocer en profundidad su operaci&oacute;n, desaf&iacute;os y necesidades. Ofrecemos a nuestros clientes: Datos confiables y comparables entre locales y centros comerciales Una mirada objetiva para gestionar, auditar y optimizar la performance Una soluci&oacute;n desarrollada espec&iacute;ficamente para el negocio de shoppings"
+    "contacto": "Herman Moldovan - Director Redes : linkedin -> www.linkedin.com/company/eulerlabs",
+    "actividad": "Eulerlabs es una empresa de tecnología dedicada a la medición, análisis y optimización del desempeño de centros comerciales . Brindamos soluciones que permiten entender el comportamiento de los visitantes , evaluar la performance de los locales y mejorar la gestión comercial y operativa del shopping, a partir de datos objetivos y confiables. Nuestra plataforma integra información de flujo peatonal, ocupación, permanencia , junto con datos de ventas y contexto, para acompañar la toma de decisiones estratégicas. Sectores o especialidades en los que opera Eulerlabs opera principalmente en el sector retail y centros comerciales , especializándose en: Shopping centers Gestión y auditoría de locales Medición de flujo peatonal y ocupación Análisis de performance comercial y operativa Integración de datos físicos y comerciales en una única plataforma Valor diferencial / Propuesta de valor El principal diferencial de Eulerlabs es la combinación de experiencia, cobertura y foco en resultados de negocio . Contamos con más de 15 años de experiencia trabajando con shopping centers y tenemos presencia en casi la totalidad de los shoppings del país , lo que nos permite conocer en profundidad su operación, desafíos y necesidades. Ofrecemos a nuestros clientes: Datos confiables y comparables entre locales y centros comerciales Una mirada objetiva para gestionar, auditar y optimizar la performance Una solución desarrollada específicamente para el negocio de shoppings"
   },
   {
     "slug": "factory-parque-brown",
@@ -471,14 +471,6 @@ export const asociados: Asociado[] = [
     "inauguracion": "18 de mayo de 1992",
     "visitas": "420.000",
     "locales": "120"
-  },
-  {
-    "slug": "havanna",
-    "name": "Havanna",
-    "category": "Retailers",
-    "logo": "/assets/asociados/logos/havanna.webp",
-    "web": "www.havanna.com.ar",
-    "actividad": "Producción de alfajores. Cafetería especializada."
   },
   {
     "slug": "hiper-chango-mas",

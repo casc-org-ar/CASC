@@ -62,19 +62,18 @@ export function DelegacionesMap({
   }
 
   /**
-   * Whether a province should light up for the highlighted region.
-   *
-   * The two metropolitan delegations (CABA and GBA) share the CABA dot on the
-   * map: the GBA "24 partidos" have no separate geometry (Buenos Aires province
-   * belongs to Pampeana), so highlighting either metro delegation lights the
-   * CABA path. Each still links to its own delegate via the list.
+   * Whether a province path (mainland provinces) should light up. CABA and GBA
+   * are NOT mainland paths — they are drawn as two separate metro dots below,
+   * each lit on its own — so this only matches non-metro regions.
    */
   function isProvinceLit(provinceRegion: RegionSlug): boolean {
     if (highlight === null) return false;
-    const metro: RegionSlug[] = ["caba", "gba"];
-    // Both metro delegations light the CABA path (the only metro geometry).
-    if (metro.includes(highlight)) return provinceRegion === "caba";
     return provinceRegion === highlight;
+  }
+
+  /** A metro dot (caba / gba) is lit when it is the highlighted region. */
+  function isMetroLit(metro: RegionSlug): boolean {
+    return highlight === metro;
   }
 
   return (
@@ -113,27 +112,62 @@ export function DelegacionesMap({
             );
           })}
 
-          {/* CABA/GBA metro marker. The real CABA geometry is a ~4px speck
-              inside Buenos Aires — invisible when lit. So the two metro
-              delegations get a visible dot at CABA's location instead, which
-              highlights (and is clickable) like a province. Placed at the
-              centroid of the CABA path (~303, 353). */}
+          {/* CABA & GBA metro markers. CABA's real geometry is a ~4px speck
+              inside Buenos Aires, and GBA (the 24 partidos) has no geometry of
+              its own, so both metro delegations are drawn as two SEPARATE dots:
+              CABA at the city's location, GBA offset to the west/south (the ring
+              of partidos that surrounds the city). Each highlights and is
+              clickable on its own, so the two are visually distinct. Small
+              labels keep them unambiguous. */}
+          {/* GBA dot — offset from the city, representing the surrounding ring. */}
           <circle
-            cx={303}
-            cy={353}
-            r={6}
+            cx={289}
+            cy={361}
+            r={7}
             className={cn(
               "cursor-pointer transition-all duration-200",
-              isProvinceLit("caba")
+              isMetroLit("gba")
                 ? "fill-casc-navy-500 stroke-white"
                 : "fill-casc-blue-300 stroke-white hover:fill-casc-navy-700",
-              highlight !== null && !isProvinceLit("caba") && "opacity-40",
+              highlight !== null && !isMetroLit("gba") && "opacity-40",
+            )}
+            strokeWidth={1.5}
+            onMouseEnter={() => setHoverRegion("gba")}
+            onMouseLeave={() => setHoverRegion(null)}
+            onClick={() => setSelectedRegion("gba")}
+          />
+          {/* CABA dot — the city itself, at its real location. */}
+          <circle
+            cx={304}
+            cy={352}
+            r={5.5}
+            className={cn(
+              "cursor-pointer transition-all duration-200",
+              isMetroLit("caba")
+                ? "fill-casc-navy-500 stroke-white"
+                : "fill-accent stroke-white hover:fill-casc-navy-700",
+              highlight !== null && !isMetroLit("caba") && "opacity-40",
             )}
             strokeWidth={1.5}
             onMouseEnter={() => setHoverRegion("caba")}
             onMouseLeave={() => setHoverRegion(null)}
             onClick={() => setSelectedRegion("caba")}
           />
+          {/* Labels so the two metro dots read as CABA vs GBA at a glance. */}
+          <text
+            x={311}
+            y={349}
+            className="pointer-events-none fill-ink text-[7px] font-semibold"
+          >
+            CABA
+          </text>
+          <text
+            x={262}
+            y={366}
+            className="pointer-events-none fill-ink text-[7px] font-semibold"
+          >
+            GBA
+          </text>
 
           {/* Islas Malvinas — real outline (client SVG), scaled and placed to
               the southeast. Coloured and selectable as part of Patagonia, so it
