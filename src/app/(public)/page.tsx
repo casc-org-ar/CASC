@@ -154,8 +154,9 @@ export default async function HomePage() {
       <HeroCarousel slides={heroSlides} />
 
       {/* Datos de la industria — cifras destacadas al inicio de la Home, con
-          contadores animados. Los valores reflejan los de "Datos del sector". */}
-      <section className="border-b border-border bg-casc-navy-900 text-white">
+          contadores animados. Los valores reflejan los de "Datos del sector".
+          `mt-8/mt-12` separa el bloque del carousel para que no quede pegado. */}
+      <section className="mt-8 border-b border-border bg-casc-navy-900 text-white sm:mt-12">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-blue-200/80">
             La industria en números
