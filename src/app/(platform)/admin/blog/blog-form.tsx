@@ -1,11 +1,12 @@
 "use client";
 
-import { Eye, Trash2, Upload } from "lucide-react";
+import { Eye, Loader2, Trash2, Upload } from "lucide-react";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select, Textarea } from "@/components/ui/field";
 import { FileOrLinkField } from "@/components/ui/file-or-link-field";
 import { useToast } from "@/components/ui/toast";
+import { uploadContentImage } from "@/lib/actions/upload-image";
 import { todayInBuenosAires } from "@/lib/utils";
 import type { BlogPost } from "@/lib/types/domain";
 import { createBlogPost, updateBlogPost } from "./actions";
@@ -30,11 +31,12 @@ export function BlogForm({
   onPreviewChange,
 }: BlogFormProps) {
   const [pending, startTransition] = useTransition();
-  // Mocked cover upload: picking a file fills portadaUrl with a fake path.
+  // Cover image: an uploaded public URL (Supabase Storage) or a pasted link.
   const [portadaUrl, setPortadaUrl] = useState(post?.portadaUrl ?? "");
-  // Gallery images: each can be an uploaded file (mocked path) or a pasted link.
+  // Gallery images: each an uploaded public URL or a pasted link.
   const [imagenes, setImagenes] = useState<string[]>(post?.imagenes ?? []);
   const [nuevoLink, setNuevoLink] = useState("");
+  const [galleryUploading, setGalleryUploading] = useState(false);
   // Preview: controlled by the parent when props are passed, otherwise local.
   const [previewLocal, setPreviewLocal] = useState(false);
   const preview = previewProp ?? previewLocal;
@@ -66,12 +68,25 @@ export function BlogForm({
       }
     });
 
-  const onGalleryPick = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onGalleryPick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    if (files.length) {
-      setImagenes((prev) => [...prev, ...files.map((f) => `/mock/${f.name}`)]);
-    }
     e.target.value = "";
+    if (!files.length) return;
+    setGalleryUploading(true);
+    try {
+      for (const file of files) {
+        const fd = new FormData();
+        fd.set("file", file);
+        const result = await uploadContentImage(fd);
+        if (result.ok) {
+          setImagenes((prev) => [...prev, result.url]);
+        } else {
+          toast.error(result.error);
+        }
+      }
+    } finally {
+      setGalleryUploading(false);
+    }
   };
 
   const addLink = () => {
@@ -157,16 +172,30 @@ export function BlogForm({
           <div className="flex flex-wrap gap-2">
             <label
               htmlFor="galeria"
-              className="flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-border bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-primary hover:bg-white"
+              className={
+                galleryUploading
+                  ? "flex cursor-wait items-center gap-2 rounded-md border border-dashed border-border bg-surface px-4 py-2 text-sm font-medium text-ink opacity-70"
+                  : "flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-border bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-primary hover:bg-white"
+              }
             >
-              <Upload className="h-4 w-4 text-primary" />
-              Subir imágenes
+              {galleryUploading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                  Subiendo…
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4 text-primary" />
+                  Subir imágenes
+                </>
+              )}
             </label>
             <input
               id="galeria"
               type="file"
               accept="image/*"
               multiple
+              disabled={galleryUploading}
               onChange={onGalleryPick}
               className="sr-only"
             />

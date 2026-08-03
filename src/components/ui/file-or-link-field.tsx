@@ -1,8 +1,9 @@
 "use client";
 
-import { Link2, Upload } from "lucide-react";
+import { Link2, Loader2, Upload } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/field";
+import { uploadContentImage } from "@/lib/actions/upload-image";
 import { cn } from "@/lib/utils";
 
 type Mode = "upload" | "link";
@@ -26,9 +27,9 @@ interface FileOrLinkFieldProps {
 /**
  * File-or-link picker with two tabs: upload a file or paste an external link.
  * One control is shown at a time so a non-technical admin never has to guess
- * which field to use. Upload is mocked (fills the value with `/mock/<name>`)
- * until Vercel Blob is wired up — the resolved URL travels in a hidden input
- * so the parent form submits it like any other field.
+ * which field to use. Uploading pushes the file to Supabase Storage (public
+ * `portadas` bucket) and stores the returned public URL — the resolved URL
+ * travels in a hidden input so the parent form submits it like any other field.
  */
 export function FileOrLinkField({
   name,
@@ -40,19 +41,39 @@ export function FileOrLinkField({
   hint,
 }: FileOrLinkFieldProps) {
   // Start on the tab that matches the existing value: a pasted link stays on
-  // the link tab, everything else (empty or an uploaded path) on upload.
+  // the link tab, everything else (empty or an uploaded URL) on upload.
   const [mode, setMode] = useState<Mode>(
     value.startsWith("http") ? "link" : "upload",
   );
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const onFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFilePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    // In production this URL comes from the Blob upload response.
-    if (file) onChange(`/mock/${file.name}`);
+    if (!file) return;
+    setError(null);
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.set("file", file);
+      const result = await uploadContentImage(fd);
+      if (result.ok) {
+        onChange(result.url);
+      } else {
+        setError(result.error);
+      }
+    } catch {
+      setError("No pudimos subir la imagen. Intentá de nuevo.");
+    } finally {
+      setUploading(false);
+      // Reset so re-picking the same file fires onChange again.
+      e.target.value = "";
+    }
   };
 
   const inputId = `${name}-file`;
-  const uploaded = value && !value.startsWith("http");
+  // A stored value that is a real URL counts as uploaded.
+  const uploaded = value.startsWith("http");
 
   return (
     <div>
@@ -75,22 +96,40 @@ export function FileOrLinkField({
         <>
           <label
             htmlFor={inputId}
-            className="flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-border bg-surface px-4 py-3 text-sm font-medium text-ink transition-colors hover:border-primary hover:bg-white"
+            className={cn(
+              "flex items-center gap-2 rounded-md border border-dashed border-border bg-surface px-4 py-3 text-sm font-medium text-ink transition-colors",
+              uploading
+                ? "cursor-wait opacity-70"
+                : "cursor-pointer hover:border-primary hover:bg-white",
+            )}
           >
-            <Upload className="h-4 w-4 text-primary" />
-            {uploaded ? "Cambiar archivo" : uploadLabel}
+            {uploading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                Subiendo…
+              </>
+            ) : (
+              <>
+                <Upload className="h-4 w-4 text-primary" />
+                {uploaded ? "Cambiar imagen" : uploadLabel}
+              </>
+            )}
           </label>
           <input
             id={inputId}
             type="file"
             accept={accept}
             onChange={onFilePick}
+            disabled={uploading}
             className="sr-only"
           />
-          {uploaded && (
+          {uploaded && !uploading && (
             <p className="mt-1.5 truncate text-xs text-ink-muted">
-              Archivo cargado: {value}
+              Imagen cargada correctamente.
             </p>
+          )}
+          {error && (
+            <p className="mt-1.5 text-xs font-medium text-red-600">{error}</p>
           )}
         </>
       ) : (

@@ -33,6 +33,39 @@ export interface UploadResult {
 }
 
 /**
+ * Upload a content image to the PUBLIC `portadas` bucket and return its
+ * permanent public URL — the value stored in the DB and rendered everywhere,
+ * including the public site. Unlike `uploadFile` (private buckets → signed
+ * URLs), a public bucket exposes a stable `…/object/public/portadas/<path>`
+ * URL that any visitor can load, which is what card/cover images need.
+ *
+ * Writes still require an admin session (storage RLS from migration 0008);
+ * "public" only means the objects are READABLE without a token.
+ */
+export async function uploadPublicImage(
+  file: File,
+  opts: { extension: string; prefix?: string },
+): Promise<{ url: string }> {
+  const supabase = createSupabaseClient();
+  const name = `${crypto.randomUUID()}.${opts.extension}`;
+  const path = opts.prefix ? `${opts.prefix}/${name}` : name;
+
+  const { error } = await supabase.storage
+    .from(BUCKETS.portadas)
+    .upload(path, file, {
+      contentType: file.type || "application/octet-stream",
+      upsert: false,
+    });
+
+  if (error) {
+    throw new Error(`Image upload to 'portadas' failed: ${error.message}`);
+  }
+
+  const { data } = supabase.storage.from(BUCKETS.portadas).getPublicUrl(path);
+  return { url: data.publicUrl };
+}
+
+/**
  * Upload a file to a private bucket under a collision-free path. Returns the
  * stored path — the caller persists THIS, not a URL.
  *
