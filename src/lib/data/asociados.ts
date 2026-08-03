@@ -12,24 +12,36 @@ export type AsociadoCategory =
   | "Otros";
 
 /**
- * Rubro (line of business) for "Proveedores de servicios". Derived from each
- * provider's `actividad` text so the directory can filter by activity —
- * pending validation by CASC.
+ * Rubro (line of business) for "Proveedores de servicios". These are the
+ * DEFINITIVE rubros provided by CASC (replacing the earlier provisional set),
+ * matching the categories shown on their current site. "Insumos industriales"
+ * is intentionally excluded for now. The mapping of each provider to its rubro
+ * is confirmed by CASC.
  */
 export type AsociadoRubro =
-  | "Arquitectura y desarrollo"
-  | "Tecnología y software"
-  | "Marketing y fidelización"
-  | "Ambientación y equipamiento"
-  | "Servicios generales";
+  | "Limpieza y mantenimiento de edificios"
+  | "Soluciones administrativas"
+  | "Soluciones tecnológicas"
+  | "Consultoría y management"
+  | "Arquitectura, diseño e ingeniería"
+  | "Movilidad eléctrica"
+  | "Hotelería, eventos"
+  | "Decoración navideña"
+  | "Marketing y publicidad"
+  | "Medios publicitarios";
 
 /** Selectable rubros, in the order shown by the directory filter. */
 export const asociadoRubros: AsociadoRubro[] = [
-  "Arquitectura y desarrollo",
-  "Tecnología y software",
-  "Marketing y fidelización",
-  "Ambientación y equipamiento",
-  "Servicios generales",
+  "Limpieza y mantenimiento de edificios",
+  "Soluciones administrativas",
+  "Soluciones tecnológicas",
+  "Consultoría y management",
+  "Arquitectura, diseño e ingeniería",
+  "Movilidad eléctrica",
+  "Hotelería, eventos",
+  "Decoración navideña",
+  "Marketing y publicidad",
+  "Medios publicitarios",
 ];
 
 export interface Asociado {
@@ -54,7 +66,6 @@ export const asociados: Asociado[] = [
     "slug": "unoporunomarketingintegrado",
     "name": "1POR1 Marketing Integrado",
     "category": "Proveedores de servicios",
-    "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/unoporunomarketingintegrado.webp",
     "web": "www.1por1.com.ar",
     "actividad": "Servicios para el desarrollo de negocios. Estrategias competitivas y de marketing para Centros Comerciales y Retailers. Estudios para implantación de nuevos centros y expansión de los existentes."
@@ -75,7 +86,6 @@ export const asociados: Asociado[] = [
     "slug": "airbits",
     "name": "Airbits",
     "category": "Proveedores de servicios",
-    "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/airbits.webp",
     "web": "www.airbits.com.ar",
     "contacto": "Pablo Honnorat – Socio Gerente",
@@ -97,7 +107,6 @@ export const asociados: Asociado[] = [
     "slug": "aldo-volpe-arquitectos",
     "name": "Aldo Volpe Arquitectos",
     "category": "Proveedores de servicios",
-    "rubro": "Arquitectura y desarrollo",
     "logo": "/assets/asociados/logos/aldo-volpe-arquitectos.webp",
     "web": "www.aldovolpe.com.ar",
     "contacto": "Arq. Aldo Volpe",
@@ -179,7 +188,6 @@ export const asociados: Asociado[] = [
     "slug": "appa",
     "name": "Appa",
     "category": "Proveedores de servicios",
-    "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/appa.webp",
     "web": "www.weareappa.com",
     "actividad": "¡appa! es la plataforma lider en fidelización y gestión digital para centros comerciales, diseñada para optimizar la operación y reducir costos. Elimina las filas en stands de promociones y minimiza la necesidad de personal operativo a través de inteligencia artificial para la validación automática de facturas, integra de forma nativa el control de parking y barreras, permitiendo al usuario obtener beneficios mientras que el shopping accede a un ecosistema de insights y data en tiempo real, permitiendo impactar a los clientes mediante canales de comunicación segmentados basados en su comportamiento real de compra."
@@ -188,7 +196,6 @@ export const asociados: Asociado[] = [
     "slug": "artisdeco",
     "name": "Artisdeco",
     "category": "Proveedores de servicios",
-    "rubro": "Ambientación y equipamiento",
     "logo": "/assets/asociados/logos/artisdeco.webp",
     "web": "www.artisdeco.com.ar",
     "contacto": "Noelia Nasir",
@@ -252,7 +259,6 @@ export const asociados: Asociado[] = [
     "slug": "centros-comerciales-latinoamerica-ccla",
     "name": "Centros comerciales Latinoamérica | CCLA",
     "category": "Proveedores de servicios",
-    "rubro": "Arquitectura y desarrollo",
     "logo": "/assets/asociados/logos/centros-comerciales-latinoamerica-ccla.webp",
     "web": "www.cclatinoamerica.com.ar",
     "actividad": "Estudios de Factibilidad para el desarrollo de Galerías, Centros Comerciales y Shoppings Centers. Comercialización de locales, espacios para stands y grandes superficies. Auditorías. Control de Calidad en procesos administrativos y comerciales. Reconversión de Espacios Comerciales. Diseño e Implementación de campañas de Marketing. Desarrollo de Programas de Fidelización de clientes."
@@ -269,7 +275,6 @@ export const asociados: Asociado[] = [
     "slug": "city-center-rosario",
     "name": "City Center Rosario",
     "category": "Proveedores de servicios",
-    "rubro": "Servicios generales",
     "logo": "/assets/asociados/logos/city-center-rosario.webp",
     "web": "www.citycenter-rosario.com.ar",
     "actividad": "Servicios relacionados con juegos de azar y apuestas N.C.P. // Servicios de expendio de comidas y bebidas en establecimientos con servicio de mesa y/o en mostrador N.C.P. // Servicios de alojamiento en hoteles, hosterías y residenciales similares, excepto por hora, que incluyen servicio de restaurante al público // Servicios inmobiliarios realizados por cuenta propia, con bienes urbanos propios o arrendados N.C.P. // Servicios de alquiler y explotación de inmuebles para fiestas, convenciones y otros eventos similares // Servicios de playas de estacionamiento y garajes // Servicios empresariales N.C.P."
@@ -278,16 +283,10 @@ export const asociados: Asociado[] = [
     "slug": "clash",
     "name": "Clash",
     "category": "Proveedores de servicios",
-    "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/clash.webp",
     "web": "www.clash.com.ar",
     "contacto": "Juan Marcos Aviano – Director Comercial & MKT Redes sociales: X: https://x.com/ClashBeneficios Facebook: https://www.facebook.com/clash.beneficios Youtube: https://www.youtube.com/@clashbeneficios Instagram: https://www.instagram.com/clash.beneficios",
     "actividad": "Clash conecta a centros comerciales con sus visitantes a través de promociones claras, organizadas y visibles. Es una solución integral que profesionaliza la comunicación de los beneficios de los locatarios, centralizándolos en un solo lugar y acompañando al shopping con tecnología, soporte operativo y acciones comerciales. Además, forma parte de un ecosistema donde miles de personas consultan cada mes todas las promociones bancarias y extrabancarias en supermercados, estaciones de servicio y otros rubros clave. Clash permite al centro comercial ganar visibilidad real y conectar con el consumidor justo cuando está buscando dónde aprovechar sus beneficios."
-  },
-  {
-    "slug": "comision-directiva",
-    "name": "comision-directiva",
-    "category": "Otros"
   },
   {
     "slug": "cordoba-shopping",
@@ -302,11 +301,6 @@ export const asociados: Asociado[] = [
     "locales": "130"
   },
   {
-    "slug": "datos-del-sector",
-    "name": "datos-del-sector",
-    "category": "Otros"
-  },
-  {
     "slug": "del-parque-outlet",
     "name": "Del Parque Outlet",
     "category": "Shopping Centers",
@@ -314,11 +308,6 @@ export const asociados: Asociado[] = [
     "direccion": "Cuenca 3035, Capital Federal Página Web: www.instagram.com/delparqueoutlet",
     "inauguracion": "15 de Diciembre de 2022",
     "locales": "41"
-  },
-  {
-    "slug": "delegaciones-regionales",
-    "name": "delegaciones-regionales",
-    "category": "Otros"
   },
   {
     "slug": "devoto-shopping",
@@ -336,7 +325,6 @@ export const asociados: Asociado[] = [
     "slug": "di-desing",
     "name": "Di Design",
     "category": "Proveedores de servicios",
-    "rubro": "Arquitectura y desarrollo",
     "logo": "/assets/asociados/logos/di-desing.webp",
     "web": "www.di-design.net",
     "contacto": "Luis Di Virgilio – Arquitecto",
@@ -391,15 +379,9 @@ export const asociados: Asociado[] = [
     "locales": "54"
   },
   {
-    "slug": "estatuto",
-    "name": "estatuto",
-    "category": "Otros"
-  },
-  {
     "slug": "etia-charge",
     "name": "Etia charge",
     "category": "Proveedores de servicios",
-    "rubro": "Ambientación y equipamiento",
     "logo": "/assets/asociados/logos/etia-charge.webp",
     "web": "www.etiacharge.com",
     "contacto": "Carlos F. Pratts – Director Comercial",
@@ -409,7 +391,6 @@ export const asociados: Asociado[] = [
     "slug": "euler",
     "name": "Euler",
     "category": "Proveedores de servicios",
-    "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/euler.webp",
     "web": "www.eulerlabs.tech",
     "contacto": "Herman Moldovan - Director Redes : linkedin -> www.linkedin.com/company/eulerlabs",
@@ -485,6 +466,16 @@ export const asociados: Asociado[] = [
     "locales": "26"
   },
   {
+    "slug": "ie-inteligencia-energetica",
+    "name": "IE - Inteligencia Energética",
+    "category": "Proveedores de servicios"
+  },
+  {
+    "slug": "interurban",
+    "name": "Interurban",
+    "category": "Proveedores de servicios"
+  },
+  {
     "slug": "la-barraca-mall",
     "name": "La Barraca Mall",
     "category": "Shopping Centers",
@@ -492,6 +483,11 @@ export const asociados: Asociado[] = [
     "direccion": "Las Cañas 1833 - (5519) Guaymallén - Pcia. de Mendoza",
     "telefono": "0261 804 2400",
     "web": "https://www.cioffigrupo.com/labarracamall"
+  },
+  {
+    "slug": "lubeca-tech",
+    "name": "Lubeca Tech",
+    "category": "Proveedores de servicios"
   },
   {
     "slug": "maschwitz-mall",
@@ -514,6 +510,11 @@ export const asociados: Asociado[] = [
     "actividad": "Empresa de comidas rápidas (Fast Food)."
   },
   {
+    "slug": "mdv-lights",
+    "name": "MDV Lights",
+    "category": "Proveedores de servicios"
+  },
+  {
     "slug": "mendoza-shopping",
     "name": "Mendoza Shopping",
     "category": "Shopping Centers",
@@ -524,6 +525,11 @@ export const asociados: Asociado[] = [
     "inauguracion": "3 de diciembre de 1992",
     "visitas": "695.387",
     "locales": "162"
+  },
+  {
+    "slug": "negozona",
+    "name": "Negozona",
+    "category": "Proveedores de servicios"
   },
   {
     "slug": "neverland",
@@ -569,11 +575,6 @@ export const asociados: Asociado[] = [
     "locales": "90"
   },
   {
-    "slug": "nosotros",
-    "name": "nosotros",
-    "category": "Otros"
-  },
-  {
     "slug": "nuevo-quilmes-plaza",
     "name": "Nuevo Quilmes Plaza",
     "category": "Shopping Centers",
@@ -600,7 +601,6 @@ export const asociados: Asociado[] = [
     "slug": "nuova-suite",
     "name": "Nuova Suite",
     "category": "Proveedores de servicios",
-    "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/nuova-suite.webp",
     "web": "www.nuovasuite.com",
     "contacto": "Gustavo Menicillo gustavo@nuovasuite.com",
@@ -616,6 +616,16 @@ export const asociados: Asociado[] = [
     "web": "www.operafun.com.ar",
     "inauguracion": "19 de diciembre de 2019",
     "locales": "59"
+  },
+  {
+    "slug": "osdawash",
+    "name": "Osdawash",
+    "category": "Proveedores de servicios"
+  },
+  {
+    "slug": "owismart",
+    "name": "Owismart",
+    "category": "Proveedores de servicios"
   },
   {
     "slug": "palmares-mall",
@@ -814,6 +824,11 @@ export const asociados: Asociado[] = [
     "locales": "152"
   },
   {
+    "slug": "pfz-arqs",
+    "name": "PFZ Arqs.",
+    "category": "Proveedores de servicios"
+  },
+  {
     "slug": "plaza-liniers-shopping",
     "name": "Plaza Liniers Shopping",
     "category": "Shopping Centers",
@@ -967,10 +982,9 @@ export const asociados: Asociado[] = [
     "locales": "90"
   },
   {
-    "slug": "proveedores-de-servicios",
-    "name": "proveedores-de-servicios",
-    "category": "Proveedores de servicios",
-    "logo": "/assets/asociados/logos/proveedores-de-servicios.webp"
+    "slug": "proyeco",
+    "name": "Proyeco",
+    "category": "Proveedores de servicios"
   },
   {
     "slug": "puerto-plaza",
@@ -1007,10 +1021,19 @@ export const asociados: Asociado[] = [
     "inauguracion": "Año 2015"
   },
   {
-    "slug": "retailers",
-    "name": "retailers",
-    "category": "Retailers",
-    "logo": "/assets/asociados/logos/retailers.webp"
+    "slug": "rentaled",
+    "name": "Rentaled",
+    "category": "Proveedores de servicios"
+  },
+  {
+    "slug": "retailcheck",
+    "name": "Retailcheck",
+    "category": "Proveedores de servicios"
+  },
+  {
+    "slug": "retco",
+    "name": "Retco",
+    "category": "Proveedores de servicios"
   },
   {
     "slug": "ribera-shopping",
@@ -1023,6 +1046,11 @@ export const asociados: Asociado[] = [
     "inauguracion": "15 de Octubre de 2008",
     "visitas": "200.000",
     "locales": "81"
+  },
+  {
+    "slug": "rm-consultoria",
+    "name": "RM Consultoría",
+    "category": "Proveedores de servicios"
   },
   {
     "slug": "san-justo-shopping",
@@ -1049,12 +1077,6 @@ export const asociados: Asociado[] = [
     "locales": "86"
   },
   {
-    "slug": "shopping-centers",
-    "name": "shopping-centers",
-    "category": "Shopping Centers",
-    "logo": "/assets/asociados/logos/shopping-centers.webp"
-  },
-  {
     "slug": "soleil-premium-outlet",
     "name": "Soleil Premium Outlet",
     "category": "Shopping Centers",
@@ -1070,7 +1092,6 @@ export const asociados: Asociado[] = [
     "slug": "solutions-malls",
     "name": "Solutions malls",
     "category": "Proveedores de servicios",
-    "rubro": "Tecnología y software",
     "logo": "/assets/asociados/logos/solutions-malls.webp",
     "web": "www.solutionsmalls.com.ar",
     "actividad": "Soluciones integrales de Software para centros comerciales."
@@ -1136,11 +1157,15 @@ export const asociados: Asociado[] = [
     "slug": "wiki-biz",
     "name": "Wiki Biz",
     "category": "Proveedores de servicios",
-    "rubro": "Marketing y fidelización",
     "logo": "/assets/asociados/logos/wiki-biz.webp",
     "web": "www.wikibiz.us",
     "contacto": "Gustavo Menicillo",
     "actividad": "Wiki Biz es una agencia de marketing integral que combina estrategia, creatividad, tecnología y ejecución para diseñar experiencias eficientes y memorables. Ofrece soluciones que van desde la planificación estratégica y la generación de contenidos hasta la gestión de campañas, desarrollo digital, activaciones, programas de fidelización e implementación de ecosistemas integrados con plataformas digitales y automatizaciones. Una agencia ágil, multidisciplinaria y orientada a resultados, que acompaña a las marcas en todas las etapas del negocio."
+  },
+  {
+    "slug": "xperts-consultores",
+    "name": "Xperts Consultores",
+    "category": "Proveedores de servicios"
   }
 ];
 
