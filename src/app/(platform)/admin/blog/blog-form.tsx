@@ -7,6 +7,7 @@ import { FormField, Input, Select, Textarea } from "@/components/ui/field";
 import { FileOrLinkField } from "@/components/ui/file-or-link-field";
 import { useToast } from "@/components/ui/toast";
 import { uploadContentImage } from "@/lib/actions/upload-image";
+import { compressImage } from "@/lib/utils/image-compress";
 import { todayInBuenosAires } from "@/lib/utils";
 import type { BlogPost } from "@/lib/types/domain";
 import { createBlogPost, updateBlogPost } from "./actions";
@@ -75,8 +76,9 @@ export function BlogForm({
     setGalleryUploading(true);
     try {
       for (const file of files) {
+        const optimized = await compressImage(file);
         const fd = new FormData();
-        fd.set("file", file);
+        fd.set("file", optimized);
         const result = await uploadContentImage(fd);
         if (result.ok) {
           setImagenes((prev) => [...prev, result.url]);

@@ -4,6 +4,7 @@ import { Link2, Loader2, Upload } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/field";
 import { uploadContentImage } from "@/lib/actions/upload-image";
+import { compressImage } from "@/lib/utils/image-compress";
 import { cn } from "@/lib/utils";
 
 type Mode = "upload" | "link";
@@ -54,8 +55,10 @@ export function FileOrLinkField({
     setError(null);
     setUploading(true);
     try {
+      // Compress/resize in the browser before uploading to save storage.
+      const optimized = await compressImage(file);
       const fd = new FormData();
-      fd.set("file", file);
+      fd.set("file", optimized);
       const result = await uploadContentImage(fd);
       if (result.ok) {
         onChange(result.url);
