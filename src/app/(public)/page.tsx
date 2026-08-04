@@ -155,23 +155,24 @@ export default async function HomePage() {
 
       {/* Datos de la industria — cifras destacadas al inicio de la Home, con
           contadores animados. Los valores reflejan los de "Datos del sector".
-          `mt-8/mt-12` separa el bloque del carousel para que no quede pegado. */}
-      <section className="mt-8 border-b border-border bg-casc-navy-900 text-white sm:mt-12">
+          Fondo claro (bg-surface) alineado al resto de las secciones, pegado
+          al carousel. */}
+      <section className="border-b border-border bg-surface">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-blue-200/80">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-primary">
             La industria en números
           </p>
-          <h2 className="mt-3 text-center text-2xl font-extrabold tracking-tight sm:text-3xl">
+          <h2 className="mt-3 text-center text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
             Una industria que no para de crecer
           </h2>
           <dl className="mt-10 grid grid-cols-2 gap-6 sm:gap-8 lg:grid-cols-4">
             {industriaStats.map((stat) => (
               <div key={stat.label} className="text-center">
-                <dd className="text-3xl font-extrabold tracking-tight text-accent sm:text-4xl">
+                <dd className="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl">
                   +<CountUpNumber value={stat.value} />
                   {stat.suffix}
                 </dd>
-                <dt className="mt-2 text-sm leading-5 text-blue-100/80">
+                <dt className="mt-2 text-sm leading-5 text-ink-muted">
                   {stat.label}
                 </dt>
               </div>
