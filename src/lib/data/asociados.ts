@@ -68,7 +68,8 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/unoporunomarketingintegrado.webp",
     "web": "www.1por1.com.ar",
-    "actividad": "Servicios para el desarrollo de negocios. Estrategias competitivas y de marketing para Centros Comerciales y Retailers. Estudios para implantación de nuevos centros y expansión de los existentes."
+    "actividad": "Servicios para el desarrollo de negocios. Estrategias competitivas y de marketing para Centros Comerciales y Retailers. Estudios para implantación de nuevos centros y expansión de los existentes.",
+    "rubro": "Marketing y publicidad"
   },
   {
     "slug": "abasto-shopping",
@@ -89,7 +90,8 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/airbits.webp",
     "web": "www.airbits.com.ar",
     "contacto": "Pablo Honnorat – Socio Gerente",
-    "actividad": "La más avanzada tecnología para centros comerciales. Conteo de personas y análisis de tráfico. Sensores IoT de presencia y cámaras inteligentes. Mapas de calor. Análisis RFM. Guest WiFi."
+    "actividad": "La más avanzada tecnología para centros comerciales. Conteo de personas y análisis de tráfico. Sensores IoT de presencia y cámaras inteligentes. Mapas de calor. Análisis RFM. Guest WiFi.",
+    "rubro": "Soluciones tecnológicas"
   },
   {
     "slug": "alcorta-shopping",
@@ -110,7 +112,8 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/aldo-volpe-arquitectos.webp",
     "web": "www.aldovolpe.com.ar",
     "contacto": "Arq. Aldo Volpe",
-    "actividad": "Planificación física y diseño arquitectónico de centros comerciales y complejos de usos mixtos. Arquitectura para servicios en general. Consultoría."
+    "actividad": "Planificación física y diseño arquitectónico de centros comerciales y complejos de usos mixtos. Arquitectura para servicios en general. Consultoría.",
+    "rubro": "Arquitectura, diseño e ingeniería"
   },
   {
     "slug": "alto-avellaneda-shopping",
@@ -190,7 +193,8 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/appa.webp",
     "web": "www.weareappa.com",
-    "actividad": "¡appa! es la plataforma lider en fidelización y gestión digital para centros comerciales, diseñada para optimizar la operación y reducir costos. Elimina las filas en stands de promociones y minimiza la necesidad de personal operativo a través de inteligencia artificial para la validación automática de facturas, integra de forma nativa el control de parking y barreras, permitiendo al usuario obtener beneficios mientras que el shopping accede a un ecosistema de insights y data en tiempo real, permitiendo impactar a los clientes mediante canales de comunicación segmentados basados en su comportamiento real de compra."
+    "actividad": "¡appa! es la plataforma lider en fidelización y gestión digital para centros comerciales, diseñada para optimizar la operación y reducir costos. Elimina las filas en stands de promociones y minimiza la necesidad de personal operativo a través de inteligencia artificial para la validación automática de facturas, integra de forma nativa el control de parking y barreras, permitiendo al usuario obtener beneficios mientras que el shopping accede a un ecosistema de insights y data en tiempo real, permitiendo impactar a los clientes mediante canales de comunicación segmentados basados en su comportamiento real de compra.",
+    "rubro": "Soluciones tecnológicas"
   },
   {
     "slug": "artisdeco",
@@ -199,7 +203,8 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/artisdeco.webp",
     "web": "www.artisdeco.com.ar",
     "contacto": "Noelia Nasir",
-    "actividad": "Ambientación navideña y seasonal para centros comerciales, grandes espacios, vidrieras, puntos de venta y eventos exclusivos de alto impacto, con más de 18 años en el mercado. Organización integral de eventos llave en mano. Brand Experience, activaciones de marca, acciones promocionales, producción técnica y artística, artistas itinerantes, talleres temáticos y mucho más."
+    "actividad": "Ambientación navideña y seasonal para centros comerciales, grandes espacios, vidrieras, puntos de venta y eventos exclusivos de alto impacto, con más de 18 años en el mercado. Organización integral de eventos llave en mano. Brand Experience, activaciones de marca, acciones promocionales, producción técnica y artística, artistas itinerantes, talleres temáticos y mucho más.",
+    "rubro": "Decoración navideña"
   },
   {
     "slug": "atlas-caballito",
@@ -261,7 +266,8 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/centros-comerciales-latinoamerica-ccla.webp",
     "web": "www.cclatinoamerica.com.ar",
-    "actividad": "Estudios de Factibilidad para el desarrollo de Galerías, Centros Comerciales y Shoppings Centers. Comercialización de locales, espacios para stands y grandes superficies. Auditorías. Control de Calidad en procesos administrativos y comerciales. Reconversión de Espacios Comerciales. Diseño e Implementación de campañas de Marketing. Desarrollo de Programas de Fidelización de clientes."
+    "actividad": "Estudios de Factibilidad para el desarrollo de Galerías, Centros Comerciales y Shoppings Centers. Comercialización de locales, espacios para stands y grandes superficies. Auditorías. Control de Calidad en procesos administrativos y comerciales. Reconversión de Espacios Comerciales. Diseño e Implementación de campañas de Marketing. Desarrollo de Programas de Fidelización de clientes.",
+    "rubro": "Consultoría y management"
   },
   {
     "slug": "cinemacenter",
@@ -277,7 +283,8 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/city-center-rosario.webp",
     "web": "www.citycenter-rosario.com.ar",
-    "actividad": "Servicios relacionados con juegos de azar y apuestas N.C.P. // Servicios de expendio de comidas y bebidas en establecimientos con servicio de mesa y/o en mostrador N.C.P. // Servicios de alojamiento en hoteles, hosterías y residenciales similares, excepto por hora, que incluyen servicio de restaurante al público // Servicios inmobiliarios realizados por cuenta propia, con bienes urbanos propios o arrendados N.C.P. // Servicios de alquiler y explotación de inmuebles para fiestas, convenciones y otros eventos similares // Servicios de playas de estacionamiento y garajes // Servicios empresariales N.C.P."
+    "actividad": "Servicios relacionados con juegos de azar y apuestas N.C.P. // Servicios de expendio de comidas y bebidas en establecimientos con servicio de mesa y/o en mostrador N.C.P. // Servicios de alojamiento en hoteles, hosterías y residenciales similares, excepto por hora, que incluyen servicio de restaurante al público // Servicios inmobiliarios realizados por cuenta propia, con bienes urbanos propios o arrendados N.C.P. // Servicios de alquiler y explotación de inmuebles para fiestas, convenciones y otros eventos similares // Servicios de playas de estacionamiento y garajes // Servicios empresariales N.C.P.",
+    "rubro": "Hotelería, eventos"
   },
   {
     "slug": "clash",
@@ -286,7 +293,8 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/clash.webp",
     "web": "www.clash.com.ar",
     "contacto": "Juan Marcos Aviano – Director Comercial & MKT Redes sociales: X: https://x.com/ClashBeneficios Facebook: https://www.facebook.com/clash.beneficios Youtube: https://www.youtube.com/@clashbeneficios Instagram: https://www.instagram.com/clash.beneficios",
-    "actividad": "Clash conecta a centros comerciales con sus visitantes a través de promociones claras, organizadas y visibles. Es una solución integral que profesionaliza la comunicación de los beneficios de los locatarios, centralizándolos en un solo lugar y acompañando al shopping con tecnología, soporte operativo y acciones comerciales. Además, forma parte de un ecosistema donde miles de personas consultan cada mes todas las promociones bancarias y extrabancarias en supermercados, estaciones de servicio y otros rubros clave. Clash permite al centro comercial ganar visibilidad real y conectar con el consumidor justo cuando está buscando dónde aprovechar sus beneficios."
+    "actividad": "Clash conecta a centros comerciales con sus visitantes a través de promociones claras, organizadas y visibles. Es una solución integral que profesionaliza la comunicación de los beneficios de los locatarios, centralizándolos en un solo lugar y acompañando al shopping con tecnología, soporte operativo y acciones comerciales. Además, forma parte de un ecosistema donde miles de personas consultan cada mes todas las promociones bancarias y extrabancarias en supermercados, estaciones de servicio y otros rubros clave. Clash permite al centro comercial ganar visibilidad real y conectar con el consumidor justo cuando está buscando dónde aprovechar sus beneficios.",
+    "rubro": "Soluciones tecnológicas"
   },
   {
     "slug": "cordoba-shopping",
@@ -328,7 +336,8 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/di-desing.webp",
     "web": "www.di-design.net",
     "contacto": "Luis Di Virgilio – Arquitecto",
-    "actividad": "Estudio de arquitectura y urbanismo. Posee experiencia internacional en el desarrollo de grandes proyectos, tales como masterplanning, revalorizaciones urbanas, proyectos de usos mixtos, shopping centers, retail, viviendas y oficinas."
+    "actividad": "Estudio de arquitectura y urbanismo. Posee experiencia internacional en el desarrollo de grandes proyectos, tales como masterplanning, revalorizaciones urbanas, proyectos de usos mixtos, shopping centers, retail, viviendas y oficinas.",
+    "rubro": "Arquitectura, diseño e ingeniería"
   },
   {
     "slug": "distrito-arcos-premium-outlet",
@@ -385,7 +394,8 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/etia-charge.webp",
     "web": "www.etiacharge.com",
     "contacto": "Carlos F. Pratts – Director Comercial",
-    "actividad": "Especialistas en el desarrollo de soluciones de carga para vehículos eléctricos y software de gestión de carga inteligente. Su propósito es ofrecer equipos de carga de máxima calidad y construir una red de carga moderna, eficiente y con cobertura nacional, que acompañe el avance de la movilidad eléctrica en la Argentina."
+    "actividad": "Especialistas en el desarrollo de soluciones de carga para vehículos eléctricos y software de gestión de carga inteligente. Su propósito es ofrecer equipos de carga de máxima calidad y construir una red de carga moderna, eficiente y con cobertura nacional, que acompañe el avance de la movilidad eléctrica en la Argentina.",
+    "rubro": "Movilidad eléctrica"
   },
   {
     "slug": "euler",
@@ -394,7 +404,8 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/euler.webp",
     "web": "www.eulerlabs.tech",
     "contacto": "Herman Moldovan - Director Redes : linkedin -> www.linkedin.com/company/eulerlabs",
-    "actividad": "Eulerlabs es una empresa de tecnología dedicada a la medición, análisis y optimización del desempeño de centros comerciales . Brindamos soluciones que permiten entender el comportamiento de los visitantes , evaluar la performance de los locales y mejorar la gestión comercial y operativa del shopping, a partir de datos objetivos y confiables. Nuestra plataforma integra información de flujo peatonal, ocupación, permanencia , junto con datos de ventas y contexto, para acompañar la toma de decisiones estratégicas. Sectores o especialidades en los que opera Eulerlabs opera principalmente en el sector retail y centros comerciales , especializándose en: Shopping centers Gestión y auditoría de locales Medición de flujo peatonal y ocupación Análisis de performance comercial y operativa Integración de datos físicos y comerciales en una única plataforma Valor diferencial / Propuesta de valor El principal diferencial de Eulerlabs es la combinación de experiencia, cobertura y foco en resultados de negocio . Contamos con más de 15 años de experiencia trabajando con shopping centers y tenemos presencia en casi la totalidad de los shoppings del país , lo que nos permite conocer en profundidad su operación, desafíos y necesidades. Ofrecemos a nuestros clientes: Datos confiables y comparables entre locales y centros comerciales Una mirada objetiva para gestionar, auditar y optimizar la performance Una solución desarrollada específicamente para el negocio de shoppings"
+    "actividad": "Eulerlabs es una empresa de tecnología dedicada a la medición, análisis y optimización del desempeño de centros comerciales . Brindamos soluciones que permiten entender el comportamiento de los visitantes , evaluar la performance de los locales y mejorar la gestión comercial y operativa del shopping, a partir de datos objetivos y confiables. Nuestra plataforma integra información de flujo peatonal, ocupación, permanencia , junto con datos de ventas y contexto, para acompañar la toma de decisiones estratégicas. Sectores o especialidades en los que opera Eulerlabs opera principalmente en el sector retail y centros comerciales , especializándose en: Shopping centers Gestión y auditoría de locales Medición de flujo peatonal y ocupación Análisis de performance comercial y operativa Integración de datos físicos y comerciales en una única plataforma Valor diferencial / Propuesta de valor El principal diferencial de Eulerlabs es la combinación de experiencia, cobertura y foco en resultados de negocio . Contamos con más de 15 años de experiencia trabajando con shopping centers y tenemos presencia en casi la totalidad de los shoppings del país , lo que nos permite conocer en profundidad su operación, desafíos y necesidades. Ofrecemos a nuestros clientes: Datos confiables y comparables entre locales y centros comerciales Una mirada objetiva para gestionar, auditar y optimizar la performance Una solución desarrollada específicamente para el negocio de shoppings",
+    "rubro": "Soluciones tecnológicas"
   },
   {
     "slug": "factory-parque-brown",
@@ -439,7 +450,8 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/fondamenta.webp",
     "telefono": "11-5451-9624",
     "web": "https://www.instagram.com/fondamentaestudio",
-    "contacto": "fondamentaestudio@gmail.com"
+    "contacto": "fondamentaestudio@gmail.com",
+    "rubro": "Arquitectura, diseño e ingeniería"
   },
   {
     "slug": "galerias-pacifico",
@@ -468,12 +480,14 @@ export const asociados: Asociado[] = [
   {
     "slug": "ie-inteligencia-energetica",
     "name": "IE - Inteligencia Energética",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Arquitectura, diseño e ingeniería"
   },
   {
     "slug": "interurban",
     "name": "Interurban",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Consultoría y management"
   },
   {
     "slug": "la-barraca-mall",
@@ -482,12 +496,16 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/la-barraca-mall.webp",
     "direccion": "Las Cañas 1833 - (5519) Guaymallén - Pcia. de Mendoza",
     "telefono": "0261 804 2400",
-    "web": "https://www.cioffigrupo.com/labarracamall"
+    "web": "https://www.cioffigrupo.com/labarracamall",
+    "inauguracion": "Mayo 2013",
+    "visitas": "30.000",
+    "locales": "104"
   },
   {
     "slug": "lubeca-tech",
     "name": "Lubeca Tech",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Soluciones tecnológicas"
   },
   {
     "slug": "maschwitz-mall",
@@ -512,7 +530,8 @@ export const asociados: Asociado[] = [
   {
     "slug": "mdv-lights",
     "name": "MDV Lights",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Arquitectura, diseño e ingeniería"
   },
   {
     "slug": "mendoza-shopping",
@@ -529,7 +548,8 @@ export const asociados: Asociado[] = [
   {
     "slug": "negozona",
     "name": "Negozona",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Consultoría y management"
   },
   {
     "slug": "neverland",
@@ -604,7 +624,8 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/nuova-suite.webp",
     "web": "www.nuovasuite.com",
     "contacto": "Gustavo Menicillo gustavo@nuovasuite.com",
-    "actividad": "Nuova Suite ofrece un portafolio de licencias SaaS modulares que integran en una sola plataforma la gestión de contenidos, campañas y programas de fidelización para clientes y marcas. A través del ecosistema conformado por los módulos Creator, Rewards, Wallet, Gift Card y Audit , permite crear experiencias digitales personalizadas, administrar billeteras y tarjetas regalo, realizar auditorías virtuales con inteligencia artificial e integrar sistemas de estacionamiento. Una solución integral, personalizable y eficiente para fortalecer la conexión entre el Shopping, sus marcas y sus visitantes."
+    "actividad": "Nuova Suite ofrece un portafolio de licencias SaaS modulares que integran en una sola plataforma la gestión de contenidos, campañas y programas de fidelización para clientes y marcas. A través del ecosistema conformado por los módulos Creator, Rewards, Wallet, Gift Card y Audit , permite crear experiencias digitales personalizadas, administrar billeteras y tarjetas regalo, realizar auditorías virtuales con inteligencia artificial e integrar sistemas de estacionamiento. Una solución integral, personalizable y eficiente para fortalecer la conexión entre el Shopping, sus marcas y sus visitantes.",
+    "rubro": "Soluciones tecnológicas"
   },
   {
     "slug": "operafun",
@@ -620,12 +641,14 @@ export const asociados: Asociado[] = [
   {
     "slug": "osdawash",
     "name": "Osdawash",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Limpieza y mantenimiento de edificios"
   },
   {
     "slug": "owismart",
     "name": "Owismart",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Soluciones tecnológicas"
   },
   {
     "slug": "palmares-mall",
@@ -714,8 +737,11 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/paseo-del-jockey.webp",
     "direccion": "Bv. Elías Yofre 1050 - (5000) Córdoba - Pcia. de Córdoba",
-    "telefono": "0351 554 0351",
-    "web": "www.paseodeljockey.com"
+    "telefono": "0351 554 0315",
+    "web": "www.paseodeljockey.com",
+    "inauguracion": "18 de mayo de 2017",
+    "visitas": "185.200",
+    "locales": "303"
   },
   {
     "slug": "paseo-libertad-lugones",
@@ -826,7 +852,8 @@ export const asociados: Asociado[] = [
   {
     "slug": "pfz-arqs",
     "name": "PFZ Arqs.",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Arquitectura, diseño e ingeniería"
   },
   {
     "slug": "plaza-liniers-shopping",
@@ -984,7 +1011,8 @@ export const asociados: Asociado[] = [
   {
     "slug": "proyeco",
     "name": "Proyeco",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Arquitectura, diseño e ingeniería"
   },
   {
     "slug": "puerto-plaza",
@@ -1023,17 +1051,20 @@ export const asociados: Asociado[] = [
   {
     "slug": "rentaled",
     "name": "Rentaled",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Medios publicitarios"
   },
   {
     "slug": "retailcheck",
     "name": "Retailcheck",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Soluciones tecnológicas"
   },
   {
     "slug": "retco",
     "name": "Retco",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Consultoría y management"
   },
   {
     "slug": "ribera-shopping",
@@ -1050,7 +1081,8 @@ export const asociados: Asociado[] = [
   {
     "slug": "rm-consultoria",
     "name": "RM Consultoría",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Consultoría y management"
   },
   {
     "slug": "san-justo-shopping",
@@ -1094,7 +1126,8 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/solutions-malls.webp",
     "web": "www.solutionsmalls.com.ar",
-    "actividad": "Soluciones integrales de Software para centros comerciales."
+    "actividad": "Soluciones integrales de Software para centros comerciales.",
+    "rubro": "Soluciones administrativas"
   },
   {
     "slug": "tablada-shopping",
@@ -1160,12 +1193,14 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/wiki-biz.webp",
     "web": "www.wikibiz.us",
     "contacto": "Gustavo Menicillo",
-    "actividad": "Wiki Biz es una agencia de marketing integral que combina estrategia, creatividad, tecnología y ejecución para diseñar experiencias eficientes y memorables. Ofrece soluciones que van desde la planificación estratégica y la generación de contenidos hasta la gestión de campañas, desarrollo digital, activaciones, programas de fidelización e implementación de ecosistemas integrados con plataformas digitales y automatizaciones. Una agencia ágil, multidisciplinaria y orientada a resultados, que acompaña a las marcas en todas las etapas del negocio."
+    "actividad": "Wiki Biz es una agencia de marketing integral que combina estrategia, creatividad, tecnología y ejecución para diseñar experiencias eficientes y memorables. Ofrece soluciones que van desde la planificación estratégica y la generación de contenidos hasta la gestión de campañas, desarrollo digital, activaciones, programas de fidelización e implementación de ecosistemas integrados con plataformas digitales y automatizaciones. Una agencia ágil, multidisciplinaria y orientada a resultados, que acompaña a las marcas en todas las etapas del negocio.",
+    "rubro": "Soluciones tecnológicas"
   },
   {
     "slug": "xperts-consultores",
     "name": "Xperts Consultores",
-    "category": "Proveedores de servicios"
+    "category": "Proveedores de servicios",
+    "rubro": "Soluciones tecnológicas"
   }
 ];
 

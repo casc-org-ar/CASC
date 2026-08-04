@@ -53,6 +53,12 @@ const industriaStats: { value: number; suffix: string; label: string }[] = [
 
 const heroSlides = [
   {
+    desktop: "/assets/banners/banner-webinar-web.jpg",
+    tablet: "/assets/banners/banner-webinar-tablet.jpg",
+    mobile: "/assets/banners/banner-webinar-mobile.jpg",
+    alt: "Webinar: Estrategia Phygital en Shopping Centers — martes 11 de agosto",
+  },
+  {
     desktop: "/assets/banners/banner-2-1.webp",
     tablet: "/assets/banners/banner-2-2.webp",
     mobile: "/assets/banners/banner-2-3.webp",
