@@ -481,13 +481,15 @@ export const asociados: Asociado[] = [
     "slug": "ie-inteligencia-energetica",
     "name": "IE - Inteligencia Energética",
     "category": "Proveedores de servicios",
-    "rubro": "Arquitectura, diseño e ingeniería"
+    "rubro": "Arquitectura, diseño e ingeniería",
+    "logo": "/assets/asociados/logos/ie-inteligencia-energetica.png"
   },
   {
     "slug": "interurban",
     "name": "Interurban",
     "category": "Proveedores de servicios",
-    "rubro": "Consultoría y management"
+    "rubro": "Consultoría y management",
+    "logo": "/assets/asociados/logos/interurban.jpg"
   },
   {
     "slug": "la-barraca-mall",
@@ -505,7 +507,8 @@ export const asociados: Asociado[] = [
     "slug": "lubeca-tech",
     "name": "Lubeca Tech",
     "category": "Proveedores de servicios",
-    "rubro": "Soluciones tecnológicas"
+    "rubro": "Soluciones tecnológicas",
+    "logo": "/assets/asociados/logos/lubeca-tech.png"
   },
   {
     "slug": "maschwitz-mall",
@@ -531,7 +534,8 @@ export const asociados: Asociado[] = [
     "slug": "mdv-lights",
     "name": "MDV Lights",
     "category": "Proveedores de servicios",
-    "rubro": "Arquitectura, diseño e ingeniería"
+    "rubro": "Arquitectura, diseño e ingeniería",
+    "logo": "/assets/asociados/logos/mdv-lights.png"
   },
   {
     "slug": "mendoza-shopping",
@@ -549,7 +553,8 @@ export const asociados: Asociado[] = [
     "slug": "negozona",
     "name": "Negozona",
     "category": "Proveedores de servicios",
-    "rubro": "Consultoría y management"
+    "rubro": "Consultoría y management",
+    "logo": "/assets/asociados/logos/negozona.png"
   },
   {
     "slug": "neverland",
@@ -642,13 +647,15 @@ export const asociados: Asociado[] = [
     "slug": "osdawash",
     "name": "Osdawash",
     "category": "Proveedores de servicios",
-    "rubro": "Limpieza y mantenimiento de edificios"
+    "rubro": "Limpieza y mantenimiento de edificios",
+    "logo": "/assets/asociados/logos/osdawash.jpeg"
   },
   {
     "slug": "owismart",
     "name": "Owismart",
     "category": "Proveedores de servicios",
-    "rubro": "Soluciones tecnológicas"
+    "rubro": "Soluciones tecnológicas",
+    "logo": "/assets/asociados/logos/owismart.png"
   },
   {
     "slug": "palmares-mall",
@@ -853,7 +860,8 @@ export const asociados: Asociado[] = [
     "slug": "pfz-arqs",
     "name": "PFZ Arqs.",
     "category": "Proveedores de servicios",
-    "rubro": "Arquitectura, diseño e ingeniería"
+    "rubro": "Arquitectura, diseño e ingeniería",
+    "logo": "/assets/asociados/logos/pfz-arqs.png"
   },
   {
     "slug": "plaza-liniers-shopping",
@@ -1012,7 +1020,8 @@ export const asociados: Asociado[] = [
     "slug": "proyeco",
     "name": "Proyeco",
     "category": "Proveedores de servicios",
-    "rubro": "Arquitectura, diseño e ingeniería"
+    "rubro": "Arquitectura, diseño e ingeniería",
+    "logo": "/assets/asociados/logos/proyeco.png"
   },
   {
     "slug": "puerto-plaza",
@@ -1052,19 +1061,22 @@ export const asociados: Asociado[] = [
     "slug": "rentaled",
     "name": "Rentaled",
     "category": "Proveedores de servicios",
-    "rubro": "Medios publicitarios"
+    "rubro": "Medios publicitarios",
+    "logo": "/assets/asociados/logos/rentaled.png"
   },
   {
     "slug": "retailcheck",
     "name": "Retailcheck",
     "category": "Proveedores de servicios",
-    "rubro": "Soluciones tecnológicas"
+    "rubro": "Soluciones tecnológicas",
+    "logo": "/assets/asociados/logos/retailcheck.png"
   },
   {
     "slug": "retco",
     "name": "Retco",
     "category": "Proveedores de servicios",
-    "rubro": "Consultoría y management"
+    "rubro": "Consultoría y management",
+    "logo": "/assets/asociados/logos/retco.jpg"
   },
   {
     "slug": "ribera-shopping",
@@ -1082,7 +1094,8 @@ export const asociados: Asociado[] = [
     "slug": "rm-consultoria",
     "name": "RM Consultoría",
     "category": "Proveedores de servicios",
-    "rubro": "Consultoría y management"
+    "rubro": "Consultoría y management",
+    "logo": "/assets/asociados/logos/rm-consultoria.jpg"
   },
   {
     "slug": "san-justo-shopping",
@@ -1200,7 +1213,8 @@ export const asociados: Asociado[] = [
     "slug": "xperts-consultores",
     "name": "Xperts Consultores",
     "category": "Proveedores de servicios",
-    "rubro": "Soluciones tecnológicas"
+    "rubro": "Soluciones tecnológicas",
+    "logo": "/assets/asociados/logos/xperts-consultores.png"
   }
 ];
 

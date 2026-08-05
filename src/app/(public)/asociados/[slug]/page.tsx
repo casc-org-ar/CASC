@@ -69,21 +69,24 @@ export default async function AsociadoFichaPage({
         </Link>
 
         <div className="grid gap-10 md:grid-cols-[280px_1fr] lg:gap-16">
-          {/* Logo */}
-          <div className="flex items-start justify-center md:sticky md:top-24 md:self-start">
-            {asociado.logo ? (
-              <Image
-                src={asociado.logo}
-                alt={asociado.name}
-                width={280}
-                height={168}
-                className="w-full max-w-70 object-contain"
-              />
-            ) : (
-              <span className="text-5xl font-bold text-accent">
-                {asociado.name.charAt(0)}
-              </span>
-            )}
+          {/* Logo — on a white square card so transparent logos read cleanly
+              and every ficha looks uniform (matches the directory cards). */}
+          <div className="md:sticky md:top-24 md:self-start">
+            <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-white p-6">
+              {asociado.logo ? (
+                <Image
+                  src={asociado.logo}
+                  alt={asociado.name}
+                  width={280}
+                  height={280}
+                  className="max-h-full w-full object-contain"
+                />
+              ) : (
+                <span className="text-6xl font-bold text-accent">
+                  {asociado.name.charAt(0)}
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Datos */}
