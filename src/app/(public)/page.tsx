@@ -20,12 +20,7 @@ import { Card } from "@/components/ui/card";
 import { IconFrame } from "@/components/ui/icon-frame";
 import { EmptyState } from "@/components/shared/empty-state";
 import { asociados } from "@/lib/data/asociados";
-import {
-  beneficios,
-  capacitaciones,
-  memberOf,
-  sponsors,
-} from "@/lib/data/home-content";
+import { beneficios, memberOf, sponsors } from "@/lib/data/home-content";
 import { getPublicDataLayer } from "@/lib/data";
 import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 import { cn } from "@/lib/utils";
@@ -91,16 +86,6 @@ const shoppingLogos = asociados
   .filter((a) => a.category === "Shopping Centers" && a.logo)
   .map((a) => ({ name: a.name, logo: a.logo!, slug: a.slug }));
 
-const homeActivityItems: ContentCarouselItem[] = capacitaciones.map(
-  (item, index) => ({
-    id: `home-actividad-${index + 1}`,
-    title: item.titulo,
-    description: item.descripcion,
-    image: item.imagen,
-    eyebrow: "Actividad",
-    href: `/actividades/${item.slug}`,
-  }),
-);
 
 function HomeSectionHeader({
   eyebrow,
@@ -154,6 +139,18 @@ export default async function HomePage() {
   )
     .sort((a, b) => (a.fecha < b.fecha ? 1 : -1))
     .slice(0, 6);
+
+  // Activities carousel — admin-managed, published only.
+  const homeActivityItems: ContentCarouselItem[] = onlyPublished(
+    await getPublicDataLayer().actividades.list(),
+  ).map((item) => ({
+    id: item.id,
+    title: item.titulo,
+    description: item.descripcion,
+    image: item.imagen,
+    eyebrow: "Actividad",
+    href: `/actividades/${item.slug}`,
+  }));
 
   return (
     <>

@@ -6,26 +6,34 @@ import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
 import { JoinCta } from "@/components/public/join-cta";
 import { ShareButtons } from "@/components/public/share-buttons";
 import { ButtonAnchor } from "@/components/ui/button";
-import {
-  actividades2025,
-  capacitaciones,
-  type Capacitacion,
-} from "@/lib/data/home-content";
+import { getPublicDataLayer } from "@/lib/data";
+import { onlyPublished } from "@/lib/data/published";
+import type { Actividad } from "@/lib/types/domain";
 
 /**
- * Activity detail page. Activities are static content (not panel-managed), so
- * they are looked up by slug across both years. The body falls back to the
- * short description when an activity has no extended write-up yet.
+ * Activity detail page. Activities are admin-managed content read from the
+ * DataLayer (public, published only), addressed by slug. The body falls back to
+ * the short description when an activity has no extended write-up yet.
  */
 
-const todas: Capacitacion[] = [...capacitaciones, ...actividades2025];
-
-function getActividad(slug: string): Capacitacion | null {
-  return todas.find((a) => a.slug === slug) ?? null;
+async function getActividad(slug: string): Promise<Actividad | null> {
+  const actividades = onlyPublished(
+    await getPublicDataLayer().actividades.list(),
+  );
+  return actividades.find((a) => a.slug === slug) ?? null;
 }
 
-export function generateStaticParams() {
-  return todas.map((a) => ({ slug: a.slug }));
+export async function generateStaticParams() {
+  try {
+    const actividades = onlyPublished(
+      await getPublicDataLayer().actividades.list(),
+    );
+    return actividades.map((a) => ({ slug: a.slug }));
+  } catch {
+    // Table may not exist yet (migration pending) — don't break the build;
+    // pages are generated on-demand instead.
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -34,7 +42,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const actividad = getActividad(slug);
+  const actividad = await getActividad(slug);
   if (!actividad) return { title: "Actividad — CASC" };
 
   return {
@@ -44,7 +52,7 @@ export async function generateMetadata({
       title: actividad.titulo,
       description: actividad.descripcion,
       type: "article",
-      images: [{ url: actividad.imagen }],
+      images: actividad.imagen ? [{ url: actividad.imagen }] : undefined,
     },
   };
 }
@@ -55,7 +63,7 @@ export default async function ActividadPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const actividad = getActividad(slug);
+  const actividad = await getActividad(slug);
   if (!actividad) notFound();
 
   const cuerpo = actividad.cuerpo ?? actividad.descripcion;

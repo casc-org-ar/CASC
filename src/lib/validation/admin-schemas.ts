@@ -31,6 +31,19 @@ const fecha = z.string().trim().min(1).max(40);
 const reqUrl = req(1000); // required: never undefined
 const optUrl = opt(1000); // optional: empty → undefined
 
+export const actividadSchema = z.object({
+  titulo: req(LIMITS.titulo),
+  slug: req(LIMITS.corto),
+  descripcion: req(LIMITS.medio),
+  imagen: optUrl,
+  cuerpo: opt(LIMITS.largo),
+  // Free-text display date ("28 de mayo de 2026"), optional.
+  fecha: opt(40),
+  lugar: opt(LIMITS.corto),
+  inscripcionUrl: optUrl,
+  status,
+});
+
 export const webinarSchema = z.object({
   titulo: req(LIMITS.titulo),
   descripcion: req(LIMITS.largo),

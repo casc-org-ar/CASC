@@ -1,6 +1,7 @@
 import type { DataLayer } from "@/lib/data/repositories";
 import { InMemoryContentRepository } from "@/lib/data/mock/in-memory-repository";
 import {
+  actividades,
   blogPosts,
   candidatos,
   consultas,
@@ -19,6 +20,7 @@ import {
  * within a running dev session — the demo shows admin writes in real time.
  */
 export const mockDataLayer: DataLayer = {
+  actividades: new InMemoryContentRepository(actividades),
   webinars: new InMemoryContentRepository(webinars),
   informes: new InMemoryContentRepository(informes),
   noticias: new InMemoryContentRepository(noticias),

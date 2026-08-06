@@ -1,4 +1,5 @@
 import type {
+  Actividad,
   BlogPost,
   Candidato,
   ConsultaContacto,
@@ -10,6 +11,7 @@ import type {
   SolicitudAsociacion,
   Webinar,
 } from "@/lib/types/domain";
+import { capacitaciones } from "@/lib/data/home-content";
 
 /**
  * Realistic seed data for the prototype demo. Names of real Argentine
@@ -601,3 +603,23 @@ export const consultas: ConsultaContacto[] = [
     updatedAt: iso(2026, 7, 22),
   },
 ];
+
+/**
+ * Actividades seed — derived from the real `capacitaciones` (migrated from the
+ * legacy site). These become an admin-managed entity; the mock store starts
+ * from the same real content so nothing is lost during development.
+ */
+export const actividades: Actividad[] = capacitaciones.map((c, i) => ({
+  id: `act-${i + 1}`,
+  titulo: c.titulo,
+  slug: c.slug,
+  descripcion: c.descripcion,
+  imagen: c.imagen,
+  cuerpo: c.cuerpo,
+  fecha: c.fecha,
+  lugar: c.lugar,
+  inscripcionUrl: c.inscripcionUrl,
+  status: "publicado",
+  createdAt: iso(2026, 7, 1),
+  updatedAt: iso(2026, 7, 1),
+}));

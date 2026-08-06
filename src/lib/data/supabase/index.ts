@@ -1,4 +1,5 @@
 import type {
+  ActividadRepository,
   BlogRepository,
   CandidatoRepository,
   ConsultaRepository,
@@ -10,6 +11,7 @@ import type {
 import { SupabaseContentRepository } from "@/lib/data/supabase/content-repository";
 import { createPublicSupabaseClient } from "@/lib/data/supabase/client";
 import {
+  actividadMapper,
   blogMapper,
   candidatoMapper,
   consultaMapper,
@@ -36,6 +38,7 @@ import {
  */
 export const supabaseDataLayer: DataLayer = {
   // Content entities — newest-first, matching the mock and the 0005 indexes.
+  actividades: new SupabaseContentRepository("actividades", actividadMapper),
   webinars: new SupabaseContentRepository("webinars", webinarMapper),
   informes: new SupabaseContentRepository("informes", informeMapper),
   noticias: new SupabaseContentRepository("noticias", noticiaMapper),
@@ -65,6 +68,13 @@ export const supabaseDataLayer: DataLayer = {
  */
 const asc = { column: "nombre", ascending: true } as const;
 
+export const publicActividades: ActividadRepository =
+  new SupabaseContentRepository(
+    "actividades",
+    actividadMapper,
+    { column: "created_at", ascending: false },
+    createPublicSupabaseClient,
+  );
 export const publicBlog: BlogRepository = new SupabaseContentRepository(
   "blog_posts",
   blogMapper,

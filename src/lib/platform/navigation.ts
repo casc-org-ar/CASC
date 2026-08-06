@@ -1,6 +1,7 @@
 import {
   BadgePercent,
   BarChart3,
+  CalendarDays,
   FileText,
   Home,
   Inbox,
@@ -34,6 +35,7 @@ const ESTADISTICAS: NavItem = {
 const NAV: Record<UserRole, NavItem[]> = {
   admin: [
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { label: "Actividades", href: "/admin/actividades", icon: CalendarDays },
     { label: "Webinars", href: "/admin/webinars", icon: Video },
     { label: "Informes", href: "/admin/informes", icon: FileText },
     // Noticias unificadas en Blog: un artículo se marca con visibilidad

@@ -6,7 +6,7 @@ import {
   type ContentCarouselItem,
 } from "@/components/public/content-carousel";
 import { EmptyState } from "@/components/shared/empty-state";
-import { actividades2025, capacitaciones } from "@/lib/data/home-content";
+import { actividades2025 } from "@/lib/data/home-content";
 import { getPublicDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
 
@@ -35,13 +35,17 @@ function formatDate(value: string): string {
 }
 
 export default async function ActividadesPage() {
-  const blogPosts = onlyPublished(await getPublicDataLayer().blog.list()).sort(
-    (a, b) => (a.fecha < b.fecha ? 1 : -1),
+  const [actividades, blogPostsAll] = await Promise.all([
+    getPublicDataLayer().actividades.list(),
+    getPublicDataLayer().blog.list(),
+  ]);
+  const blogPosts = onlyPublished(blogPostsAll).sort((a, b) =>
+    a.fecha < b.fecha ? 1 : -1,
   );
 
-  const activityItems: ContentCarouselItem[] = capacitaciones.map(
-    (item, index) => ({
-      id: `actividad-${index + 1}`,
+  const activityItems: ContentCarouselItem[] = onlyPublished(actividades).map(
+    (item) => ({
+      id: item.id,
       title: item.titulo,
       description: item.descripcion,
       image: item.imagen,

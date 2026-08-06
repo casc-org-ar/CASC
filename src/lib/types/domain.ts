@@ -40,6 +40,23 @@ export interface BaseEntity {
   updatedAt: string; // ISO 8601
 }
 
+/**
+ * A CASC activity / event (capacitación, congreso, foro, webinar público).
+ * Shown on the public home carousel and the /actividades section, each with
+ * its own detail page addressed by `slug`. Admin-managed like any content.
+ */
+export interface Actividad extends BaseEntity {
+  titulo: string;
+  slug: string; // URL-friendly id for /actividades/[slug]
+  descripcion: string;
+  imagen?: string; // cover image for the card
+  cuerpo?: string; // extended write-up for the detail page
+  fecha?: string; // display date, optional until confirmed
+  lugar?: string; // venue or format ("Auditorio…", "Online")
+  inscripcionUrl?: string; // external registration/info link
+  status: PublicationStatus;
+}
+
 export interface Webinar extends BaseEntity {
   titulo: string;
   descripcion: string;

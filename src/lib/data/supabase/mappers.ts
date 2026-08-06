@@ -1,4 +1,5 @@
 import type {
+  Actividad,
   BaseEntity,
   BlogPost,
   Candidato,
@@ -45,6 +46,39 @@ export interface EntityMapper<T extends BaseEntity> {
 function put(target: Row, key: string, value: unknown): void {
   if (value !== undefined) target[key] = value;
 }
+
+// ---------------------------------------------------------------------------
+// Actividad
+// ---------------------------------------------------------------------------
+export const actividadMapper: EntityMapper<Actividad> = {
+  fromRow: (r) => ({
+    id: r.id as string,
+    titulo: r.titulo as string,
+    slug: r.slug as string,
+    descripcion: r.descripcion as string,
+    imagen: (r.imagen as string | null) ?? undefined,
+    cuerpo: (r.cuerpo as string | null) ?? undefined,
+    fecha: (r.fecha as string | null) ?? undefined,
+    lugar: (r.lugar as string | null) ?? undefined,
+    inscripcionUrl: (r.inscripcion_url as string | null) ?? undefined,
+    status: r.status as Actividad["status"],
+    createdAt: r.created_at as string,
+    updatedAt: r.updated_at as string,
+  }),
+  toRow: (i) => {
+    const row: Row = {};
+    put(row, "titulo", i.titulo);
+    put(row, "slug", i.slug);
+    put(row, "descripcion", i.descripcion);
+    put(row, "imagen", i.imagen);
+    put(row, "cuerpo", i.cuerpo);
+    put(row, "fecha", i.fecha);
+    put(row, "lugar", i.lugar);
+    put(row, "inscripcion_url", i.inscripcionUrl);
+    put(row, "status", i.status);
+    return row;
+  },
+};
 
 // ---------------------------------------------------------------------------
 // Webinar

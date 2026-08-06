@@ -1,4 +1,5 @@
 import type {
+  ActividadRepository,
   BlogRepository,
   CandidatoRepository,
   ConsultaRepository,
@@ -9,6 +10,7 @@ import type {
 } from "@/lib/data/repositories";
 import { mockDataLayer } from "@/lib/data/mock";
 import {
+  publicActividades,
   publicBlog,
   publicCandidatos,
   publicConsultas,
@@ -37,18 +39,25 @@ export function getDataLayer(): DataLayer {
  * whose authenticated client would call Clerk `auth()` and fail at build time.
  */
 export function getPublicDataLayer(): {
+  actividades: ActividadRepository;
   blog: BlogRepository;
   noticias: NoticiaRepository;
   hoteles: HotelRepository;
 } {
   if (!clerkEnabled()) {
     return {
+      actividades: mockDataLayer.actividades,
       blog: mockDataLayer.blog,
       noticias: mockDataLayer.noticias,
       hoteles: mockDataLayer.hoteles,
     };
   }
-  return { blog: publicBlog, noticias: publicNoticias, hoteles: publicHoteles };
+  return {
+    actividades: publicActividades,
+    blog: publicBlog,
+    noticias: publicNoticias,
+    hoteles: publicHoteles,
+  };
 }
 
 /**

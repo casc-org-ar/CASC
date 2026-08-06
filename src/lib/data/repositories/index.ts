@@ -7,6 +7,7 @@
  */
 
 import type {
+  Actividad,
   BaseEntity,
   BlogPost,
   Candidato,
@@ -52,6 +53,7 @@ export interface ContentRepository<T extends BaseEntity> {
   remove(id: string): Promise<void>;
 }
 
+export type ActividadRepository = ContentRepository<Actividad>;
 export type WebinarRepository = ContentRepository<Webinar>;
 export type InformeRepository = ContentRepository<Informe>;
 export type NoticiaRepository = ContentRepository<Noticia>;
@@ -70,6 +72,7 @@ export type SocioRepository = ContentRepository<Socio>;
  * construct concrete repositories themselves.
  */
 export interface DataLayer {
+  actividades: ActividadRepository;
   webinars: WebinarRepository;
   informes: InformeRepository;
   noticias: NoticiaRepository;
