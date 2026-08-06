@@ -7,22 +7,44 @@ import { JoinCta } from "@/components/public/join-cta";
 import { ShareButtons } from "@/components/public/share-buttons";
 import { ButtonAnchor } from "@/components/ui/button";
 import { readPublishedActividades } from "@/lib/data/actividades-read";
-import type { Actividad } from "@/lib/types/domain";
+import { actividades2025 } from "@/lib/data/home-content";
 
 /**
  * Activity detail page. Activities are admin-managed content read from the
- * DataLayer (public, published only), addressed by slug. The body falls back to
- * the short description when an activity has no extended write-up yet.
+ * DataLayer (public, published only), addressed by slug. The legacy "2025" set
+ * stays hardcoded (historical), so the lookup falls back to it — otherwise
+ * those slugs would 404 now that the detail reads from the DB. The body falls
+ * back to the short description when an activity has no extended write-up yet.
  */
 
-async function getActividad(slug: string): Promise<Actividad | null> {
-  const actividades = await readPublishedActividades();
-  return actividades.find((a) => a.slug === slug) ?? null;
+/** The shape the detail page renders — shared by DB activities and the 2025 set. */
+interface ActividadView {
+  titulo: string;
+  slug: string;
+  descripcion: string;
+  imagen?: string;
+  cuerpo?: string;
+  fecha?: string;
+  lugar?: string;
+  inscripcionUrl?: string;
+}
+
+async function getActividad(slug: string): Promise<ActividadView | null> {
+  const fromDb = (await readPublishedActividades()).find(
+    (a) => a.slug === slug,
+  );
+  if (fromDb) return fromDb;
+  // Fallback to the hardcoded legacy 2025 set.
+  return actividades2025.find((a) => a.slug === slug) ?? null;
 }
 
 export async function generateStaticParams() {
-  const actividades = await readPublishedActividades();
-  return actividades.map((a) => ({ slug: a.slug }));
+  const fromDb = await readPublishedActividades();
+  const slugs = [
+    ...fromDb.map((a) => a.slug),
+    ...actividades2025.map((a) => a.slug),
+  ];
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

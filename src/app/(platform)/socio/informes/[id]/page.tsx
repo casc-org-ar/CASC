@@ -45,9 +45,6 @@ export default async function InformeDetailPage({
   if (!informe || informe.status !== "publicado") notFound();
 
   const pdfUrl = await resolvePdfUrl(informe.archivoUrl);
-  // Google Drive serves an HTML preview page (not a raw PDF), so it must be
-  // shown in an <iframe>, not an <object type="application/pdf">.
-  const isDriveEmbed = !!pdfUrl && pdfUrl.includes("drive.google.com");
 
   return (
     <div>
@@ -83,43 +80,23 @@ export default async function InformeDetailPage({
         {informe.descripcion}
       </p>
 
-      {/* Embedded PDF viewer. A Google Drive link renders in an <iframe> (Drive
-          serves an HTML preview page); an uploaded PDF (signed URL) or a direct
-          .pdf link renders in an <object type="application/pdf">. */}
+      {/* Embedded PDF viewer. An <iframe> renders both a Google Drive preview
+          page AND a raw PDF (signed URL from Storage or a direct .pdf link) —
+          more reliable than <object> in modern browsers. */}
       <div className="mt-6 overflow-hidden rounded-xl border border-border bg-surface">
-        {!pdfUrl ? (
+        {pdfUrl ? (
+          <iframe
+            src={pdfUrl}
+            title={informe.titulo}
+            className="h-[70vh] w-full"
+          />
+        ) : (
           <div className="flex flex-col items-center justify-center gap-2 py-16 text-center">
             <FileText className="h-8 w-8 text-accent" aria-hidden />
             <p className="text-sm text-ink-muted">
               Este informe todavía no tiene un archivo disponible.
             </p>
           </div>
-        ) : isDriveEmbed ? (
-          <iframe
-            src={pdfUrl}
-            title={informe.titulo}
-            className="h-[70vh] w-full"
-            allow="autoplay"
-          />
-        ) : (
-          <object
-            data={pdfUrl}
-            type="application/pdf"
-            className="h-[70vh] w-full"
-          >
-            <div className="flex flex-col items-center justify-center gap-2 py-16 text-center">
-              <FileText className="h-8 w-8 text-accent" aria-hidden />
-              <p className="text-sm text-ink-muted">
-                No se puede previsualizar el PDF aquí.
-              </p>
-              <a
-                href={pdfUrl}
-                className="text-sm font-medium text-primary hover:underline"
-              >
-                Descargar para verlo
-              </a>
-            </div>
-          </object>
         )}
       </div>
     </div>
