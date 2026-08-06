@@ -6,8 +6,7 @@ import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
 import { JoinCta } from "@/components/public/join-cta";
 import { ShareButtons } from "@/components/public/share-buttons";
 import { ButtonAnchor } from "@/components/ui/button";
-import { getPublicDataLayer } from "@/lib/data";
-import { onlyPublished } from "@/lib/data/published";
+import { readPublishedActividades } from "@/lib/data/actividades-read";
 import type { Actividad } from "@/lib/types/domain";
 
 /**
@@ -17,23 +16,13 @@ import type { Actividad } from "@/lib/types/domain";
  */
 
 async function getActividad(slug: string): Promise<Actividad | null> {
-  const actividades = onlyPublished(
-    await getPublicDataLayer().actividades.list(),
-  );
+  const actividades = await readPublishedActividades();
   return actividades.find((a) => a.slug === slug) ?? null;
 }
 
 export async function generateStaticParams() {
-  try {
-    const actividades = onlyPublished(
-      await getPublicDataLayer().actividades.list(),
-    );
-    return actividades.map((a) => ({ slug: a.slug }));
-  } catch {
-    // Table may not exist yet (migration pending) — don't break the build;
-    // pages are generated on-demand instead.
-    return [];
-  }
+  const actividades = await readPublishedActividades();
+  return actividades.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({

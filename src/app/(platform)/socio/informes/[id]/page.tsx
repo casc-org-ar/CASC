@@ -10,13 +10,24 @@ import { clerkEnabled } from "@/lib/auth/flag";
 const PDF_TTL_SECONDS = 60 * 60; // 1 hour
 
 /**
+ * A Google Drive "…/file/d/ID/view" link is a Drive PAGE, not the PDF — it
+ * can't be embedded in an <object>. Convert it to the embeddable preview form
+ * so pasted Drive links render. Non-Drive URLs are returned unchanged.
+ */
+function normalizePdfLink(url: string): string {
+  const m = url.match(/drive\.google\.com\/file\/d\/([A-Za-z0-9_-]+)/);
+  return m ? `https://drive.google.com/file/d/${m[1]}/preview` : url;
+}
+
+/**
  * Resolve the stored `archivoUrl` to a URL the browser can load. Uploaded PDFs
  * live in the private `informes` bucket as an object PATH, so we mint a signed
- * URL for them. A pasted external link (starts with http) is used as-is.
+ * URL for them. A pasted external link (starts with http) is used as-is, with
+ * Google Drive links normalized to their embeddable preview form.
  */
 async function resolvePdfUrl(archivoUrl: string): Promise<string | null> {
   if (!archivoUrl) return null;
-  if (archivoUrl.startsWith("http")) return archivoUrl;
+  if (archivoUrl.startsWith("http")) return normalizePdfLink(archivoUrl);
   // A stored path — only resolvable when Supabase is active.
   if (!clerkEnabled()) return archivoUrl;
   return signedUrl("informes", archivoUrl, { ttlSeconds: PDF_TTL_SECONDS });

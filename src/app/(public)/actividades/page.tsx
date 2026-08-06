@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { actividades2025 } from "@/lib/data/home-content";
 import { getPublicDataLayer } from "@/lib/data";
 import { onlyPublished } from "@/lib/data/published";
+import { readPublishedActividades } from "@/lib/data/actividades-read";
 
 /**
  * Actividades — migrated from actividades.html.
@@ -36,23 +37,21 @@ function formatDate(value: string): string {
 
 export default async function ActividadesPage() {
   const [actividades, blogPostsAll] = await Promise.all([
-    getPublicDataLayer().actividades.list(),
+    readPublishedActividades(),
     getPublicDataLayer().blog.list(),
   ]);
   const blogPosts = onlyPublished(blogPostsAll).sort((a, b) =>
     a.fecha < b.fecha ? 1 : -1,
   );
 
-  const activityItems: ContentCarouselItem[] = onlyPublished(actividades).map(
-    (item) => ({
-      id: item.id,
-      title: item.titulo,
-      description: item.descripcion,
-      image: item.imagen,
-      eyebrow: "Actividad",
-      href: `/actividades/${item.slug}`,
-    }),
-  );
+  const activityItems: ContentCarouselItem[] = actividades.map((item) => ({
+    id: item.id,
+    title: item.titulo,
+    description: item.descripcion,
+    image: item.imagen,
+    eyebrow: "Actividad",
+    href: `/actividades/${item.slug}`,
+  }));
 
   const activity2025Items: ContentCarouselItem[] = actividades2025.map(
     (item, index) => ({

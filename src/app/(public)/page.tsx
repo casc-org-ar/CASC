@@ -23,6 +23,7 @@ import { asociados } from "@/lib/data/asociados";
 import { beneficios, memberOf, sponsors } from "@/lib/data/home-content";
 import { getPublicDataLayer } from "@/lib/data";
 import { byVisibilidad, onlyPublished } from "@/lib/data/published";
+import { readPublishedActividades } from "@/lib/data/actividades-read";
 import { cn } from "@/lib/utils";
 
 /**
@@ -140,9 +141,10 @@ export default async function HomePage() {
     .sort((a, b) => (a.fecha < b.fecha ? 1 : -1))
     .slice(0, 6);
 
-  // Activities carousel — admin-managed, published only.
-  const homeActivityItems: ContentCarouselItem[] = onlyPublished(
-    await getPublicDataLayer().actividades.list(),
+  // Activities carousel — admin-managed, published only. Resilient read so a
+  // missing table (deploy timing) never breaks the home build.
+  const homeActivityItems: ContentCarouselItem[] = (
+    await readPublishedActividades()
   ).map((item) => ({
     id: item.id,
     title: item.titulo,
