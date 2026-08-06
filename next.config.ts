@@ -76,7 +76,7 @@ const csp = [
   `img-src 'self' data: https:`,
   `font-src 'self' data:`,
   `connect-src 'self' ${clerkFapi} https://*.protect.clerk.com ${supabaseHost} wss://${supabaseHost.replace(/^https?:\/\//, "")} https://www.google.com`,
-  `frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com https://*.protect.clerk.com https://www.google.com`,
+  `frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com https://*.protect.clerk.com https://www.google.com https://drive.google.com`,
   `worker-src 'self' blob:`,
   // Allow the informe PDF viewer (<object>) to load PDFs from Supabase Storage;
   // everything else stays blocked (no Flash/Java/arbitrary plugins).
