@@ -54,6 +54,8 @@ export interface Actividad extends BaseEntity {
   fecha?: string; // display date, optional until confirmed
   lugar?: string; // venue or format ("Auditorio…", "Online")
   inscripcionUrl?: string; // external registration/info link
+  /** Audience: members panel, public site, or both. Defaults to "ambos". */
+  visibilidad: Visibilidad;
   status: PublicationStatus;
 }
 

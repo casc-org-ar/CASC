@@ -30,16 +30,16 @@ interface ActividadView {
 }
 
 async function getActividad(slug: string): Promise<ActividadView | null> {
-  const fromDb = (await readPublishedActividades()).find(
+  const fromDb = (await readPublishedActividades("publico")).find(
     (a) => a.slug === slug,
   );
   if (fromDb) return fromDb;
-  // Fallback to the hardcoded legacy 2025 set.
+  // Fallback to the hardcoded legacy 2025 set (all public).
   return actividades2025.find((a) => a.slug === slug) ?? null;
 }
 
 export async function generateStaticParams() {
-  const fromDb = await readPublishedActividades();
+  const fromDb = await readPublishedActividades("publico");
   const slugs = [
     ...fromDb.map((a) => a.slug),
     ...actividades2025.map((a) => a.slug),

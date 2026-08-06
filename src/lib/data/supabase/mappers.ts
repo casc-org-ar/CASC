@@ -61,6 +61,7 @@ export const actividadMapper: EntityMapper<Actividad> = {
     fecha: (r.fecha as string | null) ?? undefined,
     lugar: (r.lugar as string | null) ?? undefined,
     inscripcionUrl: (r.inscripcion_url as string | null) ?? undefined,
+    visibilidad: (r.visibilidad as Actividad["visibilidad"] | null) ?? "ambos",
     status: r.status as Actividad["status"],
     createdAt: r.created_at as string,
     updatedAt: r.updated_at as string,
@@ -75,6 +76,7 @@ export const actividadMapper: EntityMapper<Actividad> = {
     put(row, "fecha", i.fecha);
     put(row, "lugar", i.lugar);
     put(row, "inscripcion_url", i.inscripcionUrl);
+    put(row, "visibilidad", i.visibilidad);
     put(row, "status", i.status);
     return row;
   },

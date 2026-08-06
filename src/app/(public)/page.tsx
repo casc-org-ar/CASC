@@ -144,7 +144,7 @@ export default async function HomePage() {
   // Activities carousel — admin-managed, published only. Resilient read so a
   // missing table (deploy timing) never breaks the home build.
   const homeActivityItems: ContentCarouselItem[] = (
-    await readPublishedActividades()
+    await readPublishedActividades("publico")
   ).map((item) => ({
     id: item.id,
     title: item.titulo,

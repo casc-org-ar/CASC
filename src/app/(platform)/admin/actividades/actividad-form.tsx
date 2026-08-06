@@ -119,16 +119,29 @@ export function ActividadForm({ actividad, onDone }: ActividadFormProps) {
         />
       </FormField>
 
-      <FormField label="Estado" htmlFor="status">
-        <Select
-          id="status"
-          name="status"
-          defaultValue={actividad?.status ?? "borrador"}
-        >
-          <option value="borrador">Borrador</option>
-          <option value="publicado">Publicado</option>
-        </Select>
-      </FormField>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <FormField label="¿Dónde se muestra?" htmlFor="visibilidad">
+          <Select
+            id="visibilidad"
+            name="visibilidad"
+            defaultValue={actividad?.visibilidad ?? "ambos"}
+          >
+            <option value="ambos">Socios y sitio público</option>
+            <option value="publico">Solo sitio público</option>
+            <option value="socios">Solo panel de socios</option>
+          </Select>
+        </FormField>
+        <FormField label="Estado" htmlFor="status">
+          <Select
+            id="status"
+            name="status"
+            defaultValue={actividad?.status ?? "borrador"}
+          >
+            <option value="borrador">Borrador</option>
+            <option value="publicado">Publicado</option>
+          </Select>
+        </FormField>
+      </div>
 
       <div className="flex justify-end gap-2 pt-2">
         <Button type="button" variant="secondary" onClick={onDone}>

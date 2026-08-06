@@ -619,6 +619,7 @@ export const actividades: Actividad[] = capacitaciones.map((c, i) => ({
   fecha: c.fecha,
   lugar: c.lugar,
   inscripcionUrl: c.inscripcionUrl,
+  visibilidad: "ambos",
   status: "publicado",
   createdAt: iso(2026, 7, 1),
   updatedAt: iso(2026, 7, 1),

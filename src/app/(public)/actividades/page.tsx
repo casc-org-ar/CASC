@@ -37,7 +37,7 @@ function formatDate(value: string): string {
 
 export default async function ActividadesPage() {
   const [actividades, blogPostsAll] = await Promise.all([
-    readPublishedActividades(),
+    readPublishedActividades("publico"),
     getPublicDataLayer().blog.list(),
   ]);
   const blogPosts = onlyPublished(blogPostsAll).sort((a, b) =>

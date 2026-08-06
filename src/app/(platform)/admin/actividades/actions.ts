@@ -35,6 +35,7 @@ function parseActividadForm(formData: FormData) {
     fecha: String(formData.get("fecha") ?? "").trim(),
     lugar: String(formData.get("lugar") ?? "").trim(),
     inscripcionUrl: String(formData.get("inscripcionUrl") ?? "").trim(),
+    visibilidad: String(formData.get("visibilidad") ?? "ambos"),
     status: String(formData.get("status") ?? "borrador"),
   });
 }

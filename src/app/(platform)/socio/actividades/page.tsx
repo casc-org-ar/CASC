@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { CardCover } from "@/components/shared/card-cover";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
@@ -14,7 +14,7 @@ export const metadata = { title: "Actividades" };
  * (/actividades/[slug]), which already renders the full activity.
  */
 export default async function SocioActividadesPage() {
-  const actividades = await readPublishedActividades();
+  const actividades = await readPublishedActividades("socios");
 
   return (
     <>
@@ -30,7 +30,7 @@ export default async function SocioActividadesPage() {
           {actividades.map((actividad) => (
             <Link
               key={actividad.id}
-              href={`/actividades/${actividad.slug}`}
+              href={`/socio/actividades/${actividad.slug}`}
               className="group block"
             >
               <Card interactive className="flex h-full flex-col overflow-hidden">
@@ -48,7 +48,7 @@ export default async function SocioActividadesPage() {
                 </CardDescription>
                 <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
                   Ver actividad
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </Card>
             </Link>

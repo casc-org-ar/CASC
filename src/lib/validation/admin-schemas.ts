@@ -41,6 +41,8 @@ export const actividadSchema = z.object({
   fecha: opt(40),
   lugar: opt(LIMITS.corto),
   inscripcionUrl: optUrl,
+  // Audience selector. Defaults to "ambos" (public + members).
+  visibilidad: z.enum(["socios", "publico", "ambos"]).default("ambos"),
   status,
 });
 
