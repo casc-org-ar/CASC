@@ -60,10 +60,26 @@ function parseBlogForm(formData: FormData) {
   });
 }
 
+/**
+ * Revalidate every place an article can surface, so a new/edited/removed post
+ * shows up immediately instead of a stale cached page. Blog + noticias are one
+ * entity now, so an article can appear on the public site (home, /noticias and
+ * its detail) AND in the socio panel, depending on its `visibilidad`.
+ */
+function revalidateArticleViews(): void {
+  revalidatePath("/admin/blog");
+  revalidatePath("/"); // home (últimas noticias)
+  revalidatePath("/noticias"); // public list
+  revalidatePath("/noticias", "layout"); // public detail pages [slug]
+  revalidatePath("/socio"); // socio home feed
+  revalidatePath("/socio/noticias"); // socio list
+  revalidatePath("/socio/noticias", "layout"); // socio detail pages [slug]
+}
+
 export async function createBlogPost(formData: FormData): Promise<void> {
   await requireRole("admin");
   await getDataLayer().blog.create(parseBlogForm(formData));
-  revalidatePath("/admin/blog");
+  revalidateArticleViews();
 }
 
 export async function updateBlogPost(
@@ -72,11 +88,11 @@ export async function updateBlogPost(
 ): Promise<void> {
   await requireRole("admin");
   await getDataLayer().blog.update(id, parseBlogForm(formData));
-  revalidatePath("/admin/blog");
+  revalidateArticleViews();
 }
 
 export async function deleteBlogPost(id: string): Promise<void> {
   await requireRole("admin");
   await getDataLayer().blog.remove(id);
-  revalidatePath("/admin/blog");
+  revalidateArticleViews();
 }
