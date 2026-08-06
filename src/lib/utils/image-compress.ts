@@ -12,6 +12,14 @@
  * decode error) so a submission is never blocked by compression.
  */
 
+/**
+ * Max ORIGINAL file size accepted before uploading, matching the server's
+ * Server Actions body limit (6 MB in next.config). Forms use this to reject an
+ * oversized file up front with a clear message.
+ */
+export const MAX_UPLOAD_MB = 6;
+export const MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024;
+
 /** Balanced defaults: sharp on screen, small on disk. */
 const MAX_EDGE = 1600; // longest side, in px
 const QUALITY = 0.8; // WebP quality (0–1)

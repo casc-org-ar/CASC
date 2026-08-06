@@ -7,7 +7,11 @@ import { FormField, Input, Select, Textarea } from "@/components/ui/field";
 import { FileOrLinkField } from "@/components/ui/file-or-link-field";
 import { useToast } from "@/components/ui/toast";
 import { uploadContentImage } from "@/lib/actions/upload-image";
-import { compressImage } from "@/lib/utils/image-compress";
+import {
+  compressImage,
+  MAX_UPLOAD_BYTES,
+  MAX_UPLOAD_MB,
+} from "@/lib/utils/image-compress";
 import { todayInBuenosAires } from "@/lib/utils";
 import type { BlogPost } from "@/lib/types/domain";
 import { createBlogPost, updateBlogPost } from "./actions";
@@ -76,6 +80,14 @@ export function BlogForm({
     setGalleryUploading(true);
     try {
       for (const file of files) {
+        // Reject an oversized original up front, with the reason and its size.
+        if (file.size > MAX_UPLOAD_BYTES) {
+          const mb = (file.size / (1024 * 1024)).toFixed(1);
+          toast.error(
+            `"${file.name}" pesa ${mb} MB. El máximo es ${MAX_UPLOAD_MB} MB.`,
+          );
+          continue;
+        }
         const optimized = await compressImage(file);
         const fd = new FormData();
         fd.set("file", optimized);

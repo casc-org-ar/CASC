@@ -4,8 +4,15 @@ import { Link2, Loader2, Upload } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/field";
 import { uploadContentImage } from "@/lib/actions/upload-image";
-import { compressImage } from "@/lib/utils/image-compress";
+import {
+  compressImage,
+  MAX_UPLOAD_BYTES,
+  MAX_UPLOAD_MB,
+} from "@/lib/utils/image-compress";
 import { cn } from "@/lib/utils";
+
+/** Human-readable MB for messages, e.g. "8.3 MB". */
+const formatMB = (bytes: number) => `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 
 type Mode = "upload" | "link";
 
@@ -53,6 +60,17 @@ export function FileOrLinkField({
     const file = e.target.files?.[0];
     if (!file) return;
     setError(null);
+
+    // Guard the original before doing anything: reject an oversized file up
+    // front with a clear reason, instead of letting the upload fail server-side.
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setError(
+        `El archivo pesa ${formatMB(file.size)}. El máximo es ${MAX_UPLOAD_MB} MB. Probá con una imagen más liviana.`,
+      );
+      e.target.value = "";
+      return;
+    }
+
     setUploading(true);
     try {
       // Compress/resize in the browser before uploading to save storage.
@@ -65,8 +83,16 @@ export function FileOrLinkField({
       } else {
         setError(result.error);
       }
-    } catch {
-      setError("No pudimos subir la imagen. Intentá de nuevo.");
+    } catch (err) {
+      // A body-size rejection from the server surfaces here; name the reason.
+      const msg = err instanceof Error ? err.message : "";
+      if (/body|413|exceeded|limit/i.test(msg)) {
+        setError(
+          `La imagen es demasiado pesada para subirla (máx ${MAX_UPLOAD_MB} MB). Probá con una más liviana.`,
+        );
+      } else {
+        setError("No pudimos subir la imagen. Intentá de nuevo.");
+      }
     } finally {
       setUploading(false);
       // Reset so re-picking the same file fires onChange again.
@@ -129,6 +155,12 @@ export function FileOrLinkField({
           {uploaded && !uploading && (
             <p className="mt-1.5 truncate text-xs text-ink-muted">
               Imagen cargada correctamente.
+            </p>
+          )}
+          {/* Preventive hint about the size limit, shown in the idle state. */}
+          {!uploaded && !uploading && !error && (
+            <p className="mt-1.5 text-xs text-ink-muted">
+              Formatos: JPG, PNG o WebP. Peso máximo: {MAX_UPLOAD_MB} MB.
             </p>
           )}
           {error && (
