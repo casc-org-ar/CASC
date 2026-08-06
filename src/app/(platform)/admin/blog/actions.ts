@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth/guard";
 import { getDataLayer } from "@/lib/data";
 import { blogSchema } from "@/lib/validation/admin-schemas";
+import { toEmbedUrl } from "@/lib/utils/video-embed";
 
 /**
  * Server actions for the admin Blog module. New entity — full CRUD. The
@@ -50,6 +51,7 @@ function parseBlogForm(formData: FormData) {
     cuerpo: String(formData.get("cuerpo") ?? "").trim(),
     portadaUrl: String(formData.get("portadaUrl") ?? "").trim(),
     imagenes: parseImagenes(formData),
+    videoUrl: toEmbedUrl(String(formData.get("videoUrl") ?? "").trim()),
     autor: String(formData.get("autor") ?? "").trim(),
     tags: tagsRaw
       ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean)

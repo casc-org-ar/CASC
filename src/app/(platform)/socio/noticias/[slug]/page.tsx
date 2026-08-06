@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { SafeImage } from "@/components/shared/safe-image";
+import { VideoEmbed } from "@/components/shared/video-embed";
 import { getDataLayer } from "@/lib/data";
 import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 
@@ -67,6 +68,8 @@ export default async function NoticiaDetailPage({
       <div className="mt-8 whitespace-pre-line text-base leading-relaxed text-ink">
         {noticia.cuerpo}
       </div>
+
+      <VideoEmbed url={noticia.videoUrl} title={noticia.titulo} />
     </article>
   );
 }

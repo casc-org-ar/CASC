@@ -259,6 +259,22 @@ export function BlogForm({
         </div>
       </FormField>
 
+      <FormField
+        label="Video de YouTube (opcional)"
+        htmlFor="videoUrl"
+      >
+        <Input
+          id="videoUrl"
+          name="videoUrl"
+          type="url"
+          defaultValue={post?.videoUrl}
+          placeholder="https://www.youtube.com/watch?v=…"
+        />
+        <p className="mt-1.5 text-xs text-ink-muted">
+          Pegá el link normal de YouTube; se muestra embebido dentro del artículo.
+        </p>
+      </FormField>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Autor" htmlFor="autor">
           <Input

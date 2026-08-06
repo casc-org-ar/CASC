@@ -174,6 +174,7 @@ export const blogMapper: EntityMapper<BlogPost> = {
     cuerpo: r.cuerpo as string,
     portadaUrl: (r.portada_url as string | null) ?? undefined,
     imagenes: (r.imagenes as string[] | null) ?? undefined,
+    videoUrl: (r.video_url as string | null) ?? undefined,
     autor: r.autor as string,
     tags: (r.tags as string[] | null) ?? [],
     visibilidad: (r.visibilidad as BlogPost["visibilidad"] | null) ?? "publico",
@@ -190,6 +191,7 @@ export const blogMapper: EntityMapper<BlogPost> = {
     put(row, "cuerpo", i.cuerpo);
     put(row, "portada_url", i.portadaUrl);
     put(row, "imagenes", i.imagenes);
+    put(row, "video_url", i.videoUrl);
     put(row, "autor", i.autor);
     put(row, "tags", i.tags);
     put(row, "visibilidad", i.visibilidad);

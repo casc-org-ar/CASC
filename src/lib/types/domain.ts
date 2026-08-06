@@ -88,6 +88,8 @@ export interface BlogPost extends BaseEntity {
   cuerpo: string; // rich body (markdown/plain for now)
   portadaUrl?: string; // cover image
   imagenes?: string[]; // gallery images shown in the article body
+  /** Optional embedded video (YouTube/Vimeo) shown in the article detail. */
+  videoUrl?: string;
   autor: string;
   tags: string[];
   /** Audience: members panel, public site, or both. Defaults to "publico". */

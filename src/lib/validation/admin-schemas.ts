@@ -78,6 +78,7 @@ export const blogSchema = z.object({
   cuerpo: req(LIMITS.largo),
   portadaUrl: optUrl,
   imagenes: z.array(z.string().max(1000)).max(30).optional(),
+  videoUrl: optUrl,
   autor: req(LIMITS.corto),
   tags: z.array(z.string().trim().max(60)).max(30),
   // Audience selector. Defaults to "publico" so a payload without the field

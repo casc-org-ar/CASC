@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SafeImage } from "@/components/shared/safe-image";
+import { VideoEmbed } from "@/components/shared/video-embed";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarDays, UserRound } from "lucide-react";
@@ -136,6 +137,9 @@ export default async function NoticiaPage({
               </p>
             ))}
         </div>
+
+        {/* Embedded video, when the article carries one. */}
+        <VideoEmbed url={post.videoUrl} title={post.titulo} />
 
         {/* Gallery images, when the article carries them. */}
         {post.imagenes && post.imagenes.length > 0 && (
