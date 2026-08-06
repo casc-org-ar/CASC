@@ -1,4 +1,4 @@
-import { FileText, Mail, Newspaper, Users, Video } from "lucide-react";
+import { CalendarDays, FileText, Mail, Newspaper, Users, Video } from "lucide-react";
 import Link from "next/link";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatCard } from "@/components/shared/stat-card";
@@ -70,9 +70,10 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardTitle className="mb-4">Accesos rápidos</CardTitle>
           <div className="space-y-2">
+            <QuickLink href="/admin/actividades" icon={CalendarDays} label="Gestionar actividades" />
             <QuickLink href="/admin/webinars" icon={Video} label="Gestionar webinars" />
             <QuickLink href="/admin/informes" icon={FileText} label="Gestionar informes" />
-            <QuickLink href="/admin/noticias" icon={Newspaper} label="Gestionar noticias" />
+            <QuickLink href="/admin/blog" icon={Newspaper} label="Gestionar noticias y blog" />
             <QuickLink href="/admin/newsletter" icon={Mail} label="Gestionar newsletter" />
             <QuickLink href="/admin/socios" icon={Users} label="Gestionar socios" />
           </div>

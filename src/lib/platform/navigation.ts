@@ -52,6 +52,7 @@ const NAV: Record<UserRole, NavItem[]> = {
   ],
   socio: [
     { label: "Inicio", href: "/socio", icon: Home },
+    { label: "Actividades", href: "/socio/actividades", icon: CalendarDays },
     { label: "Webinars", href: "/socio/webinars", icon: Video },
     { label: "Informes", href: "/socio/informes", icon: FileText },
     { label: "Noticias", href: "/socio/noticias", icon: Newspaper },
