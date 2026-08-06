@@ -648,7 +648,7 @@ export const asociados: Asociado[] = [
     "name": "Osdawash",
     "category": "Proveedores de servicios",
     "rubro": "Limpieza y mantenimiento de edificios",
-    "logo": "/assets/asociados/logos/osdawash.jpeg"
+    "logo": "/assets/asociados/logos/osdawash.png"
   },
   {
     "slug": "owismart",
@@ -1059,7 +1059,7 @@ export const asociados: Asociado[] = [
   },
   {
     "slug": "rentaled",
-    "name": "Rentaled",
+    "name": "RentaLED",
     "category": "Proveedores de servicios",
     "rubro": "Medios publicitarios",
     "logo": "/assets/asociados/logos/rentaled.png"
