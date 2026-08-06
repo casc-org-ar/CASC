@@ -84,6 +84,7 @@ export function InformeForm({ informe, onDone }: InformeFormProps) {
           name="archivoUrl"
           value={archivoUrl}
           onChange={setArchivoUrl}
+          kind="pdf"
           accept=".pdf"
           uploadLabel="Subir PDF"
           linkPlaceholder="https://ejemplo.com/informe.pdf"

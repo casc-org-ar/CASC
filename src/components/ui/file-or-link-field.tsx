@@ -4,6 +4,7 @@ import { Link2, Loader2, Upload } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/field";
 import { uploadContentImage } from "@/lib/actions/upload-image";
+import { uploadInformePdf } from "@/lib/actions/upload-informe";
 import {
   compressImage,
   MAX_UPLOAD_BYTES,
@@ -14,14 +15,24 @@ import { cn } from "@/lib/utils";
 /** Human-readable MB for messages, e.g. "8.3 MB". */
 const formatMB = (bytes: number) => `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 
+/** PDF uploads have their own (larger) size ceiling. */
+const MAX_PDF_MB = 20;
+const MAX_PDF_BYTES = MAX_PDF_MB * 1024 * 1024;
+
 type Mode = "upload" | "link";
 
 interface FileOrLinkFieldProps {
   /** Form field name; the resolved URL is submitted under this name as a hidden input. */
   name: string;
-  /** Current value (an uploaded mock path or a pasted link). */
+  /** Current value (an uploaded URL/path or a pasted link). */
   value: string;
   onChange: (value: string) => void;
+  /**
+   * What kind of file this field uploads. "image" (default) compresses and
+   * stores a public URL; "pdf" uploads to the private informes bucket and
+   * stores the object path.
+   */
+  kind?: "image" | "pdf";
   /** `accept` attribute for the file input, e.g. "image/*" or ".pdf". */
   accept?: string;
   /** Label for the upload button, e.g. "Subir imagen" or "Subir PDF". */
@@ -43,11 +54,15 @@ export function FileOrLinkField({
   name,
   value,
   onChange,
+  kind = "image",
   accept,
   uploadLabel = "Subir archivo",
   linkPlaceholder = "https://…",
   hint,
 }: FileOrLinkFieldProps) {
+  const isPdf = kind === "pdf";
+  const limitBytes = isPdf ? MAX_PDF_BYTES : MAX_UPLOAD_BYTES;
+  const limitMb = isPdf ? MAX_PDF_MB : MAX_UPLOAD_MB;
   // Start on the tab that matches the existing value: a pasted link stays on
   // the link tab, everything else (empty or an uploaded URL) on upload.
   const [mode, setMode] = useState<Mode>(
@@ -63,9 +78,9 @@ export function FileOrLinkField({
 
     // Guard the original before doing anything: reject an oversized file up
     // front with a clear reason, instead of letting the upload fail server-side.
-    if (file.size > MAX_UPLOAD_BYTES) {
+    if (file.size > limitBytes) {
       setError(
-        `El archivo pesa ${formatMB(file.size)}. El máximo es ${MAX_UPLOAD_MB} MB. Probá con una imagen más liviana.`,
+        `El archivo pesa ${formatMB(file.size)}. El máximo es ${limitMb} MB. Probá con un archivo más liviano.`,
       );
       e.target.value = "";
       return;
@@ -73,25 +88,30 @@ export function FileOrLinkField({
 
     setUploading(true);
     try {
-      // Compress/resize in the browser before uploading to save storage.
-      const optimized = await compressImage(file);
-      const fd = new FormData();
-      fd.set("file", optimized);
-      const result = await uploadContentImage(fd);
-      if (result.ok) {
-        onChange(result.url);
+      if (isPdf) {
+        const fd = new FormData();
+        fd.set("file", file);
+        const result = await uploadInformePdf(fd);
+        if (result.ok) onChange(result.path);
+        else setError(result.error);
       } else {
-        setError(result.error);
+        // Compress/resize in the browser before uploading to save storage.
+        const optimized = await compressImage(file);
+        const fd = new FormData();
+        fd.set("file", optimized);
+        const result = await uploadContentImage(fd);
+        if (result.ok) onChange(result.url);
+        else setError(result.error);
       }
     } catch (err) {
       // A body-size rejection from the server surfaces here; name the reason.
       const msg = err instanceof Error ? err.message : "";
       if (/body|413|exceeded|limit/i.test(msg)) {
         setError(
-          `La imagen es demasiado pesada para subirla (máx ${MAX_UPLOAD_MB} MB). Probá con una más liviana.`,
+          `El archivo es demasiado pesado para subirlo (máx ${limitMb} MB). Probá con uno más liviano.`,
         );
       } else {
-        setError("No pudimos subir la imagen. Intentá de nuevo.");
+        setError("No pudimos subir el archivo. Intentá de nuevo.");
       }
     } finally {
       setUploading(false);
@@ -101,8 +121,11 @@ export function FileOrLinkField({
   };
 
   const inputId = `${name}-file`;
-  // A stored value that is a real URL counts as uploaded.
-  const uploaded = value.startsWith("http");
+  // An uploaded value: a public URL (images) or a stored object path (PDFs).
+  // A pasted external link always starts with http and is not an "upload".
+  const uploaded = isPdf
+    ? value.length > 0 && !value.startsWith("http")
+    : value.startsWith("http");
 
   return (
     <div>
@@ -140,7 +163,11 @@ export function FileOrLinkField({
             ) : (
               <>
                 <Upload className="h-4 w-4 text-primary" />
-                {uploaded ? "Cambiar imagen" : uploadLabel}
+                {uploaded
+                  ? isPdf
+                    ? "Cambiar archivo"
+                    : "Cambiar imagen"
+                  : uploadLabel}
               </>
             )}
           </label>
@@ -154,13 +181,15 @@ export function FileOrLinkField({
           />
           {uploaded && !uploading && (
             <p className="mt-1.5 truncate text-xs text-ink-muted">
-              Imagen cargada correctamente.
+              {isPdf ? "PDF cargado correctamente." : "Imagen cargada correctamente."}
             </p>
           )}
           {/* Preventive hint about the size limit, shown in the idle state. */}
           {!uploaded && !uploading && !error && (
             <p className="mt-1.5 text-xs text-ink-muted">
-              Formatos: JPG, PNG o WebP. Peso máximo: {MAX_UPLOAD_MB} MB.
+              {isPdf
+                ? `Formato: PDF. Peso máximo: ${limitMb} MB.`
+                : `Formatos: JPG, PNG o WebP. Peso máximo: ${limitMb} MB.`}
             </p>
           )}
           {error && (

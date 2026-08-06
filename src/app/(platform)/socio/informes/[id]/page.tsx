@@ -3,6 +3,24 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonAnchor } from "@/components/ui/button";
 import { getDataLayer } from "@/lib/data";
+import { signedUrl } from "@/lib/data/supabase/storage";
+import { clerkEnabled } from "@/lib/auth/flag";
+
+/** How long the informe PDF stays viewable — enough to read it in one sitting. */
+const PDF_TTL_SECONDS = 60 * 60; // 1 hour
+
+/**
+ * Resolve the stored `archivoUrl` to a URL the browser can load. Uploaded PDFs
+ * live in the private `informes` bucket as an object PATH, so we mint a signed
+ * URL for them. A pasted external link (starts with http) is used as-is.
+ */
+async function resolvePdfUrl(archivoUrl: string): Promise<string | null> {
+  if (!archivoUrl) return null;
+  if (archivoUrl.startsWith("http")) return archivoUrl;
+  // A stored path — only resolvable when Supabase is active.
+  if (!clerkEnabled()) return archivoUrl;
+  return signedUrl("informes", archivoUrl, { ttlSeconds: PDF_TTL_SECONDS });
+}
 
 /** Individual informe page: embedded PDF viewer + download (published only). */
 export default async function InformeDetailPage({
@@ -14,6 +32,8 @@ export default async function InformeDetailPage({
   const informe = await getDataLayer().informes.getById(id);
 
   if (!informe || informe.status !== "publicado") notFound();
+
+  const pdfUrl = await resolvePdfUrl(informe.archivoUrl);
 
   return (
     <div>
@@ -37,39 +57,48 @@ export default async function InformeDetailPage({
             {new Date(informe.fecha).toLocaleDateString("es-AR")}
           </p>
         </div>
-        <ButtonAnchor
-          href={informe.archivoUrl}
-          download
-        >
-          <FileDown className="h-4 w-4" />
-          Descargar PDF
-        </ButtonAnchor>
+        {pdfUrl && (
+          <ButtonAnchor href={pdfUrl} download>
+            <FileDown className="h-4 w-4" />
+            Descargar PDF
+          </ButtonAnchor>
+        )}
       </div>
 
       <p className="mt-4 text-base leading-relaxed text-ink">
         {informe.descripcion}
       </p>
 
-      {/* Embedded PDF viewer. In production the URL comes from Vercel Blob. */}
+      {/* Embedded PDF viewer. The URL is a signed URL for uploaded PDFs (private
+          bucket) or the pasted external link. */}
       <div className="mt-6 overflow-hidden rounded-xl border border-border bg-surface">
-        <object
-          data={informe.archivoUrl}
-          type="application/pdf"
-          className="h-[70vh] w-full"
-        >
+        {pdfUrl ? (
+          <object
+            data={pdfUrl}
+            type="application/pdf"
+            className="h-[70vh] w-full"
+          >
+            <div className="flex flex-col items-center justify-center gap-2 py-16 text-center">
+              <FileText className="h-8 w-8 text-accent" aria-hidden />
+              <p className="text-sm text-ink-muted">
+                No se puede previsualizar el PDF aquí.
+              </p>
+              <a
+                href={pdfUrl}
+                className="text-sm font-medium text-primary hover:underline"
+              >
+                Descargar para verlo
+              </a>
+            </div>
+          </object>
+        ) : (
           <div className="flex flex-col items-center justify-center gap-2 py-16 text-center">
             <FileText className="h-8 w-8 text-accent" aria-hidden />
             <p className="text-sm text-ink-muted">
-              No se puede previsualizar el PDF aquí.
+              Este informe todavía no tiene un archivo disponible.
             </p>
-            <a
-              href={informe.archivoUrl}
-              className="text-sm font-medium text-primary hover:underline"
-            >
-              Descargar para verlo
-            </a>
           </div>
-        </object>
+        )}
       </div>
     </div>
   );

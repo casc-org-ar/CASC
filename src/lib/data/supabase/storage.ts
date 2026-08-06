@@ -100,12 +100,12 @@ export async function uploadFile(
 export async function signedUrl(
   bucket: BucketName,
   path: string,
-  opts: { download?: boolean | string } = {},
+  opts: { download?: boolean | string; ttlSeconds?: number } = {},
 ): Promise<string | null> {
   const supabase = createSupabaseClient();
   const { data, error } = await supabase.storage
     .from(bucket)
-    .createSignedUrl(path, SIGNED_URL_TTL_SECONDS, {
+    .createSignedUrl(path, opts.ttlSeconds ?? SIGNED_URL_TTL_SECONDS, {
       download: opts.download ?? false,
     });
 
