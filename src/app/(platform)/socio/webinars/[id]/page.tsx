@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { ButtonAnchor } from "@/components/ui/button";
 import { getDataLayer } from "@/lib/data";
+import { toEmbedUrl } from "@/lib/utils/video-embed";
 
 /** Individual webinar page: embedded player + attached material (published only). */
 export default async function WebinarDetailPage({
@@ -38,7 +39,7 @@ export default async function WebinarDetailPage({
 
       <div className="mt-6 aspect-video w-full max-w-4xl overflow-hidden rounded-xl bg-black">
         <iframe
-          src={webinar.videoUrl}
+          src={toEmbedUrl(webinar.videoUrl)}
           title={webinar.titulo}
           className="h-full w-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

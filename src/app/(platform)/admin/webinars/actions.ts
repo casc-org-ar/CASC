@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth/guard";
 import { getDataLayer } from "@/lib/data";
 import { webinarSchema } from "@/lib/validation/admin-schemas";
+import { toEmbedUrl } from "@/lib/utils/video-embed";
 
 /**
  * Server actions for the admin Webinars module. They write through the
@@ -16,7 +17,9 @@ function parseWebinarForm(formData: FormData) {
     titulo: formData.get("titulo") ?? "",
     descripcion: formData.get("descripcion") ?? "",
     fecha: formData.get("fecha") ?? "",
-    videoUrl: formData.get("videoUrl") ?? "",
+    // Normalize any YouTube/Vimeo link to its embeddable form so a normal
+    // watch URL doesn't get "refused to connect" in the iframe.
+    videoUrl: toEmbedUrl(String(formData.get("videoUrl") ?? "")),
     portadaUrl: formData.get("portadaUrl") ?? "",
     categoria: formData.get("categoria") ?? "",
     materialAdjuntoUrl: formData.get("materialAdjuntoUrl") ?? "",
