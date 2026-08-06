@@ -145,12 +145,15 @@ function HomeSectionHeader({
 
 export default async function HomePage() {
   // Noticias section is fed by published blog posts marked for the public site.
+  // Home preview: the latest few news (2 full rows of 3 on desktop; a swipeable
+  // carousel on mobile). Capped so it never grows long — the full archive lives
+  // in /noticias with its own pagination.
   const noticias = byVisibilidad(
     onlyPublished(await getPublicDataLayer().blog.list()),
     "publico",
   )
     .sort((a, b) => (a.fecha < b.fecha ? 1 : -1))
-    .slice(0, 3);
+    .slice(0, 6);
 
   return (
     <>
