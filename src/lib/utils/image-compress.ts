@@ -16,6 +16,9 @@
 const MAX_EDGE = 1600; // longest side, in px
 const QUALITY = 0.8; // WebP quality (0–1)
 const OUTPUT_TYPE = "image/webp";
+/** Step quality down until the result is at most this size (well under the
+ * server's body limit). A detailed 1600px image can still be large at q0.8. */
+const TARGET_MAX_BYTES = 1.2 * 1024 * 1024; // 1.2 MB
 
 /** Types we can safely re-encode. SVGs and others pass through untouched. */
 const COMPRESSIBLE = new Set([
@@ -48,9 +51,18 @@ export async function compressImage(file: File): Promise<File> {
     ctx.drawImage(bitmap, 0, 0, targetW, targetH);
     bitmap.close();
 
-    const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, OUTPUT_TYPE, QUALITY),
-    );
+    const encode = (q: number) =>
+      new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, OUTPUT_TYPE, q),
+      );
+
+    // Encode at the default quality, then step it down if the result is still
+    // heavy, so a very detailed image can't blow past the server's body limit.
+    let blob = await encode(QUALITY);
+    for (const q of [0.65, 0.5, 0.4]) {
+      if (blob && blob.size <= TARGET_MAX_BYTES) break;
+      blob = await encode(q);
+    }
     if (!blob) return file;
 
     // If compression didn't actually help (e.g. an already-tiny image), keep

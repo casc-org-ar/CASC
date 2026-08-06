@@ -107,6 +107,15 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  experimental: {
+    serverActions: {
+      // Uploads (cover images, CVs) travel through Server Actions. The default
+      // 1 MB body cap rejects a phone photo before our client-side compression
+      // can even help in edge cases. 6 MB leaves margin for an original image
+      // and the 5 MB CV limit in the Bolsa de Trabajo.
+      bodySizeLimit: "6mb",
+    },
+  },
   images: {
     // Clerk serves user avatars from img.clerk.com; allow next/image to load it.
     remotePatterns: [{ protocol: "https", hostname: "img.clerk.com" }],
