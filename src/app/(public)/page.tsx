@@ -54,12 +54,14 @@ const heroSlides = [
     mobile: "/assets/banners/banner-35anios-mobile.jpg",
     alt: "CASC — 35 años de la Cámara Argentina de Shopping Centers",
   },
-  {
-    desktop: "/assets/banners/banner-webinar-web.jpg",
-    tablet: "/assets/banners/banner-webinar-tablet.jpg",
-    mobile: "/assets/banners/banner-webinar-mobile.jpg",
-    alt: "Webinar: Estrategia Phygital en Shopping Centers — martes 11 de agosto",
-  },
+  // Banner del webinar oculto por momento (pedido del cliente). Se reactiva
+  // descomentando este slide; los archivos siguen en public/assets/banners.
+  // {
+  //   desktop: "/assets/banners/banner-webinar-web.jpg",
+  //   tablet: "/assets/banners/banner-webinar-tablet.jpg",
+  //   mobile: "/assets/banners/banner-webinar-mobile.jpg",
+  //   alt: "Webinar: Estrategia Phygital en Shopping Centers — martes 11 de agosto",
+  // },
   {
     desktop: "/assets/banners/banner-2-1.webp",
     tablet: "/assets/banners/banner-2-2.webp",
