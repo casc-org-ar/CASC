@@ -49,6 +49,12 @@ const industriaStats: { value: number; suffix: string; label: string }[] = [
 
 const heroSlides = [
   {
+    desktop: "/assets/banners/banner-35anios-web.jpg",
+    tablet: "/assets/banners/banner-35anios-tablet.jpg",
+    mobile: "/assets/banners/banner-35anios-mobile.jpg",
+    alt: "CASC — 35 años de la Cámara Argentina de Shopping Centers",
+  },
+  {
     desktop: "/assets/banners/banner-webinar-web.jpg",
     tablet: "/assets/banners/banner-webinar-tablet.jpg",
     mobile: "/assets/banners/banner-webinar-mobile.jpg",
