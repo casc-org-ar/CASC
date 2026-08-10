@@ -340,6 +340,28 @@ export const asociados: Asociado[] = [
     "rubro": "Arquitectura, diseño e ingeniería"
   },
   {
+    "slug": "dino-mall-alto-verde",
+    "name": "Dino Mall Alto Verde",
+    "category": "Shopping Centers",
+    "logo": "/assets/asociados/logos/dinomall_altoverde.webp",
+    "direccion": "Rodrigo del Busto 4086 – Córdoba – Pcia. de Córdoba",
+    "telefono": "54 351 526 1500",
+    "web": "https://dinomall.com.ar/",
+    "inauguracion": "Noviembre de 2003",
+    "locales": "116"
+  },
+  {
+    "slug": "dino-mall-ruta-20",
+    "name": "Dino Mall Ruta 20",
+    "category": "Shopping Centers",
+    "logo": "/assets/asociados/logos/dinomall-ruta20.webp",
+    "direccion": "Av. Fuerza Aérea Argentina 1700 – Córdoba – Pcia. de Córdoba",
+    "telefono": "54 351 526 1500",
+    "web": "https://dinomall.com.ar/",
+    "inauguracion": "Año 2006",
+    "locales": "47"
+  },
+  {
     "slug": "distrito-arcos-premium-outlet",
     "name": "Distrito Arcos Premium Outlet",
     "category": "Shopping Centers",
@@ -482,14 +504,14 @@ export const asociados: Asociado[] = [
     "name": "IE - Inteligencia Energética",
     "category": "Proveedores de servicios",
     "rubro": "Arquitectura, diseño e ingeniería",
-    "logo": "/assets/asociados/logos/ie-inteligencia-energetica.png"
+    "logo": "/assets/asociados/logos/ie-inteligencia-energetica.webp"
   },
   {
     "slug": "interurban",
     "name": "Interurban",
     "category": "Proveedores de servicios",
     "rubro": "Consultoría y management",
-    "logo": "/assets/asociados/logos/interurban.jpg"
+    "logo": "/assets/asociados/logos/interurban.webp"
   },
   {
     "slug": "la-barraca-mall",
@@ -508,7 +530,7 @@ export const asociados: Asociado[] = [
     "name": "Lubeca Tech",
     "category": "Proveedores de servicios",
     "rubro": "Soluciones tecnológicas",
-    "logo": "/assets/asociados/logos/lubeca-tech.png"
+    "logo": "/assets/asociados/logos/lubeca.webp"
   },
   {
     "slug": "maschwitz-mall",
@@ -535,7 +557,7 @@ export const asociados: Asociado[] = [
     "name": "MDV Lights",
     "category": "Proveedores de servicios",
     "rubro": "Arquitectura, diseño e ingeniería",
-    "logo": "/assets/asociados/logos/mdv-lights.png"
+    "logo": "/assets/asociados/logos/mdv-lights.webp"
   },
   {
     "slug": "mendoza-shopping",
@@ -554,7 +576,7 @@ export const asociados: Asociado[] = [
     "name": "Negozona",
     "category": "Proveedores de servicios",
     "rubro": "Consultoría y management",
-    "logo": "/assets/asociados/logos/negozona.png"
+    "logo": "/assets/asociados/logos/negozona.webp"
   },
   {
     "slug": "neverland",
@@ -648,14 +670,14 @@ export const asociados: Asociado[] = [
     "name": "Osdawash",
     "category": "Proveedores de servicios",
     "rubro": "Limpieza y mantenimiento de edificios",
-    "logo": "/assets/asociados/logos/osdawash.png"
+    "logo": "/assets/asociados/logos/osdawash.webp"
   },
   {
     "slug": "owismart",
     "name": "Owismart",
     "category": "Proveedores de servicios",
     "rubro": "Soluciones tecnológicas",
-    "logo": "/assets/asociados/logos/owismart.png"
+    "logo": "/assets/asociados/logos/owismart.webp"
   },
   {
     "slug": "palmares-mall",
@@ -1021,7 +1043,7 @@ export const asociados: Asociado[] = [
     "name": "Proyeco",
     "category": "Proveedores de servicios",
     "rubro": "Arquitectura, diseño e ingeniería",
-    "logo": "/assets/asociados/logos/proyeco.png"
+    "logo": "/assets/asociados/logos/proyeco.webp"
   },
   {
     "slug": "puerto-plaza",
@@ -1062,21 +1084,21 @@ export const asociados: Asociado[] = [
     "name": "RentaLED",
     "category": "Proveedores de servicios",
     "rubro": "Medios publicitarios",
-    "logo": "/assets/asociados/logos/rentaled.png"
+    "logo": "/assets/asociados/logos/rentaled.webp"
   },
   {
     "slug": "retailcheck",
     "name": "Retailcheck",
     "category": "Proveedores de servicios",
     "rubro": "Soluciones tecnológicas",
-    "logo": "/assets/asociados/logos/retailcheck.png"
+    "logo": "/assets/asociados/logos/retailcheck.webp"
   },
   {
     "slug": "retco",
     "name": "Retco",
     "category": "Proveedores de servicios",
     "rubro": "Consultoría y management",
-    "logo": "/assets/asociados/logos/retco.jpg"
+    "logo": "/assets/asociados/logos/retco.webp"
   },
   {
     "slug": "ribera-shopping",
@@ -1095,7 +1117,7 @@ export const asociados: Asociado[] = [
     "name": "RM Consultoría",
     "category": "Proveedores de servicios",
     "rubro": "Consultoría y management",
-    "logo": "/assets/asociados/logos/rm-consultoria.jpg"
+    "logo": "/assets/asociados/logos/rodolfo-mercado-consultor.webp"
   },
   {
     "slug": "san-justo-shopping",
@@ -1214,7 +1236,7 @@ export const asociados: Asociado[] = [
     "name": "Xperts Consultores",
     "category": "Proveedores de servicios",
     "rubro": "Soluciones tecnológicas",
-    "logo": "/assets/asociados/logos/xperts-consultores.png"
+    "logo": "/assets/asociados/logos/xperts-consultores.webp"
   }
 ];
 

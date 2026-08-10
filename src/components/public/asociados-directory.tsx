@@ -222,9 +222,9 @@ function AsociadoCard({ asociado }: { asociado: AsociadoDirectoryItem }) {
               alt={asociado.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-              /* Generous, uniform padding so logos of different proportions
-                 read at a similar visual size and never touch the edges. */
-              className="object-contain p-8 transition-transform duration-200 ease-out group-hover:scale-[1.03]"
+              /* Logos are now uniform 500×500 squares, so they fill the square
+                 tile edge to edge (no padding needed). */
+              className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
             />
           ) : (
             <span className="absolute inset-0 flex items-center justify-center text-5xl font-bold text-accent">

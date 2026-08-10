@@ -69,17 +69,16 @@ export default async function AsociadoFichaPage({
         </Link>
 
         <div className="grid gap-10 md:grid-cols-[280px_1fr] lg:gap-16">
-          {/* Logo — on a white square card so transparent logos read cleanly
-              and every ficha looks uniform (matches the directory cards). */}
+          {/* Logo — uniform 500×500 square, filling its tile edge to edge. */}
           <div className="md:sticky md:top-24 md:self-start">
-            <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-white p-6">
+            <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-white">
               {asociado.logo ? (
                 <Image
                   src={asociado.logo}
                   alt={asociado.name}
                   width={280}
                   height={280}
-                  className="max-h-full w-full object-contain"
+                  className="h-full w-full object-cover"
                 />
               ) : (
                 <span className="text-6xl font-bold text-accent">
