@@ -68,8 +68,11 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/unoporunomarketingintegrado.webp",
     "web": "www.1por1.com.ar",
-    "actividad": "Servicios para el desarrollo de negocios. Estrategias competitivas y de marketing para Centros Comerciales y Retailers. Estudios para implantación de nuevos centros y expansión de los existentes.",
-    "rubro": "Marketing y publicidad"
+    "actividad": "Servicios para el desarrollo de negocios. Estrategias competitivas y de marketing para Centros Comerciales y Retailers. Estudios para implantación de nuevos centros y expansión de existentes.",
+    "rubro": "Marketing y publicidad",
+    "direccion": "27 de abril 424 - 5to A - Córdoba - Pcia. de Córdoba",
+    "telefono": "54 9 351 555 8533",
+    "contacto": "Oscar Piccardo – opiccardo@1por1.com.ar"
   },
   {
     "slug": "abasto-shopping",
@@ -89,9 +92,11 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/airbits.webp",
     "web": "www.airbits.com.ar",
-    "contacto": "Pablo Honnorat – Socio Gerente",
+    "contacto": "Pablo Honnorat – pablo.honnorat@airbits.com.ar",
     "actividad": "La más avanzada tecnología para centros comerciales. Conteo de personas y análisis de tráfico. Sensores IoT de presencia y cámaras inteligentes. Mapas de calor. Análisis RFM. Guest WiFi.",
-    "rubro": "Soluciones tecnológicas"
+    "rubro": "Soluciones tecnológicas",
+    "direccion": "Entre Ríos 142 - 4° C - Resistencia - Pcia. de Chaco",
+    "telefono": "54 9 362 473 3535"
   },
   {
     "slug": "alcorta-shopping",
@@ -111,9 +116,11 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/aldo-volpe-arquitectos.webp",
     "web": "www.aldovolpe.com.ar",
-    "contacto": "Arq. Aldo Volpe",
-    "actividad": "Planificación física y diseño arquitectónico de centros comerciales y complejos de usos mixtos. Arquitectura para servicios en general. Consultoría.",
-    "rubro": "Arquitectura, diseño e ingeniería"
+    "contacto": "Mercedes Volpe – mvolpe@aldovolpe.com.ar",
+    "actividad": "Arquitectura y Asesoramiento para el desarrollo y planificación física de emprendimientos comerciales, de servicios y de usos mixtos. Su experiencia se ha nutrido del contacto con developers e inversores, participando desde el nacimiento mismo de la industria del Shopping Center en Argentina y países limítrofes, con un rol destacado en la concreción de sus hitos más importantes.",
+    "rubro": "Arquitectura, diseño e ingeniería",
+    "direccion": "O'Higgins 3715 - CABA",
+    "telefono": "11 5697 5708"
   },
   {
     "slug": "alto-avellaneda-shopping",
@@ -194,17 +201,21 @@ export const asociados: Asociado[] = [
     "logo": "/assets/asociados/logos/appa.webp",
     "web": "www.weareappa.com",
     "actividad": "¡appa! es la plataforma lider en fidelización y gestión digital para centros comerciales, diseñada para optimizar la operación y reducir costos. Elimina las filas en stands de promociones y minimiza la necesidad de personal operativo a través de inteligencia artificial para la validación automática de facturas, integra de forma nativa el control de parking y barreras, permitiendo al usuario obtener beneficios mientras que el shopping accede a un ecosistema de insights y data en tiempo real, permitiendo impactar a los clientes mediante canales de comunicación segmentados basados en su comportamiento real de compra.",
-    "rubro": "Soluciones tecnológicas"
+    "rubro": "Soluciones tecnológicas",
+    "direccion": "Vedia 3892 - CABA",
+    "telefono": "54 9 11 6176 1546",
+    "contacto": "Sabrina Seguí – ssegui@weareappa.com"
   },
   {
     "slug": "artisdeco",
     "name": "Artisdeco",
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/artisdeco.webp",
-    "web": "www.artisdeco.com.ar",
-    "contacto": "Noelia Nasir",
-    "actividad": "Ambientación navideña y seasonal para centros comerciales, grandes espacios, vidrieras, puntos de venta y eventos exclusivos de alto impacto, con más de 18 años en el mercado. Organización integral de eventos llave en mano. Brand Experience, activaciones de marca, acciones promocionales, producción técnica y artística, artistas itinerantes, talleres temáticos y mucho más.",
-    "rubro": "Decoración navideña"
+    "web": "artisdeco.com.ar",
+    "contacto": "Noelia Nasir – noelia@artisdeco.com.ar",
+    "actividad": "Ambientación navideña y seasonal para centros comerciales, grandes espacios, vidrieras, puntos de venta y eventos exclusivos de alto impacto, con más de 18 años en el mercado. Organización integral de eventos llave en mano. Brand Experience, activaciones de marca, acciones promocionales, producción técnica y artística, artistas itinerantes, talleres temáticos.",
+    "rubro": "Decoración navideña",
+    "telefono": "54 9 11 6440-3288"
   },
   {
     "slug": "atlas-caballito",
@@ -266,8 +277,11 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/centros-comerciales-latinoamerica-ccla.webp",
     "web": "www.cclatinoamerica.com.ar",
-    "actividad": "Estudios de Factibilidad para el desarrollo de Galerías, Centros Comerciales y Shoppings Centers. Comercialización de locales, espacios para stands y grandes superficies. Auditorías. Control de Calidad en procesos administrativos y comerciales. Reconversión de Espacios Comerciales. Diseño e Implementación de campañas de Marketing. Desarrollo de Programas de Fidelización de clientes.",
-    "rubro": "Consultoría y management"
+    "actividad": "Estudios de factibilidad para el desarrollo de Galerías, Centros Comerciales y Shoppings Centers. Comercialización de locales, espacios para stands y grandes superficies. Auditorías. Control de Calidad en procesos administrativos y comerciales. Reconversión de Espacios Comerciales. Diseño e Implementación de campañas de Marketing. Desarrollo de Programas de Fidelización de clientes.",
+    "rubro": "Consultoría y management",
+    "direccion": "Roque Ferreyra 1948 - Córdoba - Pcia. de Córdoba",
+    "telefono": "54 9 351 522 7657",
+    "contacto": "Daniel Coli – ccldaniel.coli@gmail.com"
   },
   {
     "slug": "cinemacenter",
@@ -283,8 +297,9 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/city-center-rosario.webp",
     "web": "www.citycenter-rosario.com.ar",
-    "actividad": "Servicios relacionados con juegos de azar y apuestas N.C.P. // Servicios de expendio de comidas y bebidas en establecimientos con servicio de mesa y/o en mostrador N.C.P. // Servicios de alojamiento en hoteles, hosterías y residenciales similares, excepto por hora, que incluyen servicio de restaurante al público // Servicios inmobiliarios realizados por cuenta propia, con bienes urbanos propios o arrendados N.C.P. // Servicios de alquiler y explotación de inmuebles para fiestas, convenciones y otros eventos similares // Servicios de playas de estacionamiento y garajes // Servicios empresariales N.C.P.",
-    "rubro": "Hotelería, eventos"
+    "actividad": "Complejo de Entretenimientos conformado por Hotel 5 estrellas de la cadena Accor, Spa, Casino, Centro de Convenciones y diferentes espacios gastronómicos. Emplazado en la ciudad de Rosario, Pcia. de Santa Fe, su acceso se ubica sobre el ingreso sur de la ciudad, llegando por la Autopista desde Buenos Aires.",
+    "rubro": "Hotelería, eventos",
+    "direccion": "Bv. Oroño y Av. Circunvalación - Rosario - Pcia. de Santa Fe"
   },
   {
     "slug": "clash",
@@ -292,9 +307,11 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/clash.webp",
     "web": "www.clash.com.ar",
-    "contacto": "Juan Marcos Aviano – Director Comercial & MKT Redes sociales: X: https://x.com/ClashBeneficios Facebook: https://www.facebook.com/clash.beneficios Youtube: https://www.youtube.com/@clashbeneficios Instagram: https://www.instagram.com/clash.beneficios",
+    "contacto": "Juan Marcos Aviano – juan.marcos.aviano@clash.com.ar",
     "actividad": "Clash conecta a centros comerciales con sus visitantes a través de promociones claras, organizadas y visibles. Es una solución integral que profesionaliza la comunicación de los beneficios de los locatarios, centralizándolos en un solo lugar y acompañando al shopping con tecnología, soporte operativo y acciones comerciales. Además, forma parte de un ecosistema donde miles de personas consultan cada mes todas las promociones bancarias y extrabancarias en supermercados, estaciones de servicio y otros rubros clave. Clash permite al centro comercial ganar visibilidad real y conectar con el consumidor justo cuando está buscando dónde aprovechar sus beneficios.",
-    "rubro": "Soluciones tecnológicas"
+    "rubro": "Soluciones tecnológicas",
+    "direccion": "Rioja 1521 - Rosario - Pcia. de Santa Fe",
+    "telefono": "54 9 341 696 7321"
   },
   {
     "slug": "cordoba-shopping",
@@ -335,9 +352,11 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/di-desing.webp",
     "web": "www.di-design.net",
-    "contacto": "Luis Di Virgilio – Arquitecto",
+    "contacto": "Luis Di Virgilio – ldivirgilio@di-design.net",
     "actividad": "Estudio de arquitectura y urbanismo. Posee experiencia internacional en el desarrollo de grandes proyectos, tales como masterplanning, revalorizaciones urbanas, proyectos de usos mixtos, shopping centers, retail, viviendas y oficinas.",
-    "rubro": "Arquitectura, diseño e ingeniería"
+    "rubro": "Arquitectura, diseño e ingeniería",
+    "direccion": "Av. Coronel Diaz 2551 piso 8° A - CABA",
+    "telefono": "54 9 11 5975 7700"
   },
   {
     "slug": "dino-mall-alto-verde",
@@ -415,9 +434,11 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/etia-charge.webp",
     "web": "www.etiacharge.com",
-    "contacto": "Carlos F. Pratts – Director Comercial",
+    "contacto": "Carlos F. Pratts – cfprats@ETIACHARGE.com",
     "actividad": "Especialistas en el desarrollo de soluciones de carga para vehículos eléctricos y software de gestión de carga inteligente. Su propósito es ofrecer equipos de carga de máxima calidad y construir una red de carga moderna, eficiente y con cobertura nacional, que acompañe el avance de la movilidad eléctrica en la Argentina.",
-    "rubro": "Movilidad eléctrica"
+    "rubro": "Movilidad eléctrica",
+    "direccion": "Lafayette 1695 - CABA",
+    "telefono": "54 9 11 5664 8836"
   },
   {
     "slug": "euler",
@@ -425,9 +446,11 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/euler.webp",
     "web": "www.eulerlabs.tech",
-    "contacto": "Herman Moldovan - Director Redes : linkedin -> www.linkedin.com/company/eulerlabs",
-    "actividad": "Eulerlabs es una empresa de tecnología dedicada a la medición, análisis y optimización del desempeño de centros comerciales . Brindamos soluciones que permiten entender el comportamiento de los visitantes , evaluar la performance de los locales y mejorar la gestión comercial y operativa del shopping, a partir de datos objetivos y confiables. Nuestra plataforma integra información de flujo peatonal, ocupación, permanencia , junto con datos de ventas y contexto, para acompañar la toma de decisiones estratégicas. Sectores o especialidades en los que opera Eulerlabs opera principalmente en el sector retail y centros comerciales , especializándose en: Shopping centers Gestión y auditoría de locales Medición de flujo peatonal y ocupación Análisis de performance comercial y operativa Integración de datos físicos y comerciales en una única plataforma Valor diferencial / Propuesta de valor El principal diferencial de Eulerlabs es la combinación de experiencia, cobertura y foco en resultados de negocio . Contamos con más de 15 años de experiencia trabajando con shopping centers y tenemos presencia en casi la totalidad de los shoppings del país , lo que nos permite conocer en profundidad su operación, desafíos y necesidades. Ofrecemos a nuestros clientes: Datos confiables y comparables entre locales y centros comerciales Una mirada objetiva para gestionar, auditar y optimizar la performance Una solución desarrollada específicamente para el negocio de shoppings",
-    "rubro": "Soluciones tecnológicas"
+    "contacto": "Herman Moldovan – herman@eulerlabs.tech",
+    "actividad": "Eulerlabs es una empresa de tecnología dedicada a la medición, análisis y optimización del desempeño de centros comerciales. Brinda soluciones que permiten entender el comportamiento de los visitantes, evaluar la performance de los locales y mejorar la gestión comercial y operativa del shopping, a partir de datos objetivos y confiables. Su plataforma integra información de flujo peatonal, ocupación, permanencia, junto con datos de ventas y contexto, para acompañar la toma de decisiones estratégicas. Cuenta con más de 15 años de experiencia trabajando con shopping centers. Una mirada objetiva para gestionar, auditar y optimizar la performance. Una solución desarrollada específicamente para el negocio de shoppings.",
+    "rubro": "Soluciones tecnológicas",
+    "direccion": "Conesa 2036 - Piso 2 - CABA",
+    "telefono": "54 9 11 6707 8804"
   },
   {
     "slug": "factory-parque-brown",
@@ -470,10 +493,12 @@ export const asociados: Asociado[] = [
     "name": "Fondamenta",
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/fondamenta.webp",
-    "telefono": "11-5451-9624",
-    "web": "https://www.instagram.com/fondamentaestudio",
-    "contacto": "fondamentaestudio@gmail.com",
-    "rubro": "Arquitectura, diseño e ingeniería"
+    "telefono": "11 5451 9624",
+    "web": "www.fondamentaestudio.com",
+    "contacto": "Karin Falck – fondamentaestudio@gmail.com",
+    "rubro": "Arquitectura, diseño e ingeniería",
+    "direccion": "Correa 4775 - 4C - Bo. de Saavedra - CABA",
+    "actividad": "Arquitectura comercial estratégica. Diseño y ejecución de locales comerciales."
   },
   {
     "slug": "galerias-pacifico",
@@ -504,14 +529,24 @@ export const asociados: Asociado[] = [
     "name": "IE - Inteligencia Energética",
     "category": "Proveedores de servicios",
     "rubro": "Arquitectura, diseño e ingeniería",
-    "logo": "/assets/asociados/logos/ie-inteligencia-energetica.webp"
+    "logo": "/assets/asociados/logos/ie-inteligencia-energetica.webp",
+    "direccion": "Espinosa 506 - Piso 5, Of. 11 - CABA / Calle Los Talas N° 475, Bo. La Arbolada, Sinsacate - Pcia. Córdoba",
+    "telefono": "54 9 11 5306 6155",
+    "contacto": "Adrián Tommasi – adrian@inteligenciaenergetica.com.ar",
+    "web": "www.inteligenciaenergetica.com.ar",
+    "actividad": "Ingenieros de distintas ramas especializados en eficiencia energética y sustentabilidad aplicada a industrias, empresas y grandes consumidores. Brinda soluciones de Gestión Energética, Medioambiental y Estratégica, acordes a la necesidad de cada cliente, implementando herramientas de gestión basadas en la mejora continua con estándares world class."
   },
   {
     "slug": "interurban",
     "name": "Interurban",
     "category": "Proveedores de servicios",
     "rubro": "Consultoría y management",
-    "logo": "/assets/asociados/logos/interurban.webp"
+    "logo": "/assets/asociados/logos/interurban.webp",
+    "direccion": "Dardo Rocha 986 - San Isidro - Pcia. de Buenos Aires",
+    "telefono": "4812 1011 / 0148",
+    "contacto": "Ignacio Nieves Piazza – INP@interurban.com.ar",
+    "web": "www.interurban.com.ar",
+    "actividad": "Asesoramiento, planificación, desarrollo y comercialización de ecosistemas comerciales en Argentina y otros países. Desarrolla y potencia espacios estratégicos de alto impacto, adaptándose a las dinámicas del mercado y a las necesidades de cada proyecto. Su visión va más allá de la comercialización: diseña destinos y potencia negocios, asegurando que cada proyecto alcance su máximo potencial."
   },
   {
     "slug": "la-barraca-mall",
@@ -530,7 +565,12 @@ export const asociados: Asociado[] = [
     "name": "Lubeca Tech",
     "category": "Proveedores de servicios",
     "rubro": "Soluciones tecnológicas",
-    "logo": "/assets/asociados/logos/lubeca.webp"
+    "logo": "/assets/asociados/logos/lubeca.webp",
+    "direccion": "José Henry 5292 - Córdoba Capital",
+    "telefono": "351 514 8330",
+    "contacto": "Renato Schmitt – rschmitt@lubeca.tech",
+    "web": "www.lubeca.tech",
+    "actividad": "Inteligencia de ventas para tu Shopping Mall. Centraliza y analiza la información de ventas de todos los locales de un Centro Comercial en tiempo real, sin intervenir en sus sistemas de facturación."
   },
   {
     "slug": "maschwitz-mall",
@@ -557,7 +597,11 @@ export const asociados: Asociado[] = [
     "name": "MDV Lights",
     "category": "Proveedores de servicios",
     "rubro": "Arquitectura, diseño e ingeniería",
-    "logo": "/assets/asociados/logos/mdv-lights.webp"
+    "logo": "/assets/asociados/logos/mdv-lights.webp",
+    "telefono": "54 9 11 6264 2232",
+    "contacto": "Paolo Dippo – pdippo@mdvlights.com",
+    "web": "www.mdvlights.com",
+    "actividad": "Más de 13 años liderando el mercado de la iluminación, aprovechando los avances tecnológicos para introducir y promover la tecnología LED. Soluciones integrales de mayor eficiencia, que van desde la asesoría y planeación, incluyendo la fabricación, importación, entrega e implementación de proyectos y servicios con tecnología de vanguardia, creando un modelo integral de servicio en cuanto a garantía, soporte y acompañamiento permanente."
   },
   {
     "slug": "mendoza-shopping",
@@ -576,7 +620,12 @@ export const asociados: Asociado[] = [
     "name": "Negozona",
     "category": "Proveedores de servicios",
     "rubro": "Consultoría y management",
-    "logo": "/assets/asociados/logos/negozona.webp"
+    "logo": "/assets/asociados/logos/negozona.webp",
+    "direccion": "Carlos Pelegrini 781 - Piso 7 - CABA",
+    "telefono": "54 911 3641 7771",
+    "contacto": "Francisco Bastard – fbastard@negozona.com",
+    "web": "www.negozona.com",
+    "actividad": "NEGOZONA genera un ámbito adecuado y exclusivamente pensado para el encuentro de vendedores, compradores, potenciales inversores, brokers, comercializadores de fondos de comercios, franquiciantes, franquiciados y todos aquellos que tengan interés en identificar y analizar oportunidades de negocios. Procura brindarles las mejores condiciones para encontrar en NegoZona las alternativas, información y soporte que los ayuden y les hagan posible la concreción de transacciones de compraventa de negocios y franquicias."
   },
   {
     "slug": "neverland",
@@ -650,9 +699,10 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/nuova-suite.webp",
     "web": "www.nuovasuite.com",
-    "contacto": "Gustavo Menicillo gustavo@nuovasuite.com",
-    "actividad": "Nuova Suite ofrece un portafolio de licencias SaaS modulares que integran en una sola plataforma la gestión de contenidos, campañas y programas de fidelización para clientes y marcas. A través del ecosistema conformado por los módulos Creator, Rewards, Wallet, Gift Card y Audit , permite crear experiencias digitales personalizadas, administrar billeteras y tarjetas regalo, realizar auditorías virtuales con inteligencia artificial e integrar sistemas de estacionamiento. Una solución integral, personalizable y eficiente para fortalecer la conexión entre el Shopping, sus marcas y sus visitantes.",
-    "rubro": "Soluciones tecnológicas"
+    "contacto": "Gustavo Menicillo – Gustavo@nuovasuite.com",
+    "actividad": "Nuova Suite ofrece un portafolio de licencias SaaS modulares que integran en una sola plataforma la gestión de contenidos, campañas y programas de fidelización para clientes y marcas. A través del ecosistema conformado por los módulos Creator, Rewards, Wallet, Gift Card y Audit, permite crear experiencias digitales personalizadas, administrar billeteras y tarjetas regalo, realizar auditorías virtuales con inteligencia artificial e integrar sistemas de estacionamiento. Una solución integral, personalizable y eficiente para fortalecer la conexión entre el Shopping, sus marcas y sus visitantes.",
+    "rubro": "Soluciones tecnológicas",
+    "telefono": "54 9 11 3385 4444"
   },
   {
     "slug": "operafun",
@@ -670,14 +720,24 @@ export const asociados: Asociado[] = [
     "name": "Osdawash",
     "category": "Proveedores de servicios",
     "rubro": "Limpieza y mantenimiento de edificios",
-    "logo": "/assets/asociados/logos/osdawash.webp"
+    "logo": "/assets/asociados/logos/osdawash.webp",
+    "direccion": "Juramento 1694 - Piso 1, Depto. \"D\" - CABA",
+    "telefono": "54 911 5415 9033",
+    "contacto": "María Schmidt – marielas@osdawash.com",
+    "web": "www.osdawash.com",
+    "actividad": "Empresa joven dedicada a proveer soluciones integrales de limpieza y mantenimiento."
   },
   {
     "slug": "owismart",
     "name": "Owismart",
     "category": "Proveedores de servicios",
     "rubro": "Soluciones tecnológicas",
-    "logo": "/assets/asociados/logos/owismart.webp"
+    "logo": "/assets/asociados/logos/owismart.webp",
+    "direccion": "Av. Jujuy 2156, Piso 3, Distrito Tecnológico - CABA",
+    "telefono": "54 11 2453 6336",
+    "contacto": "Guillermo Loureiro – gloureiro@owibot.com",
+    "web": "www.site.owismart.com",
+    "actividad": "OWISMART es una plataforma de automatización conversacional impulsada por inteligencia artificial que ayuda a las empresas a optimizar la atención al cliente, las ventas y los procesos internos a través de WhatsApp y otros canales digitales. La solución integra agentes inteligentes con los sistemas de gestión de cada organización, permitiendo brindar respuestas automáticas, ejecutar procesos de negocio, reducir costos operativos y mejorar la experiencia del cliente. Su arquitectura escalable posibilita implementar soluciones tanto para empresas individuales como para grandes organizaciones y redes de franquicias o sucursales."
   },
   {
     "slug": "palmares-mall",
@@ -883,7 +943,12 @@ export const asociados: Asociado[] = [
     "name": "PFZ Arqs.",
     "category": "Proveedores de servicios",
     "rubro": "Arquitectura, diseño e ingeniería",
-    "logo": "/assets/asociados/logos/pfz-arqs.png"
+    "logo": "/assets/asociados/logos/pfz-arquitectos.webp",
+    "direccion": "Franklin Roosevelt 2318 - Piso 1 - CABA",
+    "telefono": "54 11 7396 7002",
+    "contacto": "Juan Pfeifer – jpfeifer@pfzarquitectos.com.ar",
+    "web": "www.pfzarquitectos.com.ar",
+    "actividad": "Estudio de arquitectura especializado en proyectos de usos mixtos, transporte, centros comerciales, de entretenimiento, hoteles y oficinas."
   },
   {
     "slug": "plaza-liniers-shopping",
@@ -1043,7 +1108,12 @@ export const asociados: Asociado[] = [
     "name": "Proyeco",
     "category": "Proveedores de servicios",
     "rubro": "Arquitectura, diseño e ingeniería",
-    "logo": "/assets/asociados/logos/proyeco.webp"
+    "logo": "/assets/asociados/logos/proyeco.webp",
+    "direccion": "Arenales 1662, 6º B - CABA",
+    "telefono": "54 911 2872 0244",
+    "contacto": "María Ramos Rodríguez – mramos@proyeco.es",
+    "web": "www.proyeco.es",
+    "actividad": "Soluciones integradas en Consultoría, Project Management, Ingeniería, Urbanismo, Arquitectura, Concesiones, Construction Management, Energía y Medioambiente, tanto en proyectos de Obra Civil como en Edificación."
   },
   {
     "slug": "puerto-plaza",
@@ -1084,21 +1154,36 @@ export const asociados: Asociado[] = [
     "name": "RentaLED",
     "category": "Proveedores de servicios",
     "rubro": "Medios publicitarios",
-    "logo": "/assets/asociados/logos/rentaled.webp"
+    "logo": "/assets/asociados/logos/rentaled.webp",
+    "direccion": "Suipacha 745 - Piso 4 - CABA",
+    "telefono": "54 911 4980 9941",
+    "contacto": "Javier Salomón – javier.salomon@ibexamedia.com",
+    "web": "www.ibexamedia.com",
+    "actividad": "18 años en el mercado. Expertos en alquiler de pantallas LED y servicios de sonido e iluminación para eventos corporativos, conciertos y festivales. Equipo técnico altamente capacitado. Diseñadores y editores de video que genera contenido visual personalizado y atractivo. Última tecnología, sonido envolvente e iluminación dinámica. Instalación completa y monitoreo en tiempo real."
   },
   {
     "slug": "retailcheck",
     "name": "Retailcheck",
     "category": "Proveedores de servicios",
     "rubro": "Soluciones tecnológicas",
-    "logo": "/assets/asociados/logos/retailcheck.webp"
+    "logo": "/assets/asociados/logos/retailcheck.webp",
+    "direccion": "B. Viejo Tonel P. 14° - Maipú - Pcia. de Mendoza",
+    "telefono": "54 9261 538 2685",
+    "contacto": "Daniel Gargantini – daniel.gargantini@remaco.cl",
+    "web": "https://retailcheck.net/",
+    "actividad": "Solución en Mediciones de Flujo de Público, permitiendo mejorar la gestión y producción en distintos ámbitos, sean estos comerciales, eventos deportivos, culturales, públicos, privados etc., permitiendo desarrollar y hacer seguimientos de distintos indicadores tales como Ratio de Conversión, Permanencia de Tiempo, Circulación de Público en zonas específicas, Ticket Promedio, Ventas por mts2, entre otros."
   },
   {
     "slug": "retco",
     "name": "Retco",
     "category": "Proveedores de servicios",
     "rubro": "Consultoría y management",
-    "logo": "/assets/asociados/logos/retco.webp"
+    "logo": "/assets/asociados/logos/retco.webp",
+    "direccion": "Larrea 390 - 2° Piso - San Isidro - Pcia. Buenos Aires",
+    "telefono": "54 9 11 8059 0428",
+    "contacto": "Martín Malara – mmalara@retco.com.ar",
+    "web": "www.retco.com.ar",
+    "actividad": "Grupo interdisciplinario de profesionales con sólida experiencia en el mercado de centros comerciales y retail, lo que le permite brindar el mejor asesoramiento en la conceptualización, desarrollo, construcción, comercialización, operación y administración de shoppings. Desde el estudio de prefactibilidad y viabilidad de un proyecto nuevo, hasta la puesta en marcha de un centro comercial, acompaña a los clientes en la concreción de sus objetivos. Su especialización también le permite intervenir shoppings en funcionamiento y actuar como consultora integral de las distintas áreas que componen dicho negocio, como así también asesorar cadenas de retail."
   },
   {
     "slug": "ribera-shopping",
@@ -1117,7 +1202,12 @@ export const asociados: Asociado[] = [
     "name": "RM Consultoría",
     "category": "Proveedores de servicios",
     "rubro": "Consultoría y management",
-    "logo": "/assets/asociados/logos/rodolfo-mercado-consultor.webp"
+    "logo": "/assets/asociados/logos/rodolfo-mercado-consultor.webp",
+    "direccion": "Virrey del Pino 3141 - Piso 2 - CABA",
+    "telefono": "54 911 4086 6860",
+    "contacto": "Rodolfo Mercado – Rmercadoconsultor@gmail.com",
+    "web": "www.rmconsultores.com.ar",
+    "actividad": "Especialista en planeamiento de Shopping Centers, Áreas Comerciales y urbanismo comercial, con trayectoria en servicios de creación de valor B2B para retail, franquicias y real estate. Evalúa y desarrolla herramientas de Inteligencia en Shopping Centers."
   },
   {
     "slug": "san-justo-shopping",
@@ -1160,9 +1250,12 @@ export const asociados: Asociado[] = [
     "name": "Solutions malls",
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/solutions-malls.webp",
-    "web": "www.solutionsmalls.com.ar",
-    "actividad": "Soluciones integrales de Software para centros comerciales.",
-    "rubro": "Soluciones administrativas"
+    "web": "www.solutionsmalls.com",
+    "actividad": "Centraliza la operación del centro comercial y plazas comerciales en una plataforma única: administración de contratos, registro y análisis de ventas, facturación y cobranza, documentación y comunicación digital con cada locatario. El resultado: menos planillas, más control, información confiable para decidir y procesos operativos más rápidos.",
+    "rubro": "Soluciones administrativas",
+    "direccion": "Rivadeo 1570 - Córdoba - Pcia. Córdoba",
+    "telefono": "54 351 590 0844",
+    "contacto": "Ariel Cogote – acogote@solutionsmalls.com.ar"
   },
   {
     "slug": "tablada-shopping",
@@ -1227,16 +1320,22 @@ export const asociados: Asociado[] = [
     "category": "Proveedores de servicios",
     "logo": "/assets/asociados/logos/wiki-biz.webp",
     "web": "www.wikibiz.us",
-    "contacto": "Gustavo Menicillo",
-    "actividad": "Wiki Biz es una agencia de marketing integral que combina estrategia, creatividad, tecnología y ejecución para diseñar experiencias eficientes y memorables. Ofrece soluciones que van desde la planificación estratégica y la generación de contenidos hasta la gestión de campañas, desarrollo digital, activaciones, programas de fidelización e implementación de ecosistemas integrados con plataformas digitales y automatizaciones. Una agencia ágil, multidisciplinaria y orientada a resultados, que acompaña a las marcas en todas las etapas del negocio.",
-    "rubro": "Soluciones tecnológicas"
+    "contacto": "Gustavo Menicillo – gustavo@wikibiz.us",
+    "actividad": "Wiki Biz es una agencia de marketing integral que combina estrategia, creatividad, tecnología y ejecución para diseñar experiencias eficientes y memorables. Ofrece soluciones que van desde la planificación estratégica y la generación de contenidos hasta la gestión de campañas, desarrollo digital, activaciones, programas de fidelización e implementación de ecosistemas integrados con plataformas digitales y automatizaciones.",
+    "rubro": "Soluciones tecnológicas",
+    "telefono": "54 9 11 3385 4444"
   },
   {
     "slug": "xperts-consultores",
     "name": "Xperts Consultores",
     "category": "Proveedores de servicios",
     "rubro": "Soluciones tecnológicas",
-    "logo": "/assets/asociados/logos/xperts-consultores.webp"
+    "logo": "/assets/asociados/logos/xperts-consultores.webp",
+    "direccion": "Ugarte 2341 - CABA",
+    "telefono": "54 911 6590 9100",
+    "contacto": "Rodrigo Leivas – rodrigo@xperts.com.ar",
+    "web": "www.xperts.com.ar",
+    "actividad": "Equipo de ingenieros con más de 15 años de experiencia en el mercado de telecomunicaciones y IT, brindando soluciones tecnológicas a la problemática de operación de las empresas. Se especializa en servicios tales como: Plataforma Guess WiFi y WiFi Marketing, Consultoría IoT y ICT, Assessment Tecnológico, Sistemas de gestión para redes y Datacenters, Soluciones para gobiernos digitales (e-Goverment), Digitalización y gestión documental, Gestión integral de proyectos tecnológicos."
   }
 ];
 
