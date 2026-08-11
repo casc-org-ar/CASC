@@ -138,16 +138,23 @@ function HomeSectionHeader({
 }
 
 export default async function HomePage() {
-  // Noticias section is fed by published blog posts marked for the public site.
-  // Home preview: the latest few news (2 full rows of 3 on desktop; a swipeable
-  // carousel on mobile). Capped so it never grows long — the full archive lives
-  // in /noticias with its own pagination.
-  const noticias = byVisibilidad(
+  // Noticias section: latest published public news, shown in a carousel like
+  // the rest of the home. Capped so it never grows long — the full archive
+  // (with pagination + search) lives in /noticias.
+  const homeNewsItems: ContentCarouselItem[] = byVisibilidad(
     onlyPublished(await getPublicDataLayer().blog.list()),
     "publico",
   )
     .sort((a, b) => (a.fecha < b.fecha ? 1 : -1))
-    .slice(0, 6);
+    .slice(0, 8)
+    .map((post) => ({
+      id: post.id,
+      title: post.titulo,
+      description: post.bajada,
+      image: post.portadaUrl,
+      eyebrow: "Actualidad",
+      href: `/noticias/${post.slug}`,
+    }));
 
   // Activities carousel — admin-managed, published only. Resilient read so a
   // missing table (deploy timing) never breaks the home build.
@@ -328,56 +335,35 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Noticias y tendencias del sector — fed by published blog posts */}
+      {/* Noticias y tendencias del sector — carrusel de las últimas noticias
+          publicadas, consistente con el resto de las secciones del home. */}
       <section className="border-y border-border bg-surface/70">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <HomeSectionHeader
-            eyebrow="Actualidad"
-            title="Noticias y tendencias del sector"
-            description="Contenido actualizado sobre consumo, retail, centros comerciales, tecnologías aplicadas al sector, aperturas y eventos."
-            action={
-              <ButtonLink href="/noticias" size="lg">
-                Ver todas las noticias
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </ButtonLink>
-            }
-          />
-
-          {noticias.length > 0 ? (
-            <div className="stagger-children flex snap-x snap-mandatory gap-6 overflow-x-auto pb-3 [-ms-overflow-style:none] [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-3 [&::-webkit-scrollbar]:hidden">
-              {noticias.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/noticias/${post.slug}`}
-                  className="group block h-full min-w-full shrink-0 snap-start focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:min-w-0"
-                >
-                  <Card
-                    interactive
-                    className="card-depth flex h-full flex-col rounded-2xl"
-                  >
-                    <CardCover src={post.portadaUrl} alt={post.titulo} />
-                    <h3 className="mb-2 text-base font-bold text-ink">
-                      {post.titulo}
-                    </h3>
-                    <p className="line-clamp-2 text-sm leading-6 text-ink-muted">
-                      {post.bajada}
-                    </p>
-                    <span className="mt-auto inline-flex items-center gap-1 pt-5 text-sm font-medium text-primary">
-                      Ver noticia
-                      <ArrowRight
-                        className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </Card>
-                </Link>
-              ))}
-            </div>
+          {homeNewsItems.length > 0 ? (
+            <ContentCarousel
+              title="Noticias y tendencias del sector"
+              description="Contenido actualizado sobre consumo, retail, centros comerciales, tecnologías aplicadas al sector, aperturas y eventos."
+              items={homeNewsItems}
+            />
           ) : (
-            <div className="card-depth rounded-2xl border border-border bg-white p-4">
-              <EmptyState message="Pronto vas a encontrar acá las últimas noticias del sector." />
-            </div>
+            <>
+              <HomeSectionHeader
+                eyebrow="Actualidad"
+                title="Noticias y tendencias del sector"
+                description="Contenido actualizado sobre consumo, retail, centros comerciales, tecnologías aplicadas al sector, aperturas y eventos."
+              />
+              <div className="card-depth rounded-2xl border border-border bg-white p-4">
+                <EmptyState message="Pronto vas a encontrar acá las últimas noticias del sector." />
+              </div>
+            </>
           )}
+
+          <div className="mt-8 text-center">
+            <ButtonLink href="/noticias" size="lg">
+              Ver todas las noticias
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </ButtonLink>
+          </div>
         </div>
       </section>
 
