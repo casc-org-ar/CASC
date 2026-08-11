@@ -196,6 +196,12 @@ function buildDirectoryHref(filters: AsociadosDirectoryFilters): string {
 
 function AsociadoCard({ asociado }: { asociado: AsociadoDirectoryItem }) {
   const isProveedor = asociado.category === "Proveedores de servicios";
+  // Providers and retailers keep their contact details in the ficha only; the
+  // card shows just the website under the logo. Shopping Centers still show
+  // address/contact on the card.
+  const soloWebEnCard =
+    asociado.category === "Proveedores de servicios" ||
+    asociado.category === "Retailers";
   // Providers all share the same category, so repeating "Proveedores de
   // servicios" over every name is noise — omit the meta line for them. Shopping
   // Centers show their region; the rest show their category.
@@ -249,9 +255,10 @@ function AsociadoCard({ asociado }: { asociado: AsociadoDirectoryItem }) {
             {asociado.name}
           </h3>
 
-          {/* Providers show only their website under the logo; the full contact
-              lives in the ficha. Other categories show address + contact. */}
-          {isProveedor ? (
+          {/* Providers and retailers show only their website under the logo;
+              the full contact lives in the ficha. Shopping Centers show
+              address + contact on the card. */}
+          {soloWebEnCard ? (
             asociado.web && (
               <ul className="mt-3">
                 <li className="flex items-start gap-2 text-sm leading-5 text-ink-muted">
