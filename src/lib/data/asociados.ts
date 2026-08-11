@@ -289,7 +289,9 @@ export const asociados: Asociado[] = [
     "category": "Retailers",
     "logo": "/assets/asociados/logos/cinemacenter.webp",
     "web": "www.cinemacenter.com.ar",
-    "actividad": "Exhibición Cinematográfica"
+    "actividad": "Operación comercial y artística de salas de espectáculos públicos. Servicios de programación y asesoramiento a grupos de empresarios independientes que son parte de la industria del entretenimiento en Argentina. Líder en la industria cinematográfica, con más de 80 salas en las principales ciudades argentinas, equipadas con sistema de proyección digital que permite la exhibición de películas en distintas dimensiones.",
+    "telefono": "54 911 5218 0400",
+    "contacto": "Gabriela Zamora – gzamora@cinemacenter.com.ar"
   },
   {
     "slug": "city-center-rosario",
@@ -590,7 +592,9 @@ export const asociados: Asociado[] = [
     "category": "Retailers",
     "logo": "/assets/asociados/logos/mcdonalds.webp",
     "web": "www.mcdonalds.com.ar",
-    "actividad": "Empresa de comidas rápidas (Fast Food)."
+    "actividad": "Arcos Dorados es el mayor operador de restaurantes de McDonald's en América Latina y el Caribe y su mayor franquiciado en el mundo.",
+    "telefono": "54 911 4711 2005",
+    "contacto": "Martín Leandro Ward – martin.ward@ar.mcd.com"
   },
   {
     "slug": "mdv-lights",
@@ -633,7 +637,9 @@ export const asociados: Asociado[] = [
     "category": "Retailers",
     "logo": "/assets/asociados/logos/neverland.webp",
     "web": "www.neverland.com.ar",
-    "actividad": "Neverland es la cadena de parques de diversiones indoor líder de Argentina, con más de 40 años de trayectoria desarrollando experiencias de entretenimiento. Un modelo de gestión de clase mundial y una visión estratégica de expansión, innovación y calidad proyectaron el crecimiento y el desarrollo de la compañía; hoy con más de 30 parques ubicados en las ciudades más importantes del país y 3 millones de personas que la visitan cada año."
+    "actividad": "Cadena de parques de diversiones líder en Argentina, con 49 años de experiencia en crear entretenimiento de calidad. Neverland se posiciona hoy como un referente de entretenimiento familiar en Argentina. Su éxito se atribuye a un modelo de gestión de clase mundial y una estrategia centrada en la expansión, innovación, calidad y seguridad, lo que ha permitido un destacado crecimiento y presencia en las principales ciudades del país.",
+    "telefono": "54 9351 519 0872",
+    "contacto": "Hebe Jancic – hebe.jancic@neverlandparks.com"
   },
   {
     "slug": "nine-shopping",
