@@ -75,6 +75,12 @@ const heroSlides = [
     mobile: "/assets/banners/banner-3-3.webp",
     alt: "Cámara Argentina de Shopping Centers",
   },
+  {
+    desktop: "/assets/banners/banner-naranja.jpg",
+    tablet: "/assets/banners/banner-naranja-tablet.jpg",
+    mobile: "/assets/banners/banner-naranja-mobile.jpg",
+    alt: "Naranja X, socio de la Cámara Argentina de Shopping Centers",
+  },
 ];
 
 const funciones = [
