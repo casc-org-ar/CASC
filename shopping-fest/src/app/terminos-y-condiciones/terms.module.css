@@ -1,0 +1,242 @@
+/*
+ * Styles for the Terms & Conditions page.
+ *
+ * This page had its own self-contained design system in the original — a light
+ * card layout with its own palette, unrelated to the landing page's tokens. It
+ * is kept that way, scoped to this route via CSS Modules.
+ */
+
+.wrap {
+  --sf-orange: #f97316;
+  --sf-text: #1f2937;
+  --sf-muted: #6b7280;
+  --sf-border: #e5e7eb;
+  --sf-bg: #ffffff;
+  --sf-soft: #f8fafc;
+  --sf-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+
+  color: var(--sf-text);
+  line-height: 1.65;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 24px 16px;
+  background: #fff;
+}
+
+.wrap * {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  border: 1px solid var(--sf-border);
+  border-radius: 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+  box-shadow: var(--sf-shadow);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  flex: 1 1 180px;
+}
+
+.logo img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: 52px;
+  object-fit: contain;
+}
+
+.logoMain {
+  max-height: 80px;
+  transform: scale(1.8);
+}
+
+.titlebox {
+  flex: 2 1 320px;
+  text-align: center;
+}
+
+.kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sf-orange);
+  margin-bottom: 6px;
+}
+
+.mainTitle {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.15;
+  color: #111827;
+  font-weight: 800;
+}
+
+.subtitle {
+  margin: 10px auto 0;
+  font-size: 15px;
+  color: var(--sf-muted);
+  max-width: 720px;
+}
+
+.card {
+  background: var(--sf-bg);
+  border: 1px solid var(--sf-border);
+  border-radius: 22px;
+  box-shadow: var(--sf-shadow);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.cardInner {
+  padding: 28px;
+}
+
+.sectionLabel {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(249, 115, 22, 0.08);
+  color: var(--sf-orange);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.partTitle {
+  margin: 0 0 10px;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.2;
+  color: var(--sf-orange);
+  font-weight: 800;
+}
+
+.intro {
+  font-size: 16px;
+  color: var(--sf-text);
+  margin: 0 0 20px;
+}
+
+.block {
+  background: var(--sf-soft);
+  border: 1px solid var(--sf-border);
+  border-radius: 18px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.block h3 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--sf-orange);
+  font-weight: 800;
+}
+
+.block p {
+  margin: 0 0 12px;
+}
+
+.block p:last-child {
+  margin-bottom: 0;
+}
+
+.list {
+  margin: 12px 0 0;
+  padding-left: 20px;
+}
+
+.list li {
+  margin-bottom: 10px;
+}
+
+.list li:last-child {
+  margin-bottom: 0;
+}
+
+.strong {
+  font-weight: 700;
+}
+
+.footerNote {
+  font-size: 13px;
+  color: var(--sf-muted);
+  text-align: center;
+  margin-top: 18px;
+}
+
+.link {
+  color: var(--sf-orange);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  .wrap {
+    padding: 16px 10px;
+  }
+
+  .header {
+    padding: 16px;
+    gap: 14px;
+    border-radius: 18px;
+  }
+
+  .titlebox {
+    order: 3;
+    flex: 1 1 100%;
+  }
+
+  .logo {
+    flex: 1 1 calc(50% - 7px);
+    min-height: 46px;
+  }
+
+  .logo img {
+    max-height: 40px;
+  }
+
+  .cardInner {
+    padding: 18px;
+  }
+
+  .block {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .block h3 {
+    font-size: 19px;
+  }
+
+  .intro,
+  .block p,
+  .list li {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+}

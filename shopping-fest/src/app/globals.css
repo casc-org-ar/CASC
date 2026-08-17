@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens lifted from the Elementor kit and inline CSS of the original
+ * WordPress site. Values are kept exactly as they were rather than rounded to
+ * a "nicer" scale, because this is a fidelity migration.
+ */
+@theme {
+  --color-cream: #f4ece7;
+  --color-orange: #e1562b;
+  --color-orange-hover: #ea8d71;
+  --color-teal-dark: #144e51;
+  --color-teal: #156064;
+  --color-teal-text: #135558;
+  --color-lime: #d4e9a3;
+  --color-amber: #f69c07;
+  --color-amber-hover: #eead41;
+  --color-grey: #919191;
+
+  --font-display: "Funnel Display", sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+
+  /* Elementor's tablet/mobile breakpoints. */
+  --breakpoint-tablet: 1024px;
+  --breakpoint-mobile: 767px;
+
+  --animate-marquee: marquee 35s linear infinite;
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@font-face {
+  font-family: "Funnel Display";
+  src:
+    url("/fonts/FunnelDisplay-Bold.woff2") format("woff2"),
+    url("/fonts/FunnelDisplay-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+ * Elementor's boxed containers (`.e-con-boxed > .e-con-inner`) constrain their
+ * content to `min(100%, 1140px)` and centre it. Sections that were boxed in the
+ * original use this class; full-bleed ones (`e-con-full`) do not.
+ */
+.boxed {
+  width: min(100%, 1140px);
+  margin-inline: auto;
+}
+
+/*
+ * The original set `overflow-x: hidden !important` on <body> to contain the
+ * absolutely-positioned decorative SVGs that overhang their sections.
+ */
+html {
+  overflow-x: hidden;
+}
+
+/*
+ * Base typography from the Hello Elementor reset the original shipped with.
+ * Tailwind's preflight zeroes these out, so they are restored explicitly —
+ * `line-height: 1.2` on headings in particular, without which every heading
+ * renders 1.5x taller than the original and every section grows with it.
+ */
+@layer base {
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background-color: var(--color-cream);
+    font-family: var(--font-body);
+    color: #333;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /*
+   * Elementor widgets zero out the theme's heading margins and set
+   * `line-height: 1`, so headings occupy exactly their font size. Reproducing
+   * that here is what keeps section heights matching the original — the theme
+   * reset's 1.2 line-height and 0.5/1rem margins would inflate every band.
+   */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: 1;
+    margin: 0;
+  }
+
+  /*
+   * Paragraphs keep the body's 1.5 line-height — only headings collapse to 1.
+   * Elementor's widgets zero the margins, so text blocks sit flush.
+   */
+  p {
+    color: inherit;
+    font-family: inherit;
+    margin: 0;
+  }
+}
+
+/*
+ * Scroll-reveal animation.
+ *
+ * The original used GSAP ScrollTrigger purely to toggle an `.ativo` class on
+ * elements marked `.scroll-*`. That is exactly what IntersectionObserver does
+ * natively, so GSAP (plus its ScrollTrigger plugin) was dropped and the CSS
+ * kept verbatim — same transition, same blur, same distances.
+ */
+.scroll-bottom,
+.scroll-top,
+.scroll-left,
+.scroll-right {
+  opacity: 0;
+  transition: 0.8s ease;
+  filter: blur(10px) brightness(200%);
+  will-change: transform, opacity;
+}
+
+.scroll-bottom {
+  transform: translateY(30px);
+}
+.scroll-top {
+  transform: translateY(-30px);
+}
+.scroll-left {
+  transform: translateX(-30px);
+}
+.scroll-right {
+  transform: translateX(30px);
+}
+
+.ativo {
+  opacity: 1;
+  transform: translate(0, 0);
+  filter: blur(0) brightness(100%);
+}
+
+/* Readers who prefer reduced motion get the content without the reveal. */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-bottom,
+  .scroll-top,
+  .scroll-left,
+  .scroll-right {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
