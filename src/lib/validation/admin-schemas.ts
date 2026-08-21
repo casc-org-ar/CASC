@@ -77,11 +77,33 @@ export const noticiaSchema = z.object({
   status,
 });
 
+/**
+ * Extra files published with an edition (magazine, annexes). Rows missing a
+ * URL are dropped rather than rejected: the form always submits its rows, and
+ * a half-filled one should not fail the whole save. A row with a URL but no
+ * label still saves — the reader falls back to a generic label.
+ *
+ * Resolves to `[]`, never `undefined`, when the admin leaves no attachments:
+ * the Supabase mapper skips `undefined` fields, so collapsing an empty list to
+ * `undefined` would silently keep previously saved attachments on update.
+ */
+const newsletterAdjuntos = z
+  .array(
+    z.object({
+      titulo: z.string().trim().max(LIMITS.corto).default(""),
+      url: z.string().trim().max(1000),
+    }),
+  )
+  .max(20)
+  .default([])
+  .transform((rows) => rows.filter((r) => r.url.length > 0));
+
 export const newsletterSchema = z.object({
   titulo: req(LIMITS.titulo),
   edicion: req(LIMITS.corto),
   contenido: opt(LIMITS.largo),
   adjuntoUrl: optUrl,
+  adjuntos: newsletterAdjuntos,
   fecha,
   status,
 });

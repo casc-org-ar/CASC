@@ -44,14 +44,21 @@ export const Select = React.forwardRef<
 ));
 Select.displayName = "Select";
 
-/** Label + control wrapper for consistent vertical rhythm in forms. */
+/**
+ * Label + control wrapper for consistent vertical rhythm in forms.
+ *
+ * `htmlFor` is optional because some fields wrap a GROUP of controls (a
+ * repeatable list, a file-or-link picker) with no single input to point at. In
+ * that case the label stands as the group's heading and the inner controls
+ * carry their own accessible names.
+ */
 export function FormField({
   label,
   htmlFor,
   children,
 }: {
   label: string;
-  htmlFor: string;
+  htmlFor?: string;
   children: React.ReactNode;
 }) {
   return (

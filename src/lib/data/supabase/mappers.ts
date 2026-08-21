@@ -182,6 +182,11 @@ export const newsletterMapper: EntityMapper<Newsletter> = {
     contenido: (r.contenido as string | null) ?? undefined,
     fecha: r.fecha as string,
     adjuntoUrl: (r.adjunto_url as string | null) ?? undefined,
+    // Stored as jsonb; an empty array means "no extras", same as null.
+    adjuntos: ((r.adjuntos as Newsletter["adjuntos"] | null) ?? undefined)
+      ?.length
+      ? (r.adjuntos as Newsletter["adjuntos"])
+      : undefined,
     status: r.status as Newsletter["status"],
     createdAt: r.created_at as string,
     updatedAt: r.updated_at as string,
@@ -193,6 +198,8 @@ export const newsletterMapper: EntityMapper<Newsletter> = {
     put(row, "contenido", i.contenido);
     put(row, "fecha", i.fecha);
     put(row, "adjunto_url", i.adjuntoUrl);
+    // jsonb column; the driver serializes the array of {titulo, url} as-is.
+    put(row, "adjuntos", i.adjuntos);
     put(row, "status", i.status);
     return row;
   },
