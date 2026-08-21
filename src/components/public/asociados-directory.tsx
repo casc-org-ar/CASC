@@ -221,16 +221,19 @@ function AsociadoCard({ asociado }: { asociado: AsociadoDirectoryItem }) {
           "transition-all duration-200 ease-out group-hover:-translate-y-0.5 group-hover:border-accent/70",
         )}
       >
-        <div className="relative aspect-square overflow-hidden border-b border-border bg-white">
+        <div className="flex aspect-square items-center justify-center overflow-hidden border-b border-border bg-white p-4">
           {asociado.logo ? (
             <Image
               src={asociado.logo}
               alt={asociado.name}
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-              /* Logos are now uniform 500×500 squares, so they fill the square
-                 tile edge to edge (no padding needed). */
-              className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
+              width={300}
+              height={300}
+              sizes="300px"
+              /* Every logo file is a uniform 300x300 square. Rendering at its
+                 intrinsic size with object-contain keeps the artwork inside the
+                 tile at its real proportions: never cropped, never upscaled
+                 past 300px, so wide cards cannot pixelate it. */
+              className="h-auto max-h-full w-auto max-w-full object-contain transition-transform duration-200 ease-out group-hover:scale-[1.03]"
             />
           ) : (
             <span className="absolute inset-0 flex items-center justify-center text-5xl font-bold text-accent">
