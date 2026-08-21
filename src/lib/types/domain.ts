@@ -90,6 +90,17 @@ export interface Noticia extends BaseEntity {
   status: PublicationStatus;
 }
 
+/**
+ * An extra file shipped alongside a newsletter edition (the magazine, an
+ * annexed report). Carries a label because the socio has to know what they are
+ * downloading, which a bare URL cannot convey.
+ */
+export interface NewsletterAdjunto {
+  titulo: string;
+  /** Uploaded file path/URL or a pasted external link. */
+  url: string;
+}
+
 export interface Newsletter extends BaseEntity {
   titulo: string;
   edicion: string;
@@ -97,6 +108,8 @@ export interface Newsletter extends BaseEntity {
   contenido?: string;
   fecha: string;
   adjuntoUrl?: string; // uploaded file of the edition already sent (Vercel Blob later)
+  /** Extra files published with the edition, beyond the edition itself. */
+  adjuntos?: NewsletterAdjunto[];
   status: PublicationStatus;
 }
 

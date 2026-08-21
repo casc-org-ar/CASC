@@ -89,6 +89,39 @@ export default async function NewsletterDetailPage({
               </div>
             );
           })()}
+
+        {/* Extras published with the edition: the magazine, annexes. Each keeps
+            the label the admin gave it so the socio knows what they open. */}
+        {edicion.adjuntos && edicion.adjuntos.length > 0 && (
+          <div className="border-t border-border px-6 py-6">
+            <p className="mb-3 text-sm text-ink-muted">
+              Material complementario de esta edición:
+            </p>
+            <ul className="space-y-2">
+              {edicion.adjuntos.map((adjunto, idx) => {
+                const esPdf = /\.pdf($|\?)/i.test(adjunto.url);
+                return (
+                  <li key={`${adjunto.url}-${idx}`}>
+                    <ButtonAnchor
+                      href={adjunto.url}
+                      variant="secondary"
+                      {...(esPdf
+                        ? { download: true }
+                        : { target: "_blank", rel: "noreferrer" })}
+                    >
+                      {esPdf ? (
+                        <FileDown className="h-4 w-4" />
+                      ) : (
+                        <ExternalLink className="h-4 w-4" />
+                      )}
+                      {adjunto.titulo || "Descargar archivo"}
+                    </ButtonAnchor>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,13 +1,17 @@
 "use client";
 
+import { Plus, Trash2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select, Textarea } from "@/components/ui/field";
 import { FileOrLinkField } from "@/components/ui/file-or-link-field";
 import { useToast } from "@/components/ui/toast";
 import { todayInBuenosAires } from "@/lib/utils";
-import type { Newsletter } from "@/lib/types/domain";
+import type { Newsletter, NewsletterAdjunto } from "@/lib/types/domain";
 import { createNewsletter, updateNewsletter } from "./actions";
+
+/** Cap mirrors the schema so the UI stops offering rows the save would reject. */
+const MAX_ADJUNTOS = 20;
 
 interface NewsletterFormProps {
   newsletter?: Newsletter;
@@ -19,7 +23,25 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
   // The edition lives in a file (PDF exported from the email provider) or, when
   // the provider exposes a public campaign link, in that link.
   const [adjuntoUrl, setAdjuntoUrl] = useState(newsletter?.adjuntoUrl ?? "");
+  // Extras published with the edition (the magazine, an annex). Optional and
+  // repeatable: an edition may ship none, one, or several.
+  const [adjuntos, setAdjuntos] = useState<NewsletterAdjunto[]>(
+    newsletter?.adjuntos ?? [],
+  );
   const toast = useToast();
+
+  const addAdjunto = () =>
+    setAdjuntos((rows) =>
+      rows.length >= MAX_ADJUNTOS ? rows : [...rows, { titulo: "", url: "" }],
+    );
+
+  const removeAdjunto = (index: number) =>
+    setAdjuntos((rows) => rows.filter((_, i) => i !== index));
+
+  const patchAdjunto = (index: number, patch: Partial<NewsletterAdjunto>) =>
+    setAdjuntos((rows) =>
+      rows.map((row, i) => (i === index ? { ...row, ...patch } : row)),
+    );
 
   const action = (formData: FormData) =>
     startTransition(async () => {
@@ -79,6 +101,74 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
           linkPlaceholder="https://mailchi.mp/…"
           hint="Subí la edición ya enviada (el PDF exportado desde Mailchimp/emBlue) o pegá el link público de la campaña. Los socios la abren desde el archivo."
         />
+      </FormField>
+
+      <FormField label="Archivos adicionales (opcional)">
+        <div className="space-y-3">
+          {adjuntos.length > 0 && (
+            <ul className="space-y-3">
+              {adjuntos.map((adjunto, idx) => (
+                <li
+                  key={idx}
+                  className="rounded-md border border-border bg-white p-3"
+                >
+                  <div className="mb-2 flex items-center justify-between gap-3">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-primary">
+                      Archivo {idx + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeAdjunto(idx)}
+                      aria-label={`Quitar archivo adicional ${idx + 1}`}
+                      className="rounded-md p-1 text-ink-muted transition-colors hover:bg-surface hover:text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  <Input
+                    aria-label={`Nombre del archivo adicional ${idx + 1}`}
+                    value={adjunto.titulo}
+                    onChange={(e) =>
+                      patchAdjunto(idx, { titulo: e.target.value })
+                    }
+                    placeholder="Ej: Revista N° 12"
+                    className="mb-2"
+                  />
+
+                  <FileOrLinkField
+                    name={`adjuntos-${idx}-url`}
+                    value={adjunto.url}
+                    onChange={(url) => patchAdjunto(idx, { url })}
+                    accept=".pdf,.doc,.docx,image/*"
+                    uploadLabel="Subir archivo"
+                    linkPlaceholder="https://…"
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {adjuntos.length < MAX_ADJUNTOS && (
+            <Button type="button" variant="secondary" onClick={addAdjunto}>
+              <Plus className="h-4 w-4" />
+              Agregar archivo
+            </Button>
+          )}
+
+          <p className="text-xs text-ink-muted">
+            Sumá acá la revista u otros materiales que se publican junto con la
+            edición. Cada archivo puede subirse o enlazarse, y el nombre es el
+            que ven los socios.
+          </p>
+
+          {/* Carries the rows into the submitted form data as a JSON array. */}
+          <input
+            type="hidden"
+            name="adjuntos"
+            value={JSON.stringify(adjuntos)}
+          />
+        </div>
       </FormField>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
