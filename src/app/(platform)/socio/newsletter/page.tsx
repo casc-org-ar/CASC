@@ -4,16 +4,16 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getDataLayer } from "@/lib/data";
-import { onlyPublished } from "@/lib/data/published";
+import { byFechaDesc, onlyPublished } from "@/lib/data/published";
 import type { Newsletter } from "@/lib/types/domain";
 
 export const metadata = { title: "Newsletter" };
 
 /** Socio Newsletter: archive of published editions, grouped by year only when spanning multiple years. */
 export default async function SocioNewsletterPage() {
-  const ediciones = onlyPublished(
-    await getDataLayer().newsletters.list(),
-  ).sort((a, b) => b.fecha.localeCompare(a.fecha));
+  const ediciones = byFechaDesc(
+    onlyPublished(await getDataLayer().newsletters.list()),
+  );
 
   // Group by year (already sorted newest-first, so years come down in order).
   const porAnio = new Map<number, Newsletter[]>();

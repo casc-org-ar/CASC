@@ -23,7 +23,17 @@ type FeedItem = {
   href: string;
 };
 
-const byDateDesc = (a: FeedItem, b: FeedItem) => b.fecha.localeCompare(a.fecha);
+/**
+ * Newest-first, ties broken on `href` (unique per item, since it embeds the
+ * slug or id). Without the tie-breaker items sharing a `fecha` kept whatever
+ * order the database returned, which is not guaranteed for equal sort keys —
+ * so the feed could reshuffle between requests, and `all[0]` would promote a
+ * different "Destacado" each time. This mirrors `byFechaDesc` in
+ * lib/data/published, which the single-type listings use; the feed needs its
+ * own because it merges three entities into a shape with no `id`.
+ */
+const byDateDesc = (a: FeedItem, b: FeedItem) =>
+  b.fecha.localeCompare(a.fecha) || b.href.localeCompare(a.href);
 
 /** Socio home: personalized greeting, a featured highlight, then latest-by-section. */
 export default async function SocioHomePage() {

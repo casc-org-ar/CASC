@@ -59,7 +59,14 @@ export class SupabaseContentRepository<T extends BaseEntity>
     const { data, error } = await supabase
       .from(this.table)
       .select("*")
-      .order(this.order.column, { ascending: this.order.ascending });
+      .order(this.order.column, { ascending: this.order.ascending })
+      // Tie-breaker. Ordering by a single column leaves rows that share a value
+      // in an order Postgres does not guarantee, so they can come back in a
+      // different sequence on each request. Rows seeded by one INSERT share the
+      // exact same `created_at` (5 of the 8 actividades do), which made the
+      // listing visibly reshuffle between reloads. `id` is unique, so adding it
+      // makes the order total and stable without changing the primary sort.
+      .order("id", { ascending: false });
 
     if (error) throw new Error(`[${this.table}] list failed: ${error.message}`);
     return (data ?? []).map((row) => this.mapper.fromRow(row));

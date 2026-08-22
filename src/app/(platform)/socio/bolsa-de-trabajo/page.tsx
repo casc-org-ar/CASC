@@ -11,9 +11,14 @@ export const metadata = { title: "Bolsa de Trabajo" };
  * loaded — pending ones stay hidden until an admin reviews them.
  */
 export default async function SocioBolsaTrabajoPage() {
+  // `id` breaks ties so candidates created in the same instant keep a stable
+  // order instead of reshuffling between requests.
   const candidatos = onlyPublished(
     await getDataLayer().candidatos.list(),
-  ).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  ).sort(
+    (a, b) =>
+      b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id),
+  );
 
   return (
     <>
