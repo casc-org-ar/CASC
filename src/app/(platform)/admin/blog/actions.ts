@@ -57,6 +57,10 @@ function parseBlogForm(formData: FormData) {
       ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean)
       : [],
     visibilidad: String(formData.get("visibilidad") ?? "publico"),
+    // An unchecked checkbox submits NO field, so presence means checked. Read
+    // it as a boolean here rather than letting a missing field mean "leave as
+    // is" — unchecking must actually clear the highlight.
+    destacado: formData.get("destacado") !== null,
     fecha: String(formData.get("fecha") ?? ""),
     status: String(formData.get("status") ?? "borrador"),
   });

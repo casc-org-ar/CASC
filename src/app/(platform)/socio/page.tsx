@@ -21,6 +21,11 @@ type FeedItem = {
   fecha: string;
   imagen?: string;
   href: string;
+  /**
+   * Marked as a highlight by an admin. Only articles carry the flag today;
+   * webinars and informes have no such column, so they are never highlighted.
+   */
+  destacado: boolean;
 };
 
 /**
@@ -56,6 +61,7 @@ export default async function SocioHomePage() {
     fecha: n.fecha,
     imagen: n.portadaUrl,
     href: `/socio/noticias/${n.slug}`,
+    destacado: n.destacado,
   }));
   const webinarsFeed: FeedItem[] = onlyPublished(webinars).map((w) => ({
     tipo: "Webinar",
@@ -65,6 +71,7 @@ export default async function SocioHomePage() {
     fecha: w.fecha,
     imagen: w.portadaUrl,
     href: `/socio/webinars/${w.id}`,
+    destacado: false,
   }));
   const informesFeed: FeedItem[] = onlyPublished(informes).map((i) => ({
     tipo: "Informe",
@@ -74,34 +81,42 @@ export default async function SocioHomePage() {
     fecha: i.fecha,
     imagen: i.portadaUrl,
     href: `/socio/informes/${i.id}`,
+    destacado: false,
   }));
 
   const all = [...noticiasFeed, ...webinarsFeed, ...informesFeed].sort(
     byDateDesc,
   );
 
-  // The most recent item is the featured highlight. Exclude it from its section
-  // below so it never shows up twice.
-  const featured = all[0];
+  // Highlights are chosen by an admin (the `destacado` flag), not inferred from
+  // the date — the panel used to promote whatever was newest, so nobody could
+  // pick, and only one ever fit. Several can be marked at once.
+  //
+  // With nothing marked, fall back to the newest item so the panel is never
+  // left without a highlight (its long-standing behaviour).
+  const marcados = all.filter((i) => i.destacado);
+  const featured = marcados.length > 0 ? marcados : all.slice(0, 1);
+  // Exclude highlighted items from the sections below so they never show twice.
+  const featuredHrefs = new Set(featured.map((i) => i.href));
 
   const secciones = [
     {
       titulo: "Últimas noticias",
       verTodos: "Ver todas las noticias",
       href: "/socio/noticias",
-      items: noticiasFeed.filter((i) => i.href !== featured?.href).slice(0, 3),
+      items: noticiasFeed.filter((i) => !featuredHrefs.has(i.href)).slice(0, 3),
     },
     {
       titulo: "Últimos webinars",
       verTodos: "Ver todos los webinars",
       href: "/socio/webinars",
-      items: webinarsFeed.filter((i) => i.href !== featured?.href).slice(0, 3),
+      items: webinarsFeed.filter((i) => !featuredHrefs.has(i.href)).slice(0, 3),
     },
     {
       titulo: "Últimos informes",
       verTodos: "Ver todos los informes",
       href: "/socio/informes",
-      items: informesFeed.filter((i) => i.href !== featured?.href).slice(0, 3),
+      items: informesFeed.filter((i) => !featuredHrefs.has(i.href)).slice(0, 3),
     },
   ].filter((s) => s.items.length > 0);
 
@@ -121,10 +136,13 @@ export default async function SocioHomePage() {
         </p>
       </header>
 
-      {/* Featured highlight */}
-      {featured && (
-        <div className="animate-fade-in-up">
-          <FeaturedCard item={featured} />
+      {/* Featured highlights — one card per item an admin marked. Stacked in
+          feed order (newest first) so the layout holds with one or with many. */}
+      {featured.length > 0 && (
+        <div className="animate-fade-in-up space-y-6">
+          {featured.map((item) => (
+            <FeaturedCard key={item.href} item={item} />
+          ))}
         </div>
       )}
 
@@ -158,10 +176,11 @@ export default async function SocioHomePage() {
 }
 
 /**
- * Featured card: the single most recent novelty (across noticias/webinars/
- * informes, by date). Contained layout — a capped-height cover on top and the
- * text below — instead of a full-width banner with the image on the side, which
- * read as too heavy. The "Destacado" tag makes the highlight explicit.
+ * Featured card: one highlight the team marked from the admin panel (or the
+ * newest novelty when nothing is marked). Contained layout — a capped-height
+ * cover on top and the text below — instead of a full-width banner with the
+ * image on the side, which read as too heavy. The "Destacado" tag makes the
+ * highlight explicit.
  */
 function FeaturedCard({ item }: { item: FeedItem }) {
   const Icon = item.icon;

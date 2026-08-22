@@ -121,6 +121,10 @@ export const blogSchema = z.object({
   // Audience selector. Defaults to "publico" so a payload without the field
   // (older form, direct action call) keeps the pre-unification behaviour.
   visibilidad: z.enum(["socios", "publico", "ambos"]).default("publico"),
+  // Editor-chosen highlight. The parser resolves the checkbox to a real boolean
+  // before validating (an unchecked box submits NO field at all), so this only
+  // has to accept the boolean and default an absent one to false.
+  destacado: z.boolean().default(false),
   fecha,
   status,
 });

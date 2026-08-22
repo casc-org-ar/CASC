@@ -312,6 +312,24 @@ export function BlogForm({
         </p>
       </FormField>
 
+      {/* Highlight selector. Unchecked submits no field at all — the action
+          reads presence as the boolean, so unchecking clears the highlight. */}
+      <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-ink-muted">
+        <input
+          type="checkbox"
+          name="destacado"
+          defaultChecked={post?.destacado ?? false}
+          className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-casc-navy-500)]"
+        />
+        <span>
+          Destacar en el panel de socios
+          <span className="mt-0.5 block text-xs text-ink-muted">
+            El artículo se muestra arriba de todo, antes de las secciones.
+            Podés destacar varios a la vez.
+          </span>
+        </span>
+      </label>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField label="Fecha" htmlFor="fecha">
           <Input
