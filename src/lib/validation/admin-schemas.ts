@@ -143,7 +143,17 @@ export const hotelSchema = z.object({
 export const socioSchema = z.object({
   nombre: req(LIMITS.corto),
   shopping: req(LIMITS.corto),
-  email: z.string().trim().min(1).max(200).email(),
+  // Lowercased on the way in: `socios.email` is stored normalized (migration
+  // 0019) so the Clerk webhook can link the row with an exact `eq` match
+  // instead of a wildcard-prone `ilike`. Normalizing here means an admin typing
+  // "Gerencia@..." cannot violate the socios_email_lowercase constraint.
+  email: z
+    .string()
+    .trim()
+    .min(1)
+    .max(200)
+    .email()
+    .transform((value) => value.toLowerCase()),
   cargo: opt(LIMITS.corto),
   estado: z.enum(["activo", "inactivo"]),
   role: z.enum(["admin", "socio"]),
