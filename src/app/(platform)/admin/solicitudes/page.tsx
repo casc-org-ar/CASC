@@ -15,8 +15,13 @@ export default async function AdminSolicitudesPage() {
     data.consultas.list(),
   ]);
 
-  const porFecha = <T extends { createdAt: string }>(items: T[]) =>
-    [...items].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  // `id` breaks ties so submissions recorded in the same instant keep a stable
+  // order instead of reshuffling between requests.
+  const porFecha = <T extends { createdAt: string; id: string }>(items: T[]) =>
+    [...items].sort(
+      (a, b) =>
+        b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id),
+    );
 
   return (
     <>

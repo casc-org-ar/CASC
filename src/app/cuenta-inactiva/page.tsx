@@ -9,10 +9,15 @@ export const metadata: Metadata = {
 };
 
 /**
- * Shown when a member whose `estado` is "inactivo" reaches the platform. The
- * socio layout redirects here instead of letting them in. The account still
- * exists in Clerk (the block is reversible: an admin can reactivate them), so
- * we explain the situation and offer a clean sign-out rather than a raw error.
+ * Shown when a member whose `estado` is "inactivo" reaches the platform — a
+ * deliberate baja by an admin. The socio layout redirects here instead of
+ * letting them in. The account still exists in Clerk (the block is reversible:
+ * an admin can reactivate them), so we explain the situation and offer a clean
+ * sign-out rather than a raw error.
+ *
+ * A member who is merely not linked to their socios row yet goes to
+ * /cuenta-en-activacion instead — that is a transient state, not a baja, and
+ * this page's wording would be wrong for it.
  */
 export default function CuentaInactivaPage() {
   return (

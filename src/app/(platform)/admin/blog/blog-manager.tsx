@@ -42,10 +42,15 @@ const columns: Column<BlogPost>[] = [
   },
   {
     header: "Visibilidad",
+    // The highlight badge sits here so the team can see which articles are
+    // promoted straight from the table, without opening each one.
     cell: (p) => (
-      <Badge tone={p.visibilidad === "socios" ? "muted" : "accent"}>
-        {VISIBILIDAD_LABEL[p.visibilidad]}
-      </Badge>
+      <div className="flex flex-wrap gap-1">
+        <Badge tone={p.visibilidad === "socios" ? "muted" : "accent"}>
+          {VISIBILIDAD_LABEL[p.visibilidad]}
+        </Badge>
+        {p.destacado && <Badge tone="success">Destacado</Badge>}
+      </div>
     ),
   },
   {

@@ -7,7 +7,7 @@ import { CardCover } from "@/components/shared/card-cover";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { getPublicDataLayer } from "@/lib/data";
-import { byVisibilidad, onlyPublished } from "@/lib/data/published";
+import { byFechaDesc, byVisibilidad, onlyPublished } from "@/lib/data/published";
 
 /**
  * Public news listing. Reads published blog posts from the panel — the same
@@ -35,10 +35,16 @@ export default async function NoticiasPage({
   const query = (sp.q ?? "").trim();
   const q = query.toLowerCase();
 
-  const allPosts = byVisibilidad(
-    onlyPublished(await getPublicDataLayer().blog.list()),
-    "publico",
-  ).sort((a, b) => b.fecha.localeCompare(a.fecha));
+  // Deterministic order matters twice as much here: this listing is paginated,
+  // and rows sharing a `fecha` used to come back in an arbitrary order, so an
+  // article could land on page 1 for one request and page 2 for the next —
+  // showing up twice or not at all as the reader pages through.
+  const allPosts = byFechaDesc(
+    byVisibilidad(
+      onlyPublished(await getPublicDataLayer().blog.list()),
+      "publico",
+    ),
+  );
 
   // Filter by the search query across title, summary and body.
   const posts = q

@@ -32,7 +32,13 @@ export default async function AdminDashboardPage() {
     ...informes.map((i) => ({ tipo: "Informe", titulo: i.titulo, fecha: i.fecha, status: i.status })),
     ...noticias.map((n) => ({ tipo: "Noticia", titulo: n.titulo, fecha: n.fecha, status: n.status })),
   ]
-    .sort((a, b) => b.fecha.localeCompare(a.fecha))
+    // Ties broken on title so the "latest 5" stays stable: items sharing a
+    // `fecha` would otherwise keep the database's arbitrary order for equal
+    // sort keys, and the slice could show a different set on each load.
+    .sort(
+      (a, b) =>
+        b.fecha.localeCompare(a.fecha) || a.titulo.localeCompare(b.titulo),
+    )
     .slice(0, 5);
 
   return (

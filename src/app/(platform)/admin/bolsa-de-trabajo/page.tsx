@@ -9,8 +9,11 @@ export const metadata = { title: "Bolsa de Trabajo" };
  * landing. Newest first so pending submissions surface at the top.
  */
 export default async function AdminBolsaTrabajoPage() {
-  const candidatos = (await getDataLayer().candidatos.list()).sort((a, b) =>
-    b.createdAt.localeCompare(a.createdAt),
+  // `id` breaks ties so candidates created in the same instant keep a stable
+  // order instead of reshuffling between requests.
+  const candidatos = (await getDataLayer().candidatos.list()).sort(
+    (a, b) =>
+      b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id),
   );
 
   return (

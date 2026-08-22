@@ -21,7 +21,16 @@ export async function readPublishedActividades(
     const published = onlyPublished(
       await getPublicDataLayer().actividades.list(),
     );
-    return audience ? byVisibilidad(published, audience) : published;
+    const visible = audience ? byVisibilidad(published, audience) : published;
+    // Newest publication first. `fecha` is a free-text display date ("8 de
+    // mayo", "13 de agosto 2026") and cannot be sorted, so publication time
+    // (`createdAt`) is the ordering key. Sorting here — not only in the
+    // repository — keeps every actividades view consistent, and `id` breaks
+    // ties so rows seeded with an identical timestamp never reshuffle.
+    return [...visible].sort(
+      (a, b) =>
+        b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id),
+    );
   } catch {
     return [];
   }

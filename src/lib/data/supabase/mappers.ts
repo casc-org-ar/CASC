@@ -221,6 +221,7 @@ export const blogMapper: EntityMapper<BlogPost> = {
     autor: r.autor as string,
     tags: (r.tags as string[] | null) ?? [],
     visibilidad: (r.visibilidad as BlogPost["visibilidad"] | null) ?? "publico",
+    destacado: (r.destacado as boolean | null) ?? false,
     fecha: r.fecha as string,
     status: r.status as BlogPost["status"],
     createdAt: r.created_at as string,
@@ -238,6 +239,7 @@ export const blogMapper: EntityMapper<BlogPost> = {
     put(row, "autor", i.autor);
     put(row, "tags", i.tags);
     put(row, "visibilidad", i.visibilidad);
+    put(row, "destacado", i.destacado);
     put(row, "fecha", i.fecha);
     put(row, "status", i.status);
     return row;

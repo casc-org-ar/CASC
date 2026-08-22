@@ -126,6 +126,12 @@ export interface BlogPost extends BaseEntity {
   tags: string[];
   /** Audience: members panel, public site, or both. Defaults to "publico". */
   visibilidad: Visibilidad;
+  /**
+   * Promoted to the socio panel's highlights. Editor-chosen, and several
+   * articles can carry it at once — the panel used to highlight whatever was
+   * newest, which nobody selected and allowed only one.
+   */
+  destacado: boolean;
   fecha: string;
   status: PublicationStatus;
 }
