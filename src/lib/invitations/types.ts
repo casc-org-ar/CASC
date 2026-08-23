@@ -17,6 +17,14 @@ export interface InvitationResult {
   sentAt: string;
   /** The email the invite went to. */
   email: string;
+  /**
+   * True when the branded email actually went out. The invitation can be
+   * created in Clerk while the delivery fails (bad API key, unverified sending
+   * domain), and those are different problems: the member exists and can be
+   * re-invited, but nobody received a link. The admin UI needs to tell them
+   * apart instead of reporting a silent success.
+   */
+  emailSent: boolean;
 }
 
 export interface InvitationService {

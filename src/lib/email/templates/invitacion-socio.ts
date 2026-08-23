@@ -1,4 +1,86 @@
-<!doctype html>
+import "server-only";
+
+/**
+ * Invitation email, rendered by us and delivered through Resend.
+ *
+ * Clerk creates the invitation and returns the acceptance URL, but does NOT
+ * send the message (`notify: false`): the Cámara owns the wording and the
+ * design, so the email is built here instead of in Clerk's template editor.
+ *
+ * Why the markup looks dated: email clients are not browsers. The layout uses
+ * tables and inline styles because Outlook for Windows renders through Word and
+ * drops most modern CSS, and `casc.org.ar` receives mail on Microsoft 365, so a
+ * large share of members open it there. Gmail also strips <style> blocks in
+ * several contexts, which is why nothing relies on a stylesheet.
+ *
+ * The logo is the brand bracket drawn with borders and type rather than an
+ * image: clients block remote images by default, and a logo-as-image would
+ * leave the header blank for most recipients on first open.
+ *
+ * Palette and typography follow marca/CASC_Manual_de_Marca.md — black, grey and
+ * white, with the institutional blue reserved for the action button.
+ */
+
+/** Escape text interpolated into the HTML body. */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+export interface InvitacionEmailInput {
+  /** Clerk's acceptance URL — carries the `__clerk_ticket`. */
+  invitationUrl: string;
+  /** Member's name, when known; the greeting falls back to a plain "Hola". */
+  nombre?: string;
+}
+
+export function asuntoInvitacion(): string {
+  return "Te damos acceso a la Plataforma de Socios — CASC";
+}
+
+/**
+ * Plain-text alternative. Sending it alongside the HTML is what keeps the
+ * message out of spam filters that penalise HTML-only mail, and it is what
+ * screen readers and text-only clients fall back to.
+ */
+export function textoInvitacion({
+  invitationUrl,
+  nombre,
+}: InvitacionEmailInput): string {
+  const saludo = nombre ? `Hola ${nombre},` : "Hola,";
+  return `${saludo}
+
+La Cámara Argentina de Shopping Centers te invita a sumarte a su plataforma
+exclusiva para socios. Desde ahí vas a poder acceder a los informes del sector,
+las capacitaciones y todos los beneficios que la Cámara pone a disposición.
+
+Para activar tu cuenta, entrá en este enlace y creá tu contraseña:
+
+${invitationUrl}
+
+Esta invitación es personal y fue enviada a tu dirección de correo. Si no
+esperabas recibirla, podés ignorar este mensaje: sin activarla, no se crea
+ninguna cuenta.
+
+—
+Cámara Argentina de Shopping Centers
+Representamos a los centros comerciales de toda la Argentina desde 1990.
+https://casc.org.ar`;
+}
+
+export function htmlInvitacion({
+  invitationUrl,
+  nombre,
+}: InvitacionEmailInput): string {
+  const saludo = nombre ? `Hola ${escapeHtml(nombre)},` : "Hola,";
+  // The URL goes into an href and into visible text; escaping covers both.
+  const url = escapeHtml(invitationUrl);
+
+  return `<!doctype html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
@@ -44,7 +126,7 @@
                   Te damos acceso a la Plataforma de Socios
                 </h1>
                 <p style="margin:0 0 16px 0; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:16px; line-height:26px; font-weight:400; color:#3A3A3A;">
-                  Hola Catalina,
+                  ${saludo}
                 </p>
                 <p style="margin:0 0 16px 0; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:16px; line-height:26px; font-weight:400; color:#3A3A3A;">
                   La Cámara Argentina de Shopping Centers te invita a sumarte a su
@@ -64,7 +146,7 @@
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                   <tr>
                     <td align="center" style="background-color:#19557B;">
-                      <a href="https://casc.org.ar/sign-up?__clerk_ticket=EJEMPLO"
+                      <a href="${url}"
                          style="display:inline-block; padding:16px 42px; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:600; color:#FFFFFF; text-decoration:none;">
                         Activar mi cuenta
                       </a>
@@ -86,7 +168,7 @@
                         Copiá y pegá esta dirección en tu navegador:
                       </p>
                       <p style="margin:0; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:12px; line-height:19px; font-weight:400; word-break:break-all;">
-                        <a href="https://casc.org.ar/sign-up?__clerk_ticket=EJEMPLO" style="color:#19557B; text-decoration:underline;">https://casc.org.ar/sign-up?__clerk_ticket=EJEMPLO</a>
+                        <a href="${url}" style="color:#19557B; text-decoration:underline;">${url}</a>
                       </p>
                     </td>
                   </tr>
@@ -136,4 +218,5 @@
     </table>
 
   </body>
-</html>
+</html>`;
+}

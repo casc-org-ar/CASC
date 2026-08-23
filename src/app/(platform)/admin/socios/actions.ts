@@ -32,6 +32,13 @@ function parseSocioForm(formData: FormData) {
 /** Result surfaced to the client so the manager can show the admin notification. */
 export interface AltaResult {
   socioId: string;
+  /**
+   * Whether the invitation EMAIL actually went out. The Clerk invitation can be
+   * created while delivery fails (Resend not configured, sending domain not
+   * verified), so this tracks the email — telling the admin "invitación
+   * enviada" when nothing was delivered leaves a member waiting for a link that
+   * never arrives.
+   */
   invitacionEnviada: boolean;
   email: string;
 }
@@ -57,7 +64,11 @@ export async function createSocio(formData: FormData): Promise<AltaResult> {
     parsed.role,
   );
   revalidatePath("/admin/socios");
-  return { socioId: socio.id, invitacionEnviada: result.ok, email: parsed.email };
+  return {
+    socioId: socio.id,
+    invitacionEnviada: result.emailSent,
+    email: parsed.email,
+  };
 }
 
 export async function updateSocio(
@@ -94,13 +105,22 @@ export async function resendInvitation(id: string): Promise<AltaResult> {
     socio.role,
   );
   revalidatePath("/admin/socios");
-  return { socioId: id, invitacionEnviada: result.ok, email: socio.email };
+  return {
+    socioId: id,
+    invitacionEnviada: result.emailSent,
+    email: socio.email,
+  };
 }
 
 /**
  * Send the invitation through the provider and persist the send on the socio.
- * Shared by alta and resend. When Clerk lands, only the provider behind
- * `getInvitations()` changes — this stays the same.
+ * Shared by alta and resend. The provider behind `getInvitations()` is the only
+ * thing that changes between mock and real — this stays the same.
+ *
+ * Only an actually delivered email marks the socio as "enviada". The invitation
+ * can exist in Clerk while the email fails (Resend not configured, sending
+ * domain not verified); recording "enviada" then would show the admin a member
+ * who was never reached, and hide that the invitation needs resending.
  */
 async function sendInvitationFor(
   id: string,
@@ -109,7 +129,7 @@ async function sendInvitationFor(
   role: UserRole,
 ) {
   const result = await getInvitations().sendInvitation({ email, nombre, role });
-  if (result.ok) {
+  if (result.emailSent) {
     await getDataLayer().socios.update(id, {
       invitacionStatus: "enviada",
       invitacionEnviadaAt: result.sentAt,
