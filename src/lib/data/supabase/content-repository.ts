@@ -6,7 +6,10 @@ import type {
   UpdateInput,
 } from "@/lib/data/repositories";
 import type { BaseEntity } from "@/lib/types/domain";
-import { createSupabaseClient } from "@/lib/data/supabase/client";
+import {
+  createSupabaseClient,
+  isTransientTokenError,
+} from "@/lib/data/supabase/client";
 import type { EntityMapper } from "@/lib/data/supabase/mappers";
 
 /** Factory for the Supabase client a repository uses (authenticated or anon). */
@@ -54,9 +57,10 @@ export class SupabaseContentRepository<T extends BaseEntity>
     private readonly client: ClientFactory = createSupabaseClient,
   ) {}
 
-  async list(): Promise<T[]> {
+  /** One `list()` round-trip. Split out so it can be retried with a fresh client. */
+  private async runList() {
     const supabase = this.client();
-    const { data, error } = await supabase
+    return supabase
       .from(this.table)
       .select("*")
       .order(this.order.column, { ascending: this.order.ascending })
@@ -67,18 +71,44 @@ export class SupabaseContentRepository<T extends BaseEntity>
       // listing visibly reshuffle between reloads. `id` is unique, so adding it
       // makes the order total and stable without changing the primary sort.
       .order("id", { ascending: false });
+  }
+
+  async list(): Promise<T[]> {
+    let { data, error } = await this.runList();
+
+    // Retry once on a clock-skew token rejection ("JWT not yet valid"). Clerk
+    // stamps `nbf` from its clock and Supabase validates against its own, so a
+    // token minted moments ago can look not-yet-valid and the read throws —
+    // which took /socio and /admin down with a 500. A second attempt builds a
+    // NEW client, so `accessToken()` runs again and mints a fresh token; the
+    // short pause lets the drift pass. Only this error class is retried:
+    // permission and query failures must still surface immediately.
+    if (error && isTransientTokenError(error.message)) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      ({ data, error } = await this.runList());
+    }
 
     if (error) throw new Error(`[${this.table}] list failed: ${error.message}`);
     return (data ?? []).map((row) => this.mapper.fromRow(row));
   }
 
-  async getById(id: string): Promise<T | null> {
+  /** One `getById` round-trip. Split out so it can be retried with a fresh client. */
+  private async runGetById(id: string) {
     const supabase = this.client();
-    const { data, error } = await supabase
-      .from(this.table)
-      .select("*")
-      .eq("id", id)
-      .maybeSingle();
+    return supabase.from(this.table).select("*").eq("id", id).maybeSingle();
+  }
+
+  async getById(id: string): Promise<T | null> {
+    let { data, error } = await this.runGetById(id);
+
+    // Same clock-skew retry as `list()`: detail pages are reads too, and a
+    // not-yet-valid token would 500 them just as readily. Writes deliberately
+    // do NOT retry — replaying one could duplicate a row, and the admin sees
+    // the failure and can decide to try again.
+    if (error && isTransientTokenError(error.message)) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      ({ data, error } = await this.runGetById(id));
+    }
 
     if (error)
       throw new Error(`[${this.table}] getById failed: ${error.message}`);

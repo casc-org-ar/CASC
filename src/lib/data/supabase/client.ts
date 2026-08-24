@@ -44,6 +44,21 @@ export function createSupabaseClient() {
 }
 
 /**
+ * True when a Supabase error is a transient token-validity failure rather than
+ * a real data or permission problem.
+ *
+ * Clerk stamps each session token with `nbf` ("not before") and `exp` from ITS
+ * clock; Supabase validates them against its OWN. A small drift between the two
+ * makes a freshly minted token look like it is not valid yet — Supabase answers
+ * "JWT not yet valid" and the read throws, which surfaced as a 500 on /socio
+ * and /admin. The token is fine seconds later, so this is worth one retry;
+ * nothing else here is.
+ */
+export function isTransientTokenError(message: string): boolean {
+  return /jwt (not yet valid|expired)|token is expired/i.test(message);
+}
+
+/**
  * An ANONYMOUS Supabase client — no Clerk token. For public-site reads of
  * published content (news, blog, hotel benefits), where there is no logged-in
  * user and, crucially, no HTTP request at all during static generation
