@@ -9,6 +9,7 @@ import {
   Clock,
 } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Pagination, usePagination } from "@/components/shared/pagination";
 import { SearchInput } from "@/components/shared/search-input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -147,6 +148,10 @@ export function CandidatosList({ candidatos }: { candidatos: Candidato[] }) {
     return matchesArea && matchesSkill && matchesQuery;
   });
 
+  // Page the filtered results so the section stays a fixed height as the
+  // candidate pool grows. Resets to page 1 whenever the search or filter changes.
+  const { page, totalPages, pageItems, setPage } = usePagination(visible);
+
   const clearFilters = () => {
     setArea(null);
     setSkill(null);
@@ -206,11 +211,18 @@ export function CandidatosList({ candidatos }: { candidatos: Candidato[] }) {
           </Button>
         </EmptyState>
       ) : (
-        <div className="stagger-children grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {visible.map((candidato) => (
-            <CandidatoCard key={candidato.id} candidato={candidato} />
-          ))}
-        </div>
+        <>
+          <div className="stagger-children grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {pageItems.map((candidato) => (
+              <CandidatoCard key={candidato.id} candidato={candidato} />
+            ))}
+          </div>
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </>
       )}
     </>
   );

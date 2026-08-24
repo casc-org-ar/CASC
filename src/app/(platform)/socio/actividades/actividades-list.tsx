@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { CardCover } from "@/components/shared/card-cover";
 import { CategoryFilter } from "@/components/shared/category-filter";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Pagination, usePagination } from "@/components/shared/pagination";
 import { SearchInput } from "@/components/shared/search-input";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
@@ -66,6 +67,10 @@ export function ActividadesList({ actividades }: { actividades: Actividad[] }) {
     return matchesModalidad && matchesQuery;
   });
 
+  // Page the filtered results so the section stays a fixed height as the
+  // catalogue grows. Resets to page 1 whenever the search or filter changes.
+  const { page, totalPages, pageItems, setPage } = usePagination(visible);
+
   const clearFilters = () => {
     setModalidad(null);
     setQuery("");
@@ -95,8 +100,9 @@ export function ActividadesList({ actividades }: { actividades: Actividad[] }) {
           </Button>
         </EmptyState>
       ) : (
+        <>
         <div className="stagger-children grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {visible.map((actividad) => (
+          {pageItems.map((actividad) => (
             <Link
               key={actividad.id}
               href={`/socio/actividades/${actividad.slug}`}
@@ -123,6 +129,12 @@ export function ActividadesList({ actividades }: { actividades: Actividad[] }) {
             </Link>
           ))}
         </div>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      </>
       )}
     </>
   );

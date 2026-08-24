@@ -14,6 +14,7 @@ import {
   deriveCategories,
 } from "@/components/shared/category-filter";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Pagination, usePagination } from "@/components/shared/pagination";
 import { SearchInput } from "@/components/shared/search-input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -176,6 +177,10 @@ export function BeneficiosList({ hoteles }: { hoteles: Hotel[] }) {
     return matchesCity && matchesQuery;
   });
 
+  // Page the filtered results so the section stays a fixed height as the
+  // catalogue grows. Resets to page 1 whenever the search or filter changes.
+  const { page, totalPages, pageItems, setPage } = usePagination(visible);
+
   const clearFilters = () => {
     setCity(null);
     setQuery("");
@@ -203,11 +208,18 @@ export function BeneficiosList({ hoteles }: { hoteles: Hotel[] }) {
           </Button>
         </EmptyState>
       ) : (
-        <div className="stagger-children grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {visible.map((hotel) => (
-            <HotelCard key={hotel.id} hotel={hotel} />
-          ))}
-        </div>
+        <>
+          <div className="stagger-children grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {pageItems.map((hotel) => (
+              <HotelCard key={hotel.id} hotel={hotel} />
+            ))}
+          </div>
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </>
       )}
     </>
   );
