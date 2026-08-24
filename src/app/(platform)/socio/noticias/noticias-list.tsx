@@ -13,20 +13,31 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import type { BlogPost } from "@/lib/types/domain";
 
 /**
- * Build the sorted, de-duplicated tag list from posts, case-insensitive so
- * "Retail" and "retail" collapse to one pill (keeping the first-seen casing).
+ * Build the de-duplicated tag list from posts, case-insensitive so "Retail" and
+ * "retail" collapse to one pill (keeping the first-seen casing).
+ *
+ * Ordered by how many articles carry each tag, not alphabetically. The filter
+ * shows the first few and collapses the rest into "Más", so the leading tags
+ * should be the ones that actually narrow the list: today "shopping center" (9
+ * articles) and "retail" (8) would otherwise sit below one-off tags like
+ * "arquitectura" or "cine" purely because of the alphabet. Ties break
+ * alphabetically to keep the order stable between renders.
  */
 function deriveTags(posts: BlogPost[]): string[] {
-  const seen = new Map<string, string>();
+  const seen = new Map<string, { label: string; count: number }>();
   for (const post of posts) {
     for (const raw of post.tags) {
       const value = raw.trim();
       if (!value) continue;
       const key = value.toLowerCase();
-      if (!seen.has(key)) seen.set(key, value);
+      const entry = seen.get(key);
+      if (entry) entry.count += 1;
+      else seen.set(key, { label: value, count: 1 });
     }
   }
-  return [...seen.values()].sort((a, b) => a.localeCompare(b, "es"));
+  return [...seen.values()]
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, "es"))
+    .map((entry) => entry.label);
 }
 
 /**

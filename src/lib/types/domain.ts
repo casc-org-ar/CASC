@@ -52,6 +52,13 @@ export interface Actividad extends BaseEntity {
   imagen?: string; // cover image for the card
   cuerpo?: string; // extended write-up for the detail page
   fecha?: string; // display date, optional until confirmed
+  /**
+   * Real event date (ISO `YYYY-MM-DD`), used for ordering. `fecha` above is
+   * free text the admin writes for display ("Del 8 al 10 de mayo"), so it
+   * cannot be sorted; this is the sortable counterpart. Optional: an activity
+   * without a confirmed date falls back to publication order.
+   */
+  fechaEvento?: string;
   lugar?: string; // venue or format ("Auditorio…", "Online")
   inscripcionUrl?: string; // external registration/info link
   /** Audience: members panel, public site, or both. Defaults to "ambos". */

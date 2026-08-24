@@ -39,6 +39,14 @@ export const actividadSchema = z.object({
   cuerpo: opt(LIMITS.largo),
   // Free-text display date ("28 de mayo de 2026"), optional.
   fecha: opt(40),
+  // Real event date (ISO YYYY-MM-DD) used to order the listing, optional.
+  // `fecha` above is what the card shows; this is what it sorts by.
+  fechaEvento: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida")
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   lugar: opt(LIMITS.corto),
   inscripcionUrl: optUrl,
   // Audience selector. Defaults to "ambos" (public + members).

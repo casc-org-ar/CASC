@@ -9,6 +9,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getAuth } from "@/lib/auth";
 import { getDataLayer } from "@/lib/data";
 import { byVisibilidad, onlyPublished } from "@/lib/data/published";
+import { cn } from "@/lib/utils";
 
 export const metadata = { title: "Inicio" };
 
@@ -136,13 +137,31 @@ export default async function SocioHomePage() {
         </p>
       </header>
 
-      {/* Featured highlights — one card per item an admin marked. Stacked in
-          feed order (newest first) so the layout holds with one or with many. */}
+      {/* Featured highlights. The layout follows the count instead of being
+          fixed: the team can mark as many articles as they want, and stacking
+          full-size cards would push the rest of the panel below several screens
+          of scrolling — on a phone each card is already most of the viewport.
+
+          One highlight keeps the large card it always had. Two or more switch
+          to a compact grid, which fits any number without the page growing
+          unbounded. A carousel was the other option, but it hides items behind
+          arrows and its horizontal swipe fights the page scroll on mobile. */}
       {featured.length > 0 && (
-        <div className="animate-fade-in-up space-y-6">
-          {featured.map((item) => (
-            <FeaturedCard key={item.href} item={item} />
-          ))}
+        <div className="animate-fade-in-up">
+          {featured.length === 1 ? (
+            <FeaturedCard item={featured[0]} />
+          ) : (
+            <>
+              <h2 className="mb-4 text-lg font-bold tracking-tight text-ink">
+                Destacados
+              </h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {featured.map((item) => (
+                  <FeedCard key={item.href} item={item} highlighted />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
 
@@ -235,14 +254,28 @@ function FeaturedCard({ item }: { item: FeedItem }) {
 }
 
 /** Standard feed card used inside each section. */
-function FeedCard({ item }: { item: FeedItem }) {
+/**
+ * Feed card. `highlighted` is used when the card stands in for a featured item
+ * in the compact grid: an accent border marks it as promoted, since at that
+ * size it would otherwise be indistinguishable from the regular listings below.
+ */
+function FeedCard({
+  item,
+  highlighted = false,
+}: {
+  item: FeedItem;
+  highlighted?: boolean;
+}) {
   const Icon = item.icon;
   const showCover = item.tipo !== "Informe";
   return (
     <Link href={item.href} className="group block">
       <Card
         interactive
-        className="flex h-full flex-col overflow-hidden"
+        className={cn(
+          "flex h-full flex-col overflow-hidden",
+          highlighted && "border-accent",
+        )}
       >
         {showCover && <CardCover src={item.imagen} alt={item.titulo} />}
         <div className="mb-3 flex items-center justify-between">

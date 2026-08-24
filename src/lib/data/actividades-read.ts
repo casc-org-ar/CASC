@@ -22,15 +22,32 @@ export async function readPublishedActividades(
       await getPublicDataLayer().actividades.list(),
     );
     const visible = audience ? byVisibilidad(published, audience) : published;
-    // Newest publication first. `fecha` is a free-text display date ("8 de
-    // mayo", "13 de agosto 2026") and cannot be sorted, so publication time
-    // (`createdAt`) is the ordering key. Sorting here — not only in the
-    // repository — keeps every actividades view consistent, and `id` breaks
-    // ties so rows seeded with an identical timestamp never reshuffle.
-    return [...visible].sort(
-      (a, b) =>
-        b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id),
-    );
+    // Newest EVENT first, by `fechaEvento`.
+    //
+    // Ordering used to run on `createdAt` (publication time) while each card
+    // shows the event date, so the dates on screen looked shuffled — sorted by
+    // one field, read by another. `fecha` cannot be the key either: it is free
+    // text in mixed formats ("8 de mayo", "13 de agosto 2026"). `fechaEvento`
+    // is the real date added for exactly this.
+    //
+    // Activities with no event date sort last rather than on top, where a
+    // missing value would otherwise outrank confirmed events; among themselves
+    // they keep publication order, with `id` breaking ties so rows sharing a
+    // timestamp never reshuffle between requests.
+    return [...visible].sort((a, b) => {
+      if (a.fechaEvento && b.fechaEvento) {
+        return (
+          b.fechaEvento.localeCompare(a.fechaEvento) ||
+          b.createdAt.localeCompare(a.createdAt) ||
+          b.id.localeCompare(a.id)
+        );
+      }
+      if (a.fechaEvento) return -1;
+      if (b.fechaEvento) return 1;
+      return (
+        b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id)
+      );
+    });
   } catch {
     return [];
   }

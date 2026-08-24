@@ -33,6 +33,7 @@ function parseActividadForm(formData: FormData) {
     imagen: String(formData.get("imagen") ?? "").trim(),
     cuerpo: String(formData.get("cuerpo") ?? "").trim(),
     fecha: String(formData.get("fecha") ?? "").trim(),
+    fechaEvento: String(formData.get("fechaEvento") ?? "").trim(),
     lugar: String(formData.get("lugar") ?? "").trim(),
     inscripcionUrl: String(formData.get("inscripcionUrl") ?? "").trim(),
     visibilidad: String(formData.get("visibilidad") ?? "ambos"),

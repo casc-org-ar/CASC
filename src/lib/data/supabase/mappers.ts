@@ -59,6 +59,10 @@ export const actividadMapper: EntityMapper<Actividad> = {
     imagen: (r.imagen as string | null) ?? undefined,
     cuerpo: (r.cuerpo as string | null) ?? undefined,
     fecha: (r.fecha as string | null) ?? undefined,
+    // `date` columns come back as "YYYY-MM-DD" already; keep only that part in
+    // case the driver ever widens it to a timestamp.
+    fechaEvento:
+      (r.fecha_evento as string | null)?.slice(0, 10) ?? undefined,
     lugar: (r.lugar as string | null) ?? undefined,
     inscripcionUrl: (r.inscripcion_url as string | null) ?? undefined,
     visibilidad: (r.visibilidad as Actividad["visibilidad"] | null) ?? "ambos",
@@ -74,6 +78,10 @@ export const actividadMapper: EntityMapper<Actividad> = {
     put(row, "imagen", i.imagen);
     put(row, "cuerpo", i.cuerpo);
     put(row, "fecha", i.fecha);
+    // Written even when empty, as an explicit null: `put` skips `undefined`, so
+    // going through it would make clearing the date impossible — the column
+    // would keep its previous value. An empty date must actually clear.
+    if ("fechaEvento" in i) row.fecha_evento = i.fechaEvento || null;
     put(row, "lugar", i.lugar);
     put(row, "inscripcion_url", i.inscripcionUrl);
     put(row, "visibilidad", i.visibilidad);

@@ -87,8 +87,25 @@ export function ActividadForm({ actividad, onDone }: ActividadFormProps) {
         />
       </FormField>
 
+      {/* Two date fields on purpose. `fechaEvento` is a real date and is what
+          orders the listing; `fecha` is the free text shown on the card, so
+          wording like "Del 8 al 10 de mayo" is still possible. Ordering by the
+          display text is what left the listing looking unsorted. */}
+      <FormField label="Fecha del evento (opcional)" htmlFor="fechaEvento">
+        <Input
+          id="fechaEvento"
+          name="fechaEvento"
+          type="date"
+          defaultValue={actividad?.fechaEvento}
+        />
+        <p className="mt-1.5 text-xs text-ink-muted">
+          Ordena el listado: las actividades más recientes aparecen primero. Si
+          la dejás vacía, la actividad se ordena por fecha de publicación.
+        </p>
+      </FormField>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <FormField label="Fecha (opcional)" htmlFor="fecha">
+        <FormField label="Fecha a mostrar (opcional)" htmlFor="fecha">
           <Input
             id="fecha"
             name="fecha"
