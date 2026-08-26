@@ -13,13 +13,22 @@ import "server-only";
  * large share of members open it there. Gmail also strips <style> blocks in
  * several contexts, which is why nothing relies on a stylesheet.
  *
- * The logo is the brand bracket drawn with borders and type rather than an
- * image: clients block remote images by default, and a logo-as-image would
- * leave the header blank for most recipients on first open.
+ * The header carries the real logo as a PNG. Clients block remote images by
+ * default, so the `alt` text is styled to read as the brand name when the
+ * image does not load — the header degrades to legible text instead of an
+ * empty box.
  *
  * Palette and typography follow marca/CASC_Manual_de_Marca.md — black, grey and
  * white, with the institutional blue reserved for the action button.
  */
+
+/**
+ * Absolute URL of the logo. Email clients have no page to resolve a relative
+ * path against, so it must be fully qualified and publicly reachable — the file
+ * ships in `public/assets/brand/`. PNG, not the site's WebP: Outlook for
+ * Windows does not render WebP and would show a broken image.
+ */
+const LOGO_URL = "https://casc.org.ar/assets/brand/casc-logo-email.png";
 
 /** Escape text interpolated into the HTML body. */
 function escapeHtml(value: string): string {
@@ -102,15 +111,17 @@ export function htmlInvitacion({
 
             <tr>
               <td align="center" style="background-color:#000000; padding:40px 32px 36px 32px;">
-                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                  <tr>
-                    <td style="border-left:3px solid #FFFFFF; border-top:3px solid #FFFFFF; border-bottom:3px solid #FFFFFF; width:14px; height:64px; font-size:0; line-height:0;">&nbsp;</td>
-                    <td style="padding:0 16px; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:30px; line-height:32px; font-weight:700; letter-spacing:1px; color:#FFFFFF; text-align:center;">
-                      CA<br />SC
-                    </td>
-                    <td style="border-right:3px solid #FFFFFF; border-top:3px solid #FFFFFF; border-bottom:3px solid #FFFFFF; width:14px; height:64px; font-size:0; line-height:0;">&nbsp;</td>
-                  </tr>
-                </table>
+                <!-- Real brand logo, white version over the black header.
+                     The alt text matters more than usual: clients block remote
+                     images by default, so on first open many readers see it
+                     instead of the image. It is styled white and bold so the
+                     header still reads as CASC when the image never loads. -->
+                <img
+                  src="${LOGO_URL}"
+                  width="200"
+                  alt="CASC · Cámara Argentina de Shopping Centers"
+                  style="display:block; width:200px; max-width:70%; height:auto; border:0; outline:none; text-decoration:none; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:20px; font-weight:700; color:#FFFFFF;"
+                />
                 <p style="margin:18px 0 0 0; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:12px; line-height:18px; font-weight:400; letter-spacing:2px; text-transform:uppercase; color:#DBDAD7;">
                   Cámara Argentina de Shopping Centers
                 </p>
