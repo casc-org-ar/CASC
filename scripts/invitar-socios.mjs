@@ -52,7 +52,9 @@ function cargarEnv() {
 const env = cargarEnv();
 const SUPABASE_URL = env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
-const CLERK_KEY = env.CLERK_SECRET_KEY;
+// Se puede pasar por entorno para apuntar a la instancia de producción sin
+// tocar .env.local, que guarda la de desarrollo.
+const CLERK_KEY = process.env.CLERK_SECRET_KEY ?? env.CLERK_SECRET_KEY;
 const RESEND_KEY = process.env.RESEND_API_KEY ?? env.RESEND_API_KEY;
 const RESEND_FROM = process.env.RESEND_FROM ?? env.RESEND_FROM ?? "CASC <no-reply@casc.org.ar>";
 const APP_URL = env.NEXT_PUBLIC_APP_URL ?? "https://casc.org.ar";
@@ -65,7 +67,29 @@ const faltantes = [
 ].filter(([, v]) => !v).map(([k]) => k);
 
 if (faltantes.length) {
-  console.error(`Faltan variables en .env.local: ${faltantes.join(", ")}`);
+  console.error(`Faltan variables: ${faltantes.join(", ")}`);
+  process.exit(1);
+}
+
+/**
+ * La clave de Clerk y la base de Supabase tienen que ser del MISMO entorno.
+ *
+ * Con `sk_test_` los tickets se emiten contra la instancia de desarrollo
+ * (`*.clerk.accounts.dev`), pero las filas se escriben en la base de
+ * producción. El invitado recibe el correo, abre el link en casc.org.ar y ve
+ * "This ticket is invalid": el ticket existe, pero en otra instancia. Ya pasó
+ * una vez; el script se niega a correr antes que volver a mandarlo.
+ */
+const CLERK_ES_PROD = CLERK_KEY.startsWith("sk_live_");
+if (APPLY && !CLERK_ES_PROD) {
+  console.error(
+    "\nERROR: CLERK_SECRET_KEY es de DESARROLLO (sk_test_), pero los socios\n" +
+      "se escriben en la base de producción.\n\n" +
+      "Los tickets emitidos por la instancia de desarrollo NO sirven en\n" +
+      "casc.org.ar: el invitado veria \"This ticket is invalid\".\n\n" +
+      "Volvé a correrlo con la clave de producción:\n" +
+      "  CLERK_SECRET_KEY=sk_live_... node scripts/invitar-socios.mjs --apply\n",
+  );
   process.exit(1);
 }
 
@@ -220,6 +244,11 @@ console.log(
 );
 console.log(`origen: ${FILE ?? "lista de prueba embebida"}`);
 console.log(`remitente: ${RESEND_FROM}`);
+// Visible antes de cualquier envío: es el dato que distingue un lote válido de
+// uno que emite tickets contra la instancia equivocada.
+console.log(
+  `instancia Clerk: ${CLERK_ES_PROD ? "PRODUCCION (sk_live_)" : "desarrollo (sk_test_)"}`,
+);
 console.log(`destinatarios: ${filas.length}\n`);
 
 const resultado = { creados: 0, salteados: 0, fallidos: 0 };
