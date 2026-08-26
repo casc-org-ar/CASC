@@ -13,20 +13,20 @@ import "server-only";
  * large share of members open it there. Gmail also strips <style> blocks in
  * several contexts, which is why nothing relies on a stylesheet.
  *
- * The header carries the real logo as a PNG. Clients block remote images by
- * default, so the `alt` text is styled to read as the brand name when the
- * image does not load — the header degrades to legible text instead of an
- * empty box.
+ * The header carries the real 35-years logo as a PNG over a white band. Clients
+ * block remote images by default, so the alt text is styled to read as the
+ * brand name when the image does not load — the header degrades to legible
+ * text instead of an empty box.
  *
  * Palette and typography follow marca/CASC_Manual_de_Marca.md — black, grey and
  * white, with the institutional blue reserved for the action button.
  */
 
 /**
- * Absolute URL of the logo. Email clients have no page to resolve a relative
- * path against, so it must be fully qualified and publicly reachable — the file
- * ships in `public/assets/brand/`. PNG, not the site's WebP: Outlook for
- * Windows does not render WebP and would show a broken image.
+ * Absolute URL of the logo (the 35-years lockup). Email clients have no page to
+ * resolve a relative path against, so it must be fully qualified and publicly
+ * reachable — the file ships in `public/assets/brand/`. PNG, not the site's
+ * WebP: Outlook for Windows does not render WebP and would show a broken image.
  */
 const LOGO_URL = "https://casc.org.ar/assets/brand/casc-logo-email.png";
 
@@ -110,21 +110,21 @@ export function htmlInvitacion({
           <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:100%; background-color:#FFFFFF;">
 
             <tr>
-              <td align="center" style="background-color:#000000; padding:40px 32px 36px 32px;">
-                <!-- Real brand logo, white version over the black header.
-                     The alt text matters more than usual: clients block remote
+              <!-- Light header: the 35-years logo is the black version, which
+                   would disappear on the black background the header used to
+                   have. The brand manual allows the black logo over white or
+                   grey, so the band switches instead of the artwork. -->
+              <td align="center" style="background-color:#FFFFFF; padding:36px 32px 30px 32px; border-bottom:1px solid #E6E4E2;">
+                <!-- The alt text matters more than usual: clients block remote
                      images by default, so on first open many readers see it
-                     instead of the image. It is styled white and bold so the
-                     header still reads as CASC when the image never loads. -->
+                     instead of the image. Styled dark and bold so the header
+                     still reads as CASC when the image never loads. -->
                 <img
                   src="${LOGO_URL}"
-                  width="200"
-                  alt="CASC · Cámara Argentina de Shopping Centers"
-                  style="display:block; width:200px; max-width:70%; height:auto; border:0; outline:none; text-decoration:none; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:20px; font-weight:700; color:#FFFFFF;"
+                  width="320"
+                  alt="CASC · Cámara Argentina de Shopping Centers · 35 años"
+                  style="display:block; width:320px; max-width:86%; height:auto; border:0; outline:none; text-decoration:none; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:18px; font-weight:700; color:#000000;"
                 />
-                <p style="margin:18px 0 0 0; font-family:'Inter', Helvetica, Arial, sans-serif; font-size:12px; line-height:18px; font-weight:400; letter-spacing:2px; text-transform:uppercase; color:#DBDAD7;">
-                  Cámara Argentina de Shopping Centers
-                </p>
               </td>
             </tr>
 
