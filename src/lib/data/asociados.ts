@@ -559,7 +559,7 @@ export const asociados: Asociado[] = [
     "telefono": "0261 804 2400",
     "web": "https://www.cioffigrupo.com/labarracamall",
     "inauguracion": "Mayo 2013",
-    "visitas": "30.000",
+    "visitas": "900.000",
     "locales": "104"
   },
   {
