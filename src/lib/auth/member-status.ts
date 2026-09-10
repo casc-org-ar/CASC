@@ -1,6 +1,9 @@
 import "server-only";
+import { redirect } from "next/navigation";
+import { getAuth } from "@/lib/auth";
 import { getDataLayer } from "@/lib/data";
-import type { MemberState } from "@/lib/types/domain";
+import { securityLog } from "@/lib/security/security-log";
+import type { MemberState, SocioCategoria } from "@/lib/types/domain";
 
 /**
  * Why a member can be blocked. The socio layout needs to tell two very
@@ -15,7 +18,7 @@ import type { MemberState } from "@/lib/types/domain";
  * nobody deactivated them, the link just has not happened yet.
  */
 export type MemberAccess =
-  | { allowed: true; estado: MemberState }
+  | { allowed: true; estado: MemberState; categoria: SocioCategoria }
   | { allowed: false; reason: "inactivo" | "sin-vincular" };
 
 /**
@@ -44,5 +47,46 @@ export async function getMemberAccess(): Promise<MemberAccess> {
   // No row visible → the link is missing, NOT a deactivation.
   if (!own) return { allowed: false, reason: "sin-vincular" };
   if (own.estado !== "activo") return { allowed: false, reason: "inactivo" };
-  return { allowed: true, estado: own.estado };
+  // The category rides along with the access check: it comes from the same row
+  // RLS just authorized, so section visibility costs no extra query and can
+  // never read a different record than the guard did.
+  return { allowed: true, estado: own.estado, categoria: own.categoria };
+}
+
+/**
+ * Guard a socio page that only some member categories may open.
+ *
+ * Hiding a link in the sidebar is convenience, not access control: a member who
+ * knows the URL — or kept a bookmark from before their category changed —
+ * reaches the page anyway. This is what actually closes the door, so it must be
+ * called by every restricted page, including its detail routes.
+ *
+ * Admins pass through: they have no socios row, and the socio surface is a
+ * preview of content they already administer.
+ *
+ * A member whose category cannot be resolved is DENIED, not allowed. The
+ * layout already sends unlinked members elsewhere, so reaching this with no
+ * category means something unexpected happened — and an unexpected state must
+ * not be the one that grants access.
+ */
+export async function requireCategoria(
+  permitidas: readonly SocioCategoria[],
+): Promise<void> {
+  const user = await getAuth().getCurrentUser();
+  if (!user) redirect("/login");
+  if (user.role === "admin") return;
+
+  const access = await getMemberAccess();
+  if (!access.allowed) {
+    redirect(
+      access.reason === "inactivo" ? "/cuenta-inactiva" : "/cuenta-en-activacion",
+    );
+  }
+  if (!permitidas.includes(access.categoria)) {
+    securityLog("auth.role_denied", {
+      required: permitidas.join("|"),
+      had: access.categoria,
+    });
+    redirect("/socio");
+  }
 }

@@ -5,6 +5,8 @@ import { ButtonAnchor } from "@/components/ui/button";
 import { getDataLayer } from "@/lib/data";
 import { signedUrl } from "@/lib/data/supabase/storage";
 import { clerkEnabled } from "@/lib/auth/flag";
+import { requireCategoria } from "@/lib/auth/member-status";
+import { INFORMES_CATEGORIAS } from "@/lib/platform/navigation";
 
 /** How long the informe PDF stays viewable — enough to read it in one sitting. */
 const PDF_TTL_SECONDS = 60 * 60; // 1 hour
@@ -39,6 +41,11 @@ export default async function InformeDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  // Before reading the informe and before minting the signed PDF URL: a
+  // shared link must not hand a restricted category the file, and a guard that
+  // runs after the URL is signed has already given away the thing it protects.
+  await requireCategoria(INFORMES_CATEGORIAS);
+
   const { id } = await params;
   const informe = await getDataLayer().informes.getById(id);
 

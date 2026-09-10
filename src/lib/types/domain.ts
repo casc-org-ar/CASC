@@ -25,6 +25,28 @@ export type UserRole = "admin" | "socio";
 export type MemberState = "activo" | "inactivo";
 
 /**
+ * Type of associate. Decides which platform sections a member can reach:
+ * Informes and Estadísticas are reserved for shopping centers. The values
+ * mirror the categories CASC already uses in the public asociados directory
+ * and in the membership request form, so there is ONE taxonomy system-wide.
+ */
+export type SocioCategoria = "shopping" | "proveedor" | "retailer";
+
+/**
+ * Display labels for each category, in the order the admin form offers them.
+ * Kept beside the type so a new category cannot be added without giving it a
+ * label, and so the form and the socios table always read the same wording.
+ */
+export const SOCIO_CATEGORIAS: ReadonlyArray<{
+  value: SocioCategoria;
+  label: string;
+}> = [
+  { value: "shopping", label: "Shopping center" },
+  { value: "proveedor", label: "Proveedor de servicios" },
+  { value: "retailer", label: "Retailer" },
+];
+
+/**
  * Onboarding state of a member's account invitation (registration eje).
  * Independent from `MemberState`: a member can be an active membership while
  * their invitation is still pending. Driven by the invitation flow (Clerk
@@ -150,6 +172,8 @@ export interface Socio extends BaseEntity {
   cargo?: string;
   estado: MemberState;
   role: UserRole;
+  /** Type of associate; drives which sections this member sees. */
+  categoria: SocioCategoria;
   /** Registration onboarding state (see InvitationStatus). Defaults to "pendiente". */
   invitacionStatus: InvitationStatus;
   /** ISO timestamp of the last invitation send; undefined until first sent. */
@@ -267,4 +291,11 @@ export interface CurrentUser {
   email: string;
   role: UserRole;
   shopping?: string;
+  /**
+   * Type of associate, for members only. Undefined for admins (who have no
+   * socios row) and while the member's row is not linked to their Clerk user
+   * yet. Section visibility treats "undefined" as the most restrictive case,
+   * never as a free pass — see `getNavForUser`.
+   */
+  categoria?: SocioCategoria;
 }

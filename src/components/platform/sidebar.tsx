@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import { AccountMenu } from "@/components/platform/account-menu";
 import { SectionSwitcher } from "@/components/platform/section-switcher";
-import { getNavForRole } from "@/lib/platform/navigation";
+import { getNavForUser } from "@/lib/platform/navigation";
 import type { CurrentUser, UserRole } from "@/lib/types/domain";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +24,10 @@ export function Sidebar({ user, open, onNavigate }: SidebarProps) {
   // This lets an admin browse the socio section (preview) while staying admin.
   // It's navigation only: every server action still re-checks the real role.
   const section: UserRole = pathname.startsWith("/socio") ? "socio" : "admin";
-  const items = getNavForRole(section);
+  // Category filters the socio section: providers and retailers do not get
+  // Informes or Estadísticas. Hiding them here is convenience, not security —
+  // the page guards are what actually block the routes.
+  const items = getNavForUser(section, user);
   const isAdminSurface = section === "admin";
   const canSwitch = user.role === "admin";
 

@@ -45,6 +45,10 @@ export default async function SocioLayout({
   // and the `user.created` webhook landing) is not deactivated — telling them
   // their access "was disabled" sends them to support over a state that
   // resolves itself.
+  // The member's category comes from the same row the access check reads, so
+  // the sidebar hides exactly what the page guards block. An admin has no
+  // socios row and keeps `categoria` undefined — nothing is filtered for them.
+  let shellUser = user;
   if (user.role === "socio") {
     const access = await getMemberAccess();
     if (!access.allowed) {
@@ -54,11 +58,12 @@ export default async function SocioLayout({
           : "/cuenta-en-activacion",
       );
     }
+    shellUser = { ...user, categoria: access.categoria };
   }
 
   return (
     <PlatformShell
-      user={user}
+      user={shellUser}
       showDevSwitcher={process.env.NODE_ENV !== "production" && !clerkEnabled()}
     >
       {children}

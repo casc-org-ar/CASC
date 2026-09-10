@@ -310,6 +310,7 @@ export const socioMapper: EntityMapper<Socio> = {
     cargo: (r.cargo as string | null) ?? undefined,
     estado: r.estado as Socio["estado"],
     role: r.role as Socio["role"],
+    categoria: r.categoria as Socio["categoria"],
     invitacionStatus: r.invitacion_status as Socio["invitacionStatus"],
     invitacionEnviadaAt:
       (r.invitacion_enviada_at as string | null) ?? undefined,
@@ -324,6 +325,7 @@ export const socioMapper: EntityMapper<Socio> = {
     put(row, "cargo", i.cargo);
     put(row, "estado", i.estado);
     put(row, "role", i.role);
+    put(row, "categoria", i.categoria);
     put(row, "invitacion_status", i.invitacionStatus);
     put(row, "invitacion_enviada_at", i.invitacionEnviadaAt);
     return row;

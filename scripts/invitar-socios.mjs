@@ -17,8 +17,11 @@
  *   node scripts/invitar-socios.mjs --file socios.csv            (simulación)
  *   node scripts/invitar-socios.mjs --file socios.csv --apply    (ejecuta)
  *
- * El CSV necesita cabecera y las columnas: email, nombre, shopping, cargo, role.
- * `cargo` y `role` son opcionales (role por defecto: "socio").
+ * El CSV necesita cabecera y las columnas: email, nombre, shopping, categoria,
+ * cargo, role. `cargo` y `role` son opcionales (role por defecto: "socio");
+ * `categoria` es OBLIGATORIA y debe ser shopping, proveedor o retailer — decide
+ * qué secciones ve el socio, así que una fila sin ella se omite en vez de
+ * asumir un valor.
  *
  * Es reejecutable: un email que ya existe en `socios` se saltea, así que si el
  * proceso se corta a la mitad se puede volver a correr sin duplicar a nadie.
@@ -33,6 +36,9 @@ import { readFileSync } from "node:fs";
  * margen para que un lote grande no empiece a recibir rechazos por rate limit.
  */
 const PAUSA_MS = 600;
+
+/** Categorías válidas; deben coincidir con el enum `socio_categoria` (0022). */
+const CATEGORIAS = ["shopping", "proveedor", "retailer"];
 
 const APPLY = process.argv.includes("--apply");
 const fileArg = process.argv.indexOf("--file");
@@ -146,9 +152,9 @@ function leerCsv(ruta) {
 
 /** Lista embebida, para la prueba antes de usar un CSV real. */
 const PRUEBA = [
-  { email: "florenciagazzo@casc.org.ar", nombre: "Florencia Gazzo", shopping: "CASC", cargo: "Equipo CASC", role: "socio" },
-  { email: "carolopesperera@gmail.com", nombre: "Carolina Lopes Perera", shopping: "CASC", cargo: "Equipo CASC", role: "socio" },
-  { email: "laureanosierra.wallet@gmail.com", nombre: "Laureano Sierra", shopping: "Wonder Digital Agency", cargo: "Desarrollo", role: "socio" },
+  { email: "florenciagazzo@casc.org.ar", nombre: "Florencia Gazzo", shopping: "CASC", categoria: "shopping", cargo: "Equipo CASC", role: "socio" },
+  { email: "carolopesperera@gmail.com", nombre: "Carolina Lopes Perera", shopping: "CASC", categoria: "shopping", cargo: "Equipo CASC", role: "socio" },
+  { email: "laureanosierra.wallet@gmail.com", nombre: "Laureano Sierra", shopping: "Wonder Digital Agency", categoria: "shopping", cargo: "Desarrollo", role: "socio" },
 ];
 
 const filas = FILE ? leerCsv(FILE) : PRUEBA;
@@ -164,7 +170,7 @@ async function yaExiste(email) {
   return filas[0] ?? null;
 }
 
-async function crearSocio({ email, nombre, shopping, cargo, role }) {
+async function crearSocio({ email, nombre, shopping, cargo, role, categoria }) {
   const r = await fetch(`${SUPABASE_URL}/rest/v1/socios`, {
     method: "POST",
     headers: { ...SB, Prefer: "return=representation" },
@@ -175,6 +181,7 @@ async function crearSocio({ email, nombre, shopping, cargo, role }) {
       cargo: cargo || null,
       estado: "activo",
       role: role || "socio",
+      categoria,
       invitacion_status: "pendiente",
     }),
   });
@@ -261,11 +268,25 @@ for (const [i, cruda] of filas.entries()) {
     email: (cruda.email || "").trim().toLowerCase(),
     nombre: (cruda.nombre || "").trim(),
     shopping: (cruda.shopping || "").trim(),
+    categoria: (cruda.categoria || "").trim().toLowerCase(),
   };
   const prefijo = `${String(i + 1).padStart(2)}/${filas.length}  ${fila.email}`;
 
   if (!fila.email || !fila.nombre || !fila.shopping) {
     console.log(`${prefijo}\n     OMITIDO: faltan email, nombre o shopping`);
+    resultado.fallidos += 1;
+    continue;
+  }
+
+  // Sin valor por defecto, a propósito. Este script es la vía por la que van a
+  // entrar los proveedores y retailers; si la columna faltara y asumiéramos
+  // "shopping", un lote entero quedaría mal categorizado en silencio y con
+  // acceso a secciones que no le corresponden.
+  if (!CATEGORIAS.includes(fila.categoria)) {
+    console.log(
+      `${prefijo}\n     OMITIDO: categoria inválida o ausente ` +
+        `("${fila.categoria}"). Valores: ${CATEGORIAS.join(", ")}`,
+    );
     resultado.fallidos += 1;
     continue;
   }
@@ -279,7 +300,7 @@ for (const [i, cruda] of filas.entries()) {
     }
 
     if (!APPLY) {
-      console.log(`${prefijo}\n     se crearía: ${fila.nombre} · ${fila.shopping} · ${fila.role || "socio"}`);
+      console.log(`${prefijo}\n     se crearía: ${fila.nombre} · ${fila.shopping} · ${fila.categoria} · ${fila.role || "socio"}`);
       resultado.creados += 1;
       continue;
     }

@@ -8,9 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/field";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
-import type { Socio } from "@/lib/types/domain";
+import type { Socio, SocioCategoria } from "@/lib/types/domain";
+import { SOCIO_CATEGORIAS } from "@/lib/types/domain";
 import { deleteSocio, resendInvitation } from "./actions";
 import { SocioForm } from "./socio-form";
+
+/** Category → label, from the single list both the table and the form read. */
+const CATEGORIA_LABEL = Object.fromEntries(
+  SOCIO_CATEGORIAS.map((c) => [c.value, c.label]),
+) as Record<SocioCategoria, string>;
 
 /** Client manager: generic table + create/edit modal + delete, over the mock repo. */
 export function SociosManager({ socios }: { socios: Socio[] }) {
@@ -39,8 +45,16 @@ export function SociosManager({ socios }: { socios: Socio[] }) {
       cell: (s) => <span className="font-medium text-ink">{s.nombre}</span>,
     },
     {
-      header: "Shopping",
+      header: "Empresa",
       cell: (s) => <span className="text-ink-muted">{s.shopping}</span>,
+    },
+    {
+      header: "Tipo",
+      cell: (s) => (
+        <Badge tone={s.categoria === "shopping" ? "neutral" : "accent"}>
+          {CATEGORIA_LABEL[s.categoria]}
+        </Badge>
+      ),
     },
     {
       header: "Email",

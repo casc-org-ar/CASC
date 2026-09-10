@@ -26,6 +26,9 @@ function parseSocioForm(formData: FormData) {
     cargo: String(formData.get("cargo") ?? ""),
     estado: String(formData.get("estado") ?? "activo"),
     role: String(formData.get("role") ?? "socio"),
+    // No fallback: an unselected category must fail validation, not silently
+    // become "shopping". See the note on `categoria` in socioSchema.
+    categoria: String(formData.get("categoria") ?? ""),
   });
 }
 

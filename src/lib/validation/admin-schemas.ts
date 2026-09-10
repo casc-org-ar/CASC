@@ -169,4 +169,10 @@ export const socioSchema = z.object({
   cargo: opt(LIMITS.corto),
   estado: z.enum(["activo", "inactivo"]),
   role: z.enum(["admin", "socio"]),
+  // Required, with no default: the form ships an empty option so the admin has
+  // to choose. A pre-filled category is easy to skip past, and a miscategorized
+  // member raises no error — it surfaces only when someone sees a section they
+  // should not. The database default ('shopping', migration 0022) exists to
+  // backfill existing rows, not to excuse the form from asking.
+  categoria: z.enum(["shopping", "proveedor", "retailer"]),
 });

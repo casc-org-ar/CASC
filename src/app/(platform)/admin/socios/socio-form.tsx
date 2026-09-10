@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FormField, Input, Select } from "@/components/ui/field";
 import { useToast } from "@/components/ui/toast";
 import type { Socio } from "@/lib/types/domain";
+import { SOCIO_CATEGORIAS } from "@/lib/types/domain";
 import { createSocio, updateSocio } from "./actions";
 
 interface SocioFormProps {
@@ -41,7 +42,7 @@ export function SocioForm({ socio, onDone, onAlta }: SocioFormProps) {
         <Input id="nombre" name="nombre" required defaultValue={socio?.nombre} />
       </FormField>
 
-      <FormField label="Shopping / Centro comercial" htmlFor="shopping">
+      <FormField label="Empresa" htmlFor="shopping">
         <Input
           id="shopping"
           name="shopping"
@@ -49,6 +50,30 @@ export function SocioForm({ socio, onDone, onAlta }: SocioFormProps) {
           defaultValue={socio?.shopping}
           placeholder="Alto Palermo"
         />
+      </FormField>
+
+      {/*
+        No default on alta: an empty first option forces a deliberate choice.
+        A pre-selected category is easy to skip past when loading a provider,
+        and the mistake stays invisible until that member sees a section
+        reserved for shopping centers.
+      */}
+      <FormField label="Tipo de socio" htmlFor="categoria">
+        <Select
+          id="categoria"
+          name="categoria"
+          required
+          defaultValue={socio?.categoria ?? ""}
+        >
+          <option value="" disabled>
+            Seleccioná una opción
+          </option>
+          {SOCIO_CATEGORIAS.map((c) => (
+            <option key={c.value} value={c.value}>
+              {c.label}
+            </option>
+          ))}
+        </Select>
       </FormField>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
