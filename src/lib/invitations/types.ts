@@ -41,4 +41,27 @@ export interface InvitationService {
     nombre: string;
     role: UserRole;
   }): Promise<InvitationResult>;
+
+  /**
+   * Push a member's role to the identity provider after an admin changes it.
+   *
+   * The role lives in TWO places and the app reads only one of them: the
+   * `socios` row is the record the admin edits, but authorization reads the
+   * role from the signed session (Clerk's publicMetadata, surfaced as a JWT
+   * claim). Until now it was written once, on the invitation — so editing a
+   * member's role in the panel updated the table and changed nothing about
+   * what that person could actually do.
+   *
+   * `clerkUserId` is null while the member has not accepted their invitation.
+   * There is no user to update then, and none is needed: the pending
+   * invitation already carries the role and applies it at sign-up. Callers
+   * still pass it so this can tell "nothing to do" from "it failed".
+   *
+   * Returns whether the provider was actually updated, so the caller can warn
+   * the admin instead of reporting a silent success.
+   */
+  syncRole(input: {
+    clerkUserId: string | null;
+    role: UserRole;
+  }): Promise<{ ok: boolean; skipped: boolean }>;
 }

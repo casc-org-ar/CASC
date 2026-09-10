@@ -296,10 +296,11 @@ export const hotelMapper: EntityMapper<Hotel> = {
 // ---------------------------------------------------------------------------
 // Socio
 //
-// `clerk_user_id` is deliberately NOT handled here: the domain `Socio` type
-// doesn't expose it, and it's set by the invitation.accepted webhook (with
-// service_role), never by the admin CRUD. `fromRow` ignores the column;
-// `toRow` never writes it.
+// `clerk_user_id` is READ but never WRITTEN here. It is set by the
+// `user.created` webhook (with service_role), never by the admin CRUD, so
+// `toRow` deliberately omits it. `fromRow` surfaces it because changing a
+// member's role has to push that role to their Clerk user, and this says which
+// user that is.
 // ---------------------------------------------------------------------------
 export const socioMapper: EntityMapper<Socio> = {
   fromRow: (r) => ({
@@ -311,6 +312,7 @@ export const socioMapper: EntityMapper<Socio> = {
     estado: r.estado as Socio["estado"],
     role: r.role as Socio["role"],
     categoria: r.categoria as Socio["categoria"],
+    clerkUserId: (r.clerk_user_id as string | null) ?? undefined,
     invitacionStatus: r.invitacion_status as Socio["invitacionStatus"],
     invitacionEnviadaAt:
       (r.invitacion_enviada_at as string | null) ?? undefined,

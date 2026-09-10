@@ -91,4 +91,31 @@ export const clerkInvitations: InvitationService = {
     // `emailSent` is what tells the admin whether anything actually arrived.
     return { ok: true, sentAt, email, emailSent: delivery.ok };
   },
+
+  async syncRole({ clerkUserId, role }) {
+    // No Clerk user yet: the member has not accepted their invitation. The
+    // pending invitation already carries the role and stamps it at sign-up, so
+    // there is genuinely nothing to update — not a failure.
+    if (!clerkUserId) return { ok: true, skipped: true };
+
+    try {
+      const client = await clerkClient();
+      // Merge, don't replace: `updateUserMetadata` patches the keys it is
+      // given. Anything else stored in publicMetadata (e.g. `shopping`, which
+      // `getCurrentUser` reads) must survive a role change untouched.
+      await client.users.updateUserMetadata(clerkUserId, {
+        publicMetadata: { role },
+      });
+      return { ok: true, skipped: false };
+    } catch (cause) {
+      // Never throw: the socios row was already updated, and failing the whole
+      // action here would leave the admin thinking nothing was saved. The
+      // caller reports the partial result instead.
+      securityLog("write.failed", {
+        entity: "clerk-user",
+        message: cause instanceof Error ? cause.message : "error desconocido",
+      });
+      return { ok: false, skipped: false };
+    }
+  },
 };

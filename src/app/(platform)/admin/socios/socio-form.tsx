@@ -23,8 +23,17 @@ export function SocioForm({ socio, onDone, onAlta }: SocioFormProps) {
     startTransition(async () => {
       try {
         if (socio) {
-          await updateSocio(socio.id, formData);
-          toast.success("Socio actualizado.");
+          const result = await updateSocio(socio.id, formData);
+          // The row saved either way; what may have failed is pushing the new
+          // role to the identity provider. Reporting a plain success would tell
+          // the admin the member's permissions changed when they did not.
+          if (result.roleSyncFailed) {
+            toast.error(
+              "Se guardaron los datos, pero no pudimos aplicar el cambio de rol. Volvé a intentarlo.",
+            );
+          } else {
+            toast.success("Socio actualizado.");
+          }
         } else {
           const result = await createSocio(formData);
           toast.success("Socio dado de alta.");

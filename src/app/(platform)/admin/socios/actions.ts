@@ -74,15 +74,46 @@ export async function createSocio(formData: FormData): Promise<AltaResult> {
   };
 }
 
+/** Outcome of an edit, so the UI can warn when the role did not fully apply. */
+export interface UpdateResult {
+  /**
+   * True when the role changed but the identity provider could not be updated.
+   * The socios row IS saved in that case; what failed is the part that decides
+   * what the member can actually do, so the admin has to know.
+   */
+  roleSyncFailed: boolean;
+}
+
 export async function updateSocio(
   id: string,
   formData: FormData,
-): Promise<void> {
+): Promise<UpdateResult> {
   await requireRole("admin");
+  const parsed = parseSocioForm(formData);
+
+  // Read the stored row BEFORE writing: the role must be pushed to Clerk only
+  // when it actually changes, and afterwards there is nothing left to compare
+  // against.
+  const previo = await getDataLayer().socios.getById(id);
+
   // Editing member details must not reset onboarding progress, so
   // `invitacionStatus` is left untouched here.
-  await getDataLayer().socios.update(id, parseSocioForm(formData));
+  await getDataLayer().socios.update(id, parsed);
+
+  // Authorization reads the role from the signed session, not from this table.
+  // Without this push the panel would keep showing the new role while the
+  // member kept the permissions of the old one.
+  let roleSyncFailed = false;
+  if (previo && previo.role !== parsed.role) {
+    const sync = await getInvitations().syncRole({
+      clerkUserId: previo.clerkUserId ?? null,
+      role: parsed.role,
+    });
+    roleSyncFailed = !sync.ok;
+  }
+
   revalidatePath("/admin/socios");
+  return { roleSyncFailed };
 }
 
 export async function deleteSocio(id: string): Promise<void> {

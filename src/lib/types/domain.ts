@@ -174,6 +174,14 @@ export interface Socio extends BaseEntity {
   role: UserRole;
   /** Type of associate; drives which sections this member sees. */
   categoria: SocioCategoria;
+  /**
+   * The linked Clerk user, once the member accepted their invitation.
+   * READ-ONLY here: it is written by the `user.created` webhook, never by the
+   * admin CRUD (`toRow` does not emit it). Exposed because changing a member's
+   * role has to push that role to Clerk, and this is who to push it to.
+   * Undefined while the invitation is still pending.
+   */
+  clerkUserId?: string;
   /** Registration onboarding state (see InvitationStatus). Defaults to "pendiente". */
   invitacionStatus: InvitationStatus;
   /** ISO timestamp of the last invitation send; undefined until first sent. */

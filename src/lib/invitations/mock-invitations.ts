@@ -26,4 +26,11 @@ export const mockInvitations: InvitationService = {
       emailSent: true,
     };
   },
+
+  // With the mock there is no identity provider holding a second copy of the
+  // role: `getCurrentUser` reads it straight from the seed data, so the socios
+  // row IS the source of truth and updating it is the whole job.
+  async syncRole() {
+    return { ok: true, skipped: true };
+  },
 };
