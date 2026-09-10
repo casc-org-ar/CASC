@@ -26,6 +26,17 @@ export interface SendEmailInput {
   html: string;
   /** Plain-text alternative. Sent alongside the HTML to avoid spam filters. */
   text: string;
+  /**
+   * Address that "Reply" should answer, when it is not the sender. Used by the
+   * inbound-form notifications: the message is sent by the platform, but the
+   * useful reply goes to the person who filled the form, so the CASC team can
+   * answer straight from their inbox instead of copying the address by hand.
+   *
+   * Never put an unvalidated address here: the value ends up in a mail header,
+   * so a newline in it would let a hostile submitter inject headers of their
+   * own. Callers pass addresses already parsed by a schema.
+   */
+  replyTo?: string;
 }
 
 export interface SendEmailResult {
@@ -44,6 +55,7 @@ export async function sendEmail({
   subject,
   html,
   text,
+  replyTo,
 }: SendEmailInput): Promise<SendEmailResult> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM;
@@ -61,7 +73,14 @@ export async function sendEmail({
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ from, to: [to], subject, html, text }),
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject,
+        html,
+        text,
+        ...(replyTo ? { reply_to: [replyTo] } : {}),
+      }),
     });
 
     const body = (await response.json()) as { id?: string; message?: string };

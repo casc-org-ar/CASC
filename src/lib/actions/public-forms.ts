@@ -1,6 +1,10 @@
 "use server";
 
 import { z } from "zod";
+import {
+  avisarConsultaContacto,
+  avisarSolicitudAsociacion,
+} from "@/lib/email/avisos";
 import { getPublicWriteDataLayer } from "@/lib/data";
 import { checkRateLimit } from "@/lib/security/rate-limit";
 import { verifyRecaptcha } from "@/lib/security/recaptcha";
@@ -13,7 +17,9 @@ import { securityLog } from "@/lib/security/security-log";
  * These are PUBLIC endpoints: anyone can call them (server actions are public
  * HTTP endpoints), so every field is validated with a schema at the boundary
  * before anything is written. They only ever WRITE — nothing on the public site
- * reads these back. The CASC team manages them from the admin panel.
+ * reads these back. The CASC team manages them from the admin panel, and is
+ * notified by email at each submission so nobody has to log in to discover
+ * that something arrived.
  *
  * Validation uses Zod: length caps stop unbounded payloads, `.email()` rejects
  * malformed addresses, and `.trim()` normalizes. Unknown/extra fields are
@@ -121,6 +127,10 @@ export async function enviarSolicitudAsociacion(
       ...parsed.data,
       gestion: "nueva",
     });
+    // After the write, never before: the record is what must not be lost, the
+    // email is the alert. `avisar…` swallows its own failures on purpose, so a
+    // mailer outage cannot turn a saved request into an error for the visitor.
+    await avisarSolicitudAsociacion(parsed.data);
     return { ok: true };
   } catch (err) {
     // Log the real cause to the server (never to the user); no personal data.
@@ -171,6 +181,7 @@ export async function enviarConsultaContacto(
       ...parsed.data,
       gestion: "nueva",
     });
+    await avisarConsultaContacto(parsed.data);
     return { ok: true };
   } catch (err) {
     securityLog("write.failed", {
