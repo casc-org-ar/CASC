@@ -62,18 +62,6 @@ const heroSlides = [
     href: "/assets/banners/Propuesta_valor_CASC_23_12_25.pdf",
   },
   {
-    desktop: "/assets/banners/banner-3-1.webp",
-    tablet: "/assets/banners/banner-3-2.webp",
-    mobile: "/assets/banners/banner-3-3.webp",
-    alt: "Cámara Argentina de Shopping Centers",
-  },
-  {
-    desktop: "/assets/banners/webinar-web.webp",
-    tablet: "/assets/banners/webinar-tablet.webp",
-    mobile: "/assets/banners/webinar-mobile.webp",
-    alt: "Webinar Estrategia Phygital en Shopping Centers — martes 15 de septiembre, 11 hs, gratuito",
-  },
-  {
     desktop: "/assets/banners/banner-naranja.jpg",
     tablet: "/assets/banners/banner-naranja-tablet.jpg",
     mobile: "/assets/banners/banner-naranja-mobile.jpg",
