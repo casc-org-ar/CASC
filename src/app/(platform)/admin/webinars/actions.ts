@@ -11,6 +11,22 @@ import { toEmbedUrl } from "@/lib/utils/video-embed";
  * DataLayer and revalidate the listing so changes reflect live.
  */
 
+/**
+ * Parse the attachments, submitted as a JSON array of {titulo, url}. Same
+ * hidden-input convention the newsletter and blog gallery use. Malformed input
+ * is ignored rather than failing the save; the schema does the real validation.
+ */
+function parseAdjuntos(formData: FormData): unknown {
+  const raw = String(formData.get("adjuntos") ?? "").trim();
+  if (!raw) return undefined;
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /** Validate + normalize the form. Throws on invalid input (the form catches). */
 function parseWebinarForm(formData: FormData) {
   return webinarSchema.parse({
@@ -22,7 +38,7 @@ function parseWebinarForm(formData: FormData) {
     videoUrl: toEmbedUrl(String(formData.get("videoUrl") ?? "")),
     portadaUrl: formData.get("portadaUrl") ?? "",
     categoria: formData.get("categoria") ?? "",
-    materialAdjuntoUrl: formData.get("materialAdjuntoUrl") ?? "",
+    adjuntos: parseAdjuntos(formData),
     status: formData.get("status") ?? "borrador",
   });
 }

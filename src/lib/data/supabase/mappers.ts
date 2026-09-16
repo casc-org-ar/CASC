@@ -93,6 +93,22 @@ export const actividadMapper: EntityMapper<Actividad> = {
 // ---------------------------------------------------------------------------
 // Webinar
 // ---------------------------------------------------------------------------
+
+/**
+ * Resolve a webinar's attachment list. Prefers the `adjuntos` jsonb column;
+ * when it is empty (a webinar saved before migration 0023, or one the backfill
+ * did not reach) the legacy single `material_adjunto_url` stands in, so no
+ * published material silently disappears from the detail page.
+ */
+function readAdjuntos(
+  adjuntos: Webinar["adjuntos"] | null,
+  legacyUrl: string | null,
+): Webinar["adjuntos"] {
+  if (adjuntos?.length) return adjuntos;
+  const legacy = legacyUrl?.trim();
+  return legacy ? [{ titulo: "Material adjunto", url: legacy }] : undefined;
+}
+
 export const webinarMapper: EntityMapper<Webinar> = {
   fromRow: (r) => ({
     id: r.id as string,
@@ -103,6 +119,13 @@ export const webinarMapper: EntityMapper<Webinar> = {
     portadaUrl: (r.portada_url as string | null) ?? undefined,
     categoria: r.categoria as string,
     materialAdjuntoUrl: (r.material_adjunto_url as string | null) ?? undefined,
+    // Stored as jsonb; an empty array means "no attachments", same as null.
+    // Falls back to the legacy single column so a webinar saved before
+    // migration 0023 still shows its material.
+    adjuntos: readAdjuntos(
+      r.adjuntos as Webinar["adjuntos"] | null,
+      r.material_adjunto_url as string | null,
+    ),
     status: r.status as Webinar["status"],
     createdAt: r.created_at as string,
     updatedAt: r.updated_at as string,
@@ -116,6 +139,12 @@ export const webinarMapper: EntityMapper<Webinar> = {
     put(row, "portada_url", i.portadaUrl);
     put(row, "categoria", i.categoria);
     put(row, "material_adjunto_url", i.materialAdjuntoUrl);
+    // jsonb column; the driver serializes the array of {titulo, url} as-is.
+    put(row, "adjuntos", i.adjuntos);
+    // Saving the list supersedes the legacy single column. Clearing it is what
+    // makes removal stick: leave it set and `fromRow`'s fallback would resurrect
+    // a deleted attachment the moment the admin empties the list.
+    if (i.adjuntos !== undefined) row.material_adjunto_url = null;
     put(row, "status", i.status);
     return row;
   },

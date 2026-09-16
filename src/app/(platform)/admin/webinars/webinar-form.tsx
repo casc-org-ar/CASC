@@ -1,13 +1,17 @@
 "use client";
 
+import { Plus, Trash2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField, Input, Select, Textarea } from "@/components/ui/field";
 import { FileOrLinkField } from "@/components/ui/file-or-link-field";
 import { useToast } from "@/components/ui/toast";
 import { todayInBuenosAires } from "@/lib/utils";
-import type { Webinar } from "@/lib/types/domain";
+import type { ArchivoAdjunto, Webinar } from "@/lib/types/domain";
 import { createWebinar, updateWebinar } from "./actions";
+
+/** Cap mirrors the schema so the UI stops offering rows the save would reject. */
+const MAX_ADJUNTOS = 20;
 
 interface WebinarFormProps {
   /** When present, the form edits this webinar; otherwise it creates. */
@@ -18,10 +22,25 @@ interface WebinarFormProps {
 export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
   const [pending, startTransition] = useTransition();
   const [portadaUrl, setPortadaUrl] = useState(webinar?.portadaUrl ?? "");
-  const [materialAdjuntoUrl, setMaterialAdjuntoUrl] = useState(
-    webinar?.materialAdjuntoUrl ?? "",
+  // A webinar usually ships with more than one file (the deck plus an annexed
+  // report), so the material is a list, not a single slot.
+  const [adjuntos, setAdjuntos] = useState<ArchivoAdjunto[]>(
+    webinar?.adjuntos ?? [],
   );
   const toast = useToast();
+
+  const addAdjunto = () =>
+    setAdjuntos((rows) =>
+      rows.length >= MAX_ADJUNTOS ? rows : [...rows, { titulo: "", url: "" }],
+    );
+
+  const removeAdjunto = (index: number) =>
+    setAdjuntos((rows) => rows.filter((_, i) => i !== index));
+
+  const patchAdjunto = (index: number, patch: Partial<ArchivoAdjunto>) =>
+    setAdjuntos((rows) =>
+      rows.map((row, i) => (i === index ? { ...row, ...patch } : row)),
+    );
 
   const action = (formData: FormData) =>
     startTransition(async () => {
@@ -104,18 +123,73 @@ export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
         />
       </FormField>
 
-      <FormField
-        label="Material adjunto (opcional)"
-        htmlFor="materialAdjuntoUrl-file"
-      >
-        <FileOrLinkField
-          name="materialAdjuntoUrl"
-          value={materialAdjuntoUrl}
-          onChange={setMaterialAdjuntoUrl}
-          accept=".pdf,.doc,.docx"
-          uploadLabel="Subir material (PDF)"
-          linkPlaceholder="https://ejemplo.com/material.pdf"
-        />
+      <FormField label="Material adjunto (opcional)">
+        <div className="space-y-3">
+          {adjuntos.length > 0 && (
+            <ul className="space-y-3">
+              {adjuntos.map((adjunto, idx) => (
+                <li
+                  key={idx}
+                  className="rounded-md border border-border bg-white p-3"
+                >
+                  <div className="mb-2 flex items-center justify-between gap-3">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-primary">
+                      Archivo {idx + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeAdjunto(idx)}
+                      aria-label={`Quitar material adjunto ${idx + 1}`}
+                      className="rounded-md p-1 text-ink-muted transition-colors hover:bg-surface hover:text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  <Input
+                    aria-label={`Nombre del material adjunto ${idx + 1}`}
+                    value={adjunto.titulo}
+                    onChange={(e) =>
+                      patchAdjunto(idx, { titulo: e.target.value })
+                    }
+                    placeholder="Ej: Presentación del webinar"
+                    className="mb-2"
+                  />
+
+                  <FileOrLinkField
+                    name={`adjuntos-${idx}-url`}
+                    value={adjunto.url}
+                    onChange={(url) => patchAdjunto(idx, { url })}
+                    kind="pdf"
+                    accept=".pdf"
+                    uploadLabel="Subir PDF"
+                    linkPlaceholder="https://ejemplo.com/material.pdf"
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {adjuntos.length < MAX_ADJUNTOS && (
+            <Button type="button" variant="secondary" onClick={addAdjunto}>
+              <Plus className="h-4 w-4" />
+              Agregar material
+            </Button>
+          )}
+
+          <p className="text-xs text-ink-muted">
+            Sumá acá la presentación y todo otro material del webinar. Cada
+            archivo puede subirse o enlazarse, y el nombre es el que ven los
+            socios en el botón de descarga.
+          </p>
+
+          {/* Carries the rows into the submitted form data as a JSON array. */}
+          <input
+            type="hidden"
+            name="adjuntos"
+            value={JSON.stringify(adjuntos)}
+          />
+        </div>
       </FormField>
 
       <FormField label="Estado" htmlFor="status">

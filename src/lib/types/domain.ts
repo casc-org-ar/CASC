@@ -95,7 +95,13 @@ export interface Webinar extends BaseEntity {
   videoUrl: string; // YouTube/Vimeo embed URL — never a stored file
   portadaUrl?: string; // cover image for the listing card
   categoria: string;
+  /**
+   * @deprecated Superseded by `adjuntos` (migration 0023). Still read as a
+   * fallback for webinars saved before the list existed; never written.
+   */
   materialAdjuntoUrl?: string;
+  /** Files published with the webinar: deck, annexed report, etc. */
+  adjuntos?: ArchivoAdjunto[];
   status: PublicationStatus;
 }
 
@@ -120,15 +126,18 @@ export interface Noticia extends BaseEntity {
 }
 
 /**
- * An extra file shipped alongside a newsletter edition (the magazine, an
- * annexed report). Carries a label because the socio has to know what they are
- * downloading, which a bare URL cannot convey.
+ * A file published alongside a piece of content (a newsletter's magazine, a
+ * webinar's deck or annexed report). Carries a label because the socio has to
+ * know what they are downloading, which a bare URL cannot convey.
  */
-export interface NewsletterAdjunto {
+export interface ArchivoAdjunto {
   titulo: string;
   /** Uploaded file path/URL or a pasted external link. */
   url: string;
 }
+
+/** @deprecated Use {@link ArchivoAdjunto} — kept so existing imports resolve. */
+export type NewsletterAdjunto = ArchivoAdjunto;
 
 export interface Newsletter extends BaseEntity {
   titulo: string;

@@ -32,7 +32,9 @@ export const webinars: Webinar[] = [
     fecha: iso(2026, 5, 20),
     videoUrl: "https://www.youtube.com/embed/_O6MYU4vgQQ",
     categoria: "Retail",
-    materialAdjuntoUrl: "/mock/tendencias-2026.pdf",
+    adjuntos: [
+      { titulo: "Presentación del webinar", url: "/mock/tendencias-2026.pdf" },
+    ],
     status: "publicado",
     createdAt: iso(2026, 5, 10),
     updatedAt: iso(2026, 5, 10),

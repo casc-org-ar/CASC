@@ -30,9 +30,10 @@ interface FileOrLinkFieldProps {
   /**
    * What kind of file this field uploads. "image" (default) compresses and
    * stores a public URL; "pdf" uploads to the private informes bucket and
-   * stores the object path.
+   * stores the object path; "auto" accepts both and routes each file by its
+   * own type, for fields that legitimately take either.
    */
-  kind?: "image" | "pdf";
+  kind?: "image" | "pdf" | "auto";
   /** `accept` attribute for the file input, e.g. "image/*" or ".pdf". */
   accept?: string;
   /** Label for the upload button, e.g. "Subir imagen" or "Subir PDF". */
@@ -61,8 +62,10 @@ export function FileOrLinkField({
   hint,
 }: FileOrLinkFieldProps) {
   const isPdf = kind === "pdf";
-  const limitBytes = isPdf ? MAX_PDF_BYTES : MAX_UPLOAD_BYTES;
-  const limitMb = isPdf ? MAX_PDF_MB : MAX_UPLOAD_MB;
+  const isAuto = kind === "auto";
+  // Ceiling quoted in the idle hint. A mixed field advertises the larger one;
+  // the real check happens per file, once we know what was actually picked.
+  const limitMb = isPdf || isAuto ? MAX_PDF_MB : MAX_UPLOAD_MB;
   // Start on the tab that matches the existing value: a pasted link stays on
   // the link tab, everything else (empty or an uploaded URL) on upload.
   const [mode, setMode] = useState<Mode>(
@@ -76,11 +79,18 @@ export function FileOrLinkField({
     if (!file) return;
     setError(null);
 
+    // Route by the file actually picked, not just by the field's kind: a
+    // mixed field must send a PDF to the PDF uploader, because the image
+    // uploader rejects every non-image type outright.
+    const asPdf = isPdf || (isAuto && file.type === "application/pdf");
+    const fileLimitBytes = asPdf ? MAX_PDF_BYTES : MAX_UPLOAD_BYTES;
+    const fileLimitMb = asPdf ? MAX_PDF_MB : MAX_UPLOAD_MB;
+
     // Guard the original before doing anything: reject an oversized file up
     // front with a clear reason, instead of letting the upload fail server-side.
-    if (file.size > limitBytes) {
+    if (file.size > fileLimitBytes) {
       setError(
-        `El archivo pesa ${formatMB(file.size)}. El máximo es ${limitMb} MB. Probá con un archivo más liviano.`,
+        `El archivo pesa ${formatMB(file.size)}. El máximo es ${fileLimitMb} MB. Probá con un archivo más liviano.`,
       );
       e.target.value = "";
       return;
@@ -88,7 +98,7 @@ export function FileOrLinkField({
 
     setUploading(true);
     try {
-      if (isPdf) {
+      if (asPdf) {
         const fd = new FormData();
         fd.set("file", file);
         const result = await uploadInformePdf(fd);
@@ -123,9 +133,13 @@ export function FileOrLinkField({
   const inputId = `${name}-file`;
   // An uploaded value: a public URL (images) or a stored object path (PDFs).
   // A pasted external link always starts with http and is not an "upload".
-  const uploaded = isPdf
-    ? value.length > 0 && !value.startsWith("http")
-    : value.startsWith("http");
+  // A mixed field can hold either shape, so anything non-empty counts; the
+  // link tab is what distinguishes a pasted URL there.
+  const uploaded = isAuto
+    ? value.length > 0
+    : isPdf
+      ? value.length > 0 && !value.startsWith("http")
+      : value.startsWith("http");
 
   return (
     <div>
@@ -164,7 +178,7 @@ export function FileOrLinkField({
               <>
                 <Upload className="h-4 w-4 text-primary" />
                 {uploaded
-                  ? isPdf
+                  ? isPdf || isAuto
                     ? "Cambiar archivo"
                     : "Cambiar imagen"
                   : uploadLabel}
@@ -181,7 +195,9 @@ export function FileOrLinkField({
           />
           {uploaded && !uploading && (
             <p className="mt-1.5 truncate text-xs text-ink-muted">
-              {isPdf ? "PDF cargado correctamente." : "Imagen cargada correctamente."}
+              {isPdf || isAuto
+                ? "Archivo cargado correctamente."
+                : "Imagen cargada correctamente."}
             </p>
           )}
           {/* Preventive hint about the size limit, shown in the idle state. */}
@@ -189,7 +205,9 @@ export function FileOrLinkField({
             <p className="mt-1.5 text-xs text-ink-muted">
               {isPdf
                 ? `Formato: PDF. Peso máximo: ${limitMb} MB.`
-                : `Formatos: JPG, PNG o WebP. Peso máximo: ${limitMb} MB.`}
+                : isAuto
+                  ? `Formatos: PDF o imagen (JPG, PNG, WebP). Peso máximo: ${limitMb} MB.`
+                  : `Formatos: JPG, PNG o WebP. Peso máximo: ${limitMb} MB.`}
             </p>
           )}
           {error && (

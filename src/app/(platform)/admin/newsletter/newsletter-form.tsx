@@ -96,7 +96,8 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
           name="adjuntoUrl"
           value={adjuntoUrl}
           onChange={setAdjuntoUrl}
-          accept=".pdf,.doc,.docx,image/*"
+          kind="auto"
+          accept=".pdf,image/*"
           uploadLabel="Subir archivo (PDF)"
           linkPlaceholder="https://mailchi.mp/…"
           hint="Subí la edición ya enviada (el PDF exportado desde Mailchimp/emBlue) o pegá el link público de la campaña. Los socios la abren desde el archivo."
@@ -140,7 +141,8 @@ export function NewsletterForm({ newsletter, onDone }: NewsletterFormProps) {
                     name={`adjuntos-${idx}-url`}
                     value={adjunto.url}
                     onChange={(url) => patchAdjunto(idx, { url })}
-                    accept=".pdf,.doc,.docx,image/*"
+                    kind="auto"
+                    accept=".pdf,image/*"
                     uploadLabel="Subir archivo"
                     linkPlaceholder="https://…"
                   />
