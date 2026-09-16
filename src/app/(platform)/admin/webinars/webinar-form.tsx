@@ -133,7 +133,7 @@ export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
                   className="rounded-md border border-border bg-white p-3"
                 >
                   <div className="mb-2 flex items-center justify-between gap-3">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-primary">
+                    <span className="inline-flex items-center rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-white">
                       Archivo {idx + 1}
                     </span>
                     <button
@@ -171,7 +171,12 @@ export function WebinarForm({ webinar, onDone }: WebinarFormProps) {
           )}
 
           {adjuntos.length < MAX_ADJUNTOS && (
-            <Button type="button" variant="secondary" onClick={addAdjunto}>
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              onClick={addAdjunto}
+            >
               <Plus className="h-4 w-4" />
               Agregar material
             </Button>

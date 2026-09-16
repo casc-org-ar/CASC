@@ -1,6 +1,6 @@
 "use client";
 
-import { Link2, Loader2, Upload } from "lucide-react";
+import { CheckCircle2, Link2, Loader2, Upload } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/field";
 import { uploadContentImage } from "@/lib/actions/upload-image";
@@ -194,10 +194,19 @@ export function FileOrLinkField({
             className="sr-only"
           />
           {uploaded && !uploading && (
-            <p className="mt-1.5 truncate text-xs text-ink-muted">
-              {isPdf || isAuto
-                ? "Archivo cargado correctamente."
-                : "Imagen cargada correctamente."}
+            /* Success needs to read as success at a glance: the muted grey
+               line this replaced was easy to miss, so an admin could not tell
+               whether the upload had gone through. */
+            <p className="mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-green-700">
+              <CheckCircle2
+                className="h-4 w-4 shrink-0 text-green-600"
+                aria-hidden="true"
+              />
+              <span className="truncate">
+                {isPdf || isAuto
+                  ? "Archivo cargado correctamente."
+                  : "Imagen cargada correctamente."}
+              </span>
             </p>
           )}
           {/* Preventive hint about the size limit, shown in the idle state. */}
