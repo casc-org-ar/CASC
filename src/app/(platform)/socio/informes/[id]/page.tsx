@@ -7,6 +7,7 @@ import { signedUrl } from "@/lib/data/supabase/storage";
 import { clerkEnabled } from "@/lib/auth/flag";
 import { requireCategoria } from "@/lib/auth/member-status";
 import { INFORMES_CATEGORIAS } from "@/lib/platform/navigation";
+import { formatDate } from "@/lib/utils";
 
 /** How long the informe PDF stays viewable — enough to read it in one sitting. */
 const PDF_TTL_SECONDS = 60 * 60; // 1 hour
@@ -72,7 +73,7 @@ export default async function InformeDetailPage({
             {informe.titulo}
           </h1>
           <p className="mt-1 text-sm text-ink-muted">
-            {new Date(informe.fecha).toLocaleDateString("es-AR")}
+            {formatDate(informe.fecha)}
           </p>
         </div>
         {pdfUrl && (

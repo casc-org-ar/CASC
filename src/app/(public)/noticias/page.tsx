@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { getPublicDataLayer } from "@/lib/data";
 import { byFechaDesc, byVisibilidad, onlyPublished } from "@/lib/data/published";
+import { formatDate } from "@/lib/utils";
 
 /**
  * Public news listing. Reads published blog posts from the panel — the same
@@ -119,7 +120,7 @@ export default async function NoticiasPage({
                     <CardCover src={post.portadaUrl} alt={post.titulo} />
 
                     <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                      {new Date(post.fecha).toLocaleDateString("es-AR", {
+                      {formatDate(post.fecha, {
                         day: "numeric",
                         month: "long",
                         year: "numeric",

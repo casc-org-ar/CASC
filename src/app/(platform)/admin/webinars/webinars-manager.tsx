@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/toast";
 import type { Webinar } from "@/lib/types/domain";
 import { deleteWebinar } from "./actions";
 import { WebinarForm } from "./webinar-form";
+import { formatDate } from "@/lib/utils";
 
 const columns: Column<Webinar>[] = [
   {
@@ -21,7 +22,7 @@ const columns: Column<Webinar>[] = [
     header: "Fecha",
     cell: (w) => (
       <span className="text-ink-muted">
-        {new Date(w.fecha).toLocaleDateString("es-AR")}
+        {formatDate(w.fecha)}
       </span>
     ),
   },

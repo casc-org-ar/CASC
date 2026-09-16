@@ -9,7 +9,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getAuth } from "@/lib/auth";
 import { getDataLayer } from "@/lib/data";
 import { byVisibilidad, onlyPublished } from "@/lib/data/published";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 
 export const metadata = { title: "Inicio" };
 
@@ -286,7 +286,7 @@ function FeedCard({
             </span>
           </div>
           <Badge tone="muted">
-            {new Date(item.fecha).toLocaleDateString("es-AR")}
+            {formatDate(item.fecha)}
           </Badge>
         </div>
         <CardTitle>{item.titulo}</CardTitle>

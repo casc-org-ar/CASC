@@ -11,6 +11,7 @@ import type { BlogPost, Visibilidad } from "@/lib/types/domain";
 import { deleteBlogPost } from "./actions";
 import { BlogForm } from "./blog-form";
 import { BlogPreview } from "./blog-preview";
+import { formatDate } from "@/lib/utils";
 
 /** Human label for each audience, shown in the manager table. */
 const VISIBILIDAD_LABEL: Record<Visibilidad, string> = {
@@ -57,7 +58,7 @@ const columns: Column<BlogPost>[] = [
     header: "Fecha",
     cell: (p) => (
       <span className="text-ink-muted">
-        {new Date(p.fecha).toLocaleDateString("es-AR")}
+        {formatDate(p.fecha)}
       </span>
     ),
   },

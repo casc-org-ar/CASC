@@ -9,6 +9,7 @@ import { ShareButtons } from "@/components/public/share-buttons";
 import { getPublicDataLayer } from "@/lib/data";
 import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 import type { BlogPost } from "@/lib/types/domain";
+import { formatDate } from "@/lib/utils";
 
 /**
  * Public article page. Each published post gets its own URL so it can be
@@ -73,7 +74,7 @@ export default async function NoticiaPage({
       ? { href: "/actividades", label: "Volver a actividades" }
       : { href: "/noticias", label: "Volver a noticias" };
 
-  const fecha = new Date(post.fecha).toLocaleDateString("es-AR", {
+  const fecha = formatDate(post.fecha, {
     day: "numeric",
     month: "long",
     year: "numeric",

@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { formatDate } from "@/lib/utils";
 
 /** Minimal shape the preview needs from the blog form's live fields. */
 export interface BlogDraft {
@@ -37,7 +38,7 @@ export function BlogPreview({
   const [mode, setMode] = useState<"card" | "articulo">("articulo");
 
   const fecha = draft.fecha
-    ? new Date(`${draft.fecha}T00:00:00`).toLocaleDateString("es-AR", {
+    ? formatDate(draft.fecha, {
         day: "numeric",
         month: "long",
         year: "numeric",

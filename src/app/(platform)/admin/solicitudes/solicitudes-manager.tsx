@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
-import { cn } from "@/lib/utils";
+import { cn, formatDate, formatDateTime } from "@/lib/utils";
 import type {
   ConsultaContacto,
   GestionStatus,
@@ -211,7 +211,7 @@ export function SolicitudesManager({
                         {remitente(m)}
                         {"cargo" in m && m.cargo ? ` · ${m.cargo}` : ""}
                         {" · "}
-                        {new Date(m.createdAt).toLocaleDateString("es-AR")}
+                        {formatDate(m.createdAt)}
                       </p>
                     </div>
 
@@ -277,7 +277,7 @@ export function SolicitudesManager({
                 <Badge tone="accent">{detalle.sector}</Badge>
               )}
               <span className="text-xs text-ink-muted">
-                {new Date(detalle.createdAt).toLocaleString("es-AR")}
+                {formatDateTime(detalle.createdAt)}
               </span>
             </div>
 

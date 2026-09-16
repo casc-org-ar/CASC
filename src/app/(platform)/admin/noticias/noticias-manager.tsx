@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/toast";
 import type { Noticia } from "@/lib/types/domain";
 import { deleteNoticia } from "./actions";
 import { NoticiaForm } from "./noticia-form";
+import { formatDate } from "@/lib/utils";
 
 const columns: Column<Noticia>[] = [
   {
@@ -35,7 +36,7 @@ const columns: Column<Noticia>[] = [
     header: "Fecha",
     cell: (n) => (
       <span className="text-ink-muted">
-        {new Date(n.fecha).toLocaleDateString("es-AR")}
+        {formatDate(n.fecha)}
       </span>
     ),
   },

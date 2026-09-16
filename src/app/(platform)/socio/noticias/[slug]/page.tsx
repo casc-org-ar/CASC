@@ -6,6 +6,7 @@ import { SafeImage } from "@/components/shared/safe-image";
 import { VideoEmbed } from "@/components/shared/video-embed";
 import { getDataLayer } from "@/lib/data";
 import { byVisibilidad, onlyPublished } from "@/lib/data/published";
+import { formatDate } from "@/lib/utils";
 
 /**
  * Individual article page for members (read-only). Resolves by slug — the same
@@ -51,7 +52,7 @@ export default async function NoticiaDetailPage({
       <div className="flex items-center gap-3">
         {noticia.tags[0] && <Badge tone="accent">{noticia.tags[0]}</Badge>}
         <p className="text-sm text-ink-muted">
-          {new Date(noticia.fecha).toLocaleDateString("es-AR", {
+          {formatDate(noticia.fecha, {
             day: "numeric",
             month: "long",
             year: "numeric",

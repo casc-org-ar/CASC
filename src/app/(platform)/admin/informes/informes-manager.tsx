@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/toast";
 import type { Informe } from "@/lib/types/domain";
 import { deleteInforme } from "./actions";
 import { InformeForm } from "./informe-form";
+import { formatDate } from "@/lib/utils";
 
 const columns: Column<Informe>[] = [
   {
@@ -21,7 +22,7 @@ const columns: Column<Informe>[] = [
     header: "Fecha",
     cell: (i) => (
       <span className="text-ink-muted">
-        {new Date(i.fecha).toLocaleDateString("es-AR")}
+        {formatDate(i.fecha)}
       </span>
     ),
   },

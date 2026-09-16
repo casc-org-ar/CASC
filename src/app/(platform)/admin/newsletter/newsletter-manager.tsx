@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/toast";
 import type { Newsletter } from "@/lib/types/domain";
 import { deleteNewsletter } from "./actions";
 import { NewsletterForm } from "./newsletter-form";
+import { formatDate } from "@/lib/utils";
 
 const columns: Column<Newsletter>[] = [
   {
@@ -21,7 +22,7 @@ const columns: Column<Newsletter>[] = [
     header: "Fecha",
     cell: (n) => (
       <span className="text-ink-muted">
-        {new Date(n.fecha).toLocaleDateString("es-AR")}
+        {formatDate(n.fecha)}
       </span>
     ),
   },

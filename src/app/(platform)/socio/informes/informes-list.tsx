@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import type { Informe } from "@/lib/types/domain";
+import { formatDate } from "@/lib/utils";
 
 /** Read-only informes grid with text search + category filter (same pattern as noticias/webinars). */
 export function InformesList({ informes }: { informes: Informe[] }) {
@@ -82,7 +83,7 @@ export function InformesList({ informes }: { informes: Informe[] }) {
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <Badge tone="accent">{i.categoria}</Badge>
                   <span className="text-xs text-ink-muted">
-                    {new Date(i.fecha).toLocaleDateString("es-AR")}
+                    {formatDate(i.fecha)}
                   </span>
                 </div>
                 <CardTitle className="flex items-start gap-2">

@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import type { BlogPost } from "@/lib/types/domain";
+import { formatDate } from "@/lib/utils";
 
 /**
  * Build the de-duplicated tag list from posts, case-insensitive so "Retail" and
@@ -114,7 +115,7 @@ export function NoticiasList({ noticias }: { noticias: BlogPost[] }) {
                     <span />
                   )}
                   <span className="text-xs text-ink-muted">
-                    {new Date(n.fecha).toLocaleDateString("es-AR", {
+                    {formatDate(n.fecha, {
                       day: "numeric",
                       month: "long",
                       year: "numeric",

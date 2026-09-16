@@ -6,6 +6,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getDataLayer } from "@/lib/data";
 import { byFechaDesc, onlyPublished } from "@/lib/data/published";
 import type { Newsletter } from "@/lib/types/domain";
+import { formatDate } from "@/lib/utils";
 
 export const metadata = { title: "Newsletter" };
 
@@ -64,7 +65,7 @@ export default async function SocioNewsletterPage() {
                             {n.edicion}
                           </span>
                           <span className="text-xs text-ink-muted">
-                            {new Date(n.fecha).toLocaleDateString("es-AR")}
+                            {formatDate(n.fecha)}
                           </span>
                         </div>
                         <CardTitle>{n.titulo}</CardTitle>

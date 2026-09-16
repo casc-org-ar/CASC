@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonAnchor } from "@/components/ui/button";
 import { getDataLayer } from "@/lib/data";
+import { formatDate } from "@/lib/utils";
 
 /**
  * Individual newsletter edition — reads like an opened email: header with
@@ -39,7 +40,7 @@ export default async function NewsletterDetailPage({
               {edicion.edicion}
             </span>
             <span>
-              {new Date(edicion.fecha).toLocaleDateString("es-AR", {
+              {formatDate(edicion.fecha, {
                 day: "numeric",
                 month: "long",
                 year: "numeric",

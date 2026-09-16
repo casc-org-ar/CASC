@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import type { Webinar } from "@/lib/types/domain";
+import { formatDate } from "@/lib/utils";
 
 /** Client grid for published webinars with text search + category filter. */
 export function WebinarsList({ webinars }: { webinars: Webinar[] }) {
@@ -82,7 +83,7 @@ export function WebinarsList({ webinars }: { webinars: Webinar[] }) {
                 <div className="mb-3 flex items-center justify-between">
                   <Badge tone="accent">{w.categoria}</Badge>
                   <span className="text-xs text-ink-muted">
-                    {new Date(w.fecha).toLocaleDateString("es-AR")}
+                    {formatDate(w.fecha)}
                   </span>
                 </div>
                 <CardTitle>{w.titulo}</CardTitle>
