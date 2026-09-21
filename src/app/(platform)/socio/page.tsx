@@ -8,8 +8,10 @@ import { ButtonLink } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getAuth } from "@/lib/auth";
 import { getDataLayer } from "@/lib/data";
+import { getEncuestaEstado } from "@/lib/data/encuesta-estado";
 import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 import { cn, formatDate } from "@/lib/utils";
+import { EncuestaCta } from "./encuesta-cta";
 
 export const metadata = { title: "Inicio" };
 
@@ -44,11 +46,15 @@ const byDateDesc = (a: FeedItem, b: FeedItem) =>
 /** Socio home: personalized greeting, a featured highlight, then latest-by-section. */
 export default async function SocioHomePage() {
   const data = getDataLayer();
-  const [user, webinars, informes, noticias] = await Promise.all([
+  // The survey state rides along with the feed queries instead of being awaited
+  // after them: it is an independent read, and running it in sequence would add
+  // its round-trip to how long the home takes to render.
+  const [user, webinars, informes, noticias, encuesta] = await Promise.all([
     getAuth().getCurrentUser(),
     data.webinars.list(),
     data.informes.list(),
     data.blog.list(),
+    getEncuestaEstado(),
   ]);
 
   const noticiasFeed: FeedItem[] = byVisibilidad(
@@ -136,6 +142,12 @@ export default async function SocioHomePage() {
             : "Novedades de la Cámara"}
         </p>
       </header>
+
+      {/* Survey invitation. Sits right under the greeting — above the feed, so
+          it is seen, but inside the home rather than as a section of its own.
+          It disappears for good once answered (`pendiente` is derived from the
+          stored answer, so there is no flag to reset or expire). */}
+      {encuesta.pendiente && <EncuestaCta />}
 
       {/* Featured highlights. The layout follows the count instead of being
           fixed: the team can mark as many articles as they want, and stacking

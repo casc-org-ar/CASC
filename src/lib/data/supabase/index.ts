@@ -15,6 +15,7 @@ import {
   blogMapper,
   candidatoMapper,
   consultaMapper,
+  encuestaMapper,
   hotelMapper,
   informeMapper,
   newsletterMapper,
@@ -55,6 +56,13 @@ export const supabaseDataLayer: DataLayer = {
   solicitudes: new SupabaseContentRepository("solicitudes", solicitudMapper),
   consultas: new SupabaseContentRepository("consultas", consultaMapper),
   socios: new SupabaseContentRepository("socios", socioMapper),
+  // Survey answers, newest-first (matching the 0023 index). RLS narrows the
+  // same `list()` to one row for a member and to every row for an admin, so
+  // both the "have I answered?" check and the export share this repository.
+  encuesta: new SupabaseContentRepository(
+    "encuesta_respuestas",
+    encuestaMapper,
+  ),
 };
 
 /**

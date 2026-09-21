@@ -2,6 +2,7 @@ import {
   BadgePercent,
   BarChart3,
   CalendarDays,
+  ClipboardList,
   FileText,
   Home,
   Inbox,
@@ -75,6 +76,9 @@ const NAV: Record<UserRole, NavItem[]> = {
     { label: "Solicitudes", href: "/admin/solicitudes", icon: Inbox },
     { label: "Noticias y Blog", href: "/admin/blog", icon: PenSquare },
     { label: "Socios", href: "/admin/socios", icon: Users },
+    // Survey results. Admin-only: the socio side reaches the survey from the
+    // home CTA, which disappears once answered, so it has no menu entry.
+    { label: "Encuesta", href: "/admin/encuesta", icon: ClipboardList },
     ESTADISTICAS,
   ],
   socio: [

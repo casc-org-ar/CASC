@@ -3,6 +3,7 @@ import type {
   BlogPost,
   Candidato,
   ConsultaContacto,
+  EncuestaRespuesta,
   Hotel,
   Informe,
   Newsletter,
@@ -643,6 +644,17 @@ export const consultas: ConsultaContacto[] = [
     updatedAt: iso(2026, 7, 22),
   },
 ];
+
+/**
+ * Survey answers start EMPTY on purpose.
+ *
+ * Every other store is seeded so the walkthrough has content to show. This one
+ * is not: with a seeded answer for the demo member, the home CTA would be
+ * hidden from the first load and the survey flow — the thing being built —
+ * could never be walked through. An empty store is also the real starting
+ * state, so the mock and a fresh database behave the same.
+ */
+export const encuestaRespuestas: EncuestaRespuesta[] = [];
 
 /**
  * Actividades seed — derived from the real `capacitaciones` (migrated from the

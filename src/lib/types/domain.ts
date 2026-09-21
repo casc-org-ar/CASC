@@ -301,6 +301,107 @@ export interface ConsultaContacto extends BaseEntity {
   gestion: GestionStatus;
 }
 
+/**
+ * Satisfaction survey answered by members.
+ *
+ * ONE fixed survey, not a survey engine: the questions are known, so they are
+ * typed columns instead of a generic question/answer schema. That lets the
+ * database validate each answer (enums + 1-5 checks) and keeps the CSV export
+ * on stable columns.
+ *
+ * Immutable once submitted — see migration 0023, which grants members INSERT
+ * and SELECT on their own row and no UPDATE at all.
+ */
+
+/** Identifier of the current survey. Bump it to run a new one (see 0023). */
+export const ENCUESTA_SLUG_ACTUAL = "satisfaccion-2026";
+
+/** 1-5 rating used by the three scale questions. */
+export type EscalaRespuesta = 1 | 2 | 3 | 4 | 5;
+
+/** "¿Participarías de próximas acciones comerciales conjuntas?" */
+export type ParticipacionAcciones = "si" | "no" | "depende";
+
+/** "¿Abrís el portal desde el celular o desktop?" */
+export type DispositivoPrincipal = "celular" | "desktop";
+
+/**
+ * Suggested topics for "¿Qué temas te gustaría que la CASC priorice?".
+ *
+ * Kept as a plain list, and the column as `text[]`, because the form offers an
+ * "Otro" option where the member types their own topic — an enum would reject
+ * exactly the answer CASC most wants to read.
+ */
+export const TEMAS_PRIORITARIOS = [
+  "Legal/SADAIC",
+  "Marketing conjunto",
+  "Capacitaciones",
+  "Networking",
+] as const;
+
+/** Channels for "¿Cómo preferís recibir novedades de la Cámara?". */
+export const CANALES_NOVEDADES = [
+  "Email",
+  "WhatsApp",
+  "Portal",
+  "Redes",
+] as const;
+
+/**
+ * Labels for the closed-choice questions. Beside the types so a new option
+ * cannot be added without the wording the form and the CSV both read.
+ */
+export const PARTICIPACION_LABEL: Record<ParticipacionAcciones, string> = {
+  si: "Sí",
+  no: "No",
+  depende: "Depende",
+};
+
+export const DISPOSITIVO_LABEL: Record<DispositivoPrincipal, string> = {
+  celular: "Celular",
+  desktop: "Desktop",
+};
+
+/**
+ * Wording of each scale endpoint. The numbers alone ("3") tell the member
+ * nothing about which end is good, and an unanchored scale is answered
+ * inconsistently — which makes the average meaningless.
+ */
+export const ESCALA_EXTREMOS: Record<
+  "satisfaccion" | "utilidad" | "facilidad",
+  { min: string; max: string }
+> = {
+  satisfaccion: { min: "Nada satisfecho/a", max: "Muy satisfecho/a" },
+  utilidad: { min: "Nada útil", max: "Muy útil" },
+  facilidad: { min: "Muy difícil", max: "Muy fácil" },
+};
+
+export interface EncuestaRespuesta extends BaseEntity {
+  /** The `socios` row that answered — not the Clerk id (see migration 0023). */
+  socioId: string;
+  /** Which survey this answers. Defaults to `ENCUESTA_SLUG_ACTUAL`. */
+  encuestaSlug: string;
+
+  // Eje 1 — Satisfacción general
+  satisfaccionServicios: EscalaRespuesta;
+  utilidadComunicacion: EscalaRespuesta;
+  /** Open question, optional by design. */
+  queMejorarias?: string;
+
+  // Eje 2 — Prioridades y participación
+  /** Values from `TEMAS_PRIORITARIOS`, plus any free-text "Otro". */
+  temasPrioritarios: string[];
+  participacionAcciones: ParticipacionAcciones;
+  /** Values from `CANALES_NOVEDADES`; more than one is allowed. */
+  canalesPreferidos: string[];
+
+  // Eje 3 — Portal
+  facilidadPortal: EscalaRespuesta;
+  /** Open question, optional by design. */
+  funcionalidadSugerida?: string;
+  dispositivoPrincipal: DispositivoPrincipal;
+}
+
 /** The shape of the currently authenticated user. */
 export interface CurrentUser {
   id: string;

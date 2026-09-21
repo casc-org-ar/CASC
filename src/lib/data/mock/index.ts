@@ -5,6 +5,7 @@ import {
   blogPosts,
   candidatos,
   consultas,
+  encuestaRespuestas,
   hoteles,
   informes,
   newsletters,
@@ -31,4 +32,5 @@ export const mockDataLayer: DataLayer = {
   solicitudes: new InMemoryContentRepository(solicitudes),
   consultas: new InMemoryContentRepository(consultas),
   socios: new InMemoryContentRepository(socios),
+  encuesta: new InMemoryContentRepository(encuestaRespuestas),
 };

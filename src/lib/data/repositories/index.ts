@@ -12,6 +12,7 @@ import type {
   BlogPost,
   Candidato,
   ConsultaContacto,
+  EncuestaRespuesta,
   Hotel,
   Informe,
   Newsletter,
@@ -68,6 +69,14 @@ export type ConsultaRepository = ContentRepository<ConsultaContacto>;
 export type SocioRepository = ContentRepository<Socio>;
 
 /**
+ * Survey answers. The full CRUD surface is exposed because the port is shared,
+ * but who may call what is decided by RLS (migration 0023): a member can only
+ * `create` their own row and `list` it back, never update or delete it. The
+ * admin panel reads every row to export them.
+ */
+export type EncuestaRepository = ContentRepository<EncuestaRespuesta>;
+
+/**
  * The full data layer surface. Consumers ask for this bundle and never
  * construct concrete repositories themselves.
  */
@@ -83,4 +92,5 @@ export interface DataLayer {
   solicitudes: SolicitudRepository;
   consultas: ConsultaRepository;
   socios: SocioRepository;
+  encuesta: EncuestaRepository;
 }

@@ -22,6 +22,7 @@ export type SecurityEvent =
   | "input.validation_failed" // a public payload failed schema validation
   | "upload.scan_rejected" // a CV failed the antivirus scan
   | "captcha.rejected" // a reCAPTCHA check failed (reason in context)
+  | "encuesta.submit_denied" // a survey submit from an account that cannot answer
   | "write.failed"; // a persistence write threw
 
 /** Non-secret context. Callers must NOT put personal data here. */

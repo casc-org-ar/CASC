@@ -4,6 +4,7 @@ import type {
   BlogPost,
   Candidato,
   ConsultaContacto,
+  EncuestaRespuesta,
   Hotel,
   Informe,
   Newsletter,
@@ -436,6 +437,52 @@ export const solicitudMapper: EntityMapper<SolicitudAsociacion> = {
     put(row, "email", i.email);
     put(row, "mensaje", i.mensaje);
     put(row, "gestion", i.gestion);
+    return row;
+  },
+};
+
+// ---------------------------------------------------------------------------
+// EncuestaRespuesta (no `status`/`gestion`: a survey answer is final once sent)
+//
+// The scale columns are `smallint` with a 1-5 check in the database, so a row
+// that comes back can only ever hold a valid rating; the cast states that
+// rather than re-validating what Postgres already guaranteed.
+// ---------------------------------------------------------------------------
+export const encuestaMapper: EntityMapper<EncuestaRespuesta> = {
+  fromRow: (r) => ({
+    id: r.id as string,
+    socioId: r.socio_id as string,
+    encuestaSlug: r.encuesta_slug as string,
+    satisfaccionServicios:
+      r.satisfaccion_servicios as EncuestaRespuesta["satisfaccionServicios"],
+    utilidadComunicacion:
+      r.utilidad_comunicacion as EncuestaRespuesta["utilidadComunicacion"],
+    queMejorarias: (r.que_mejorarias as string | null) ?? undefined,
+    temasPrioritarios: (r.temas_prioritarios as string[] | null) ?? [],
+    participacionAcciones:
+      r.participacion_acciones as EncuestaRespuesta["participacionAcciones"],
+    canalesPreferidos: (r.canales_preferidos as string[] | null) ?? [],
+    facilidadPortal: r.facilidad_portal as EncuestaRespuesta["facilidadPortal"],
+    funcionalidadSugerida:
+      (r.funcionalidad_sugerida as string | null) ?? undefined,
+    dispositivoPrincipal:
+      r.dispositivo_principal as EncuestaRespuesta["dispositivoPrincipal"],
+    createdAt: r.created_at as string,
+    updatedAt: r.updated_at as string,
+  }),
+  toRow: (i) => {
+    const row: Row = {};
+    put(row, "socio_id", i.socioId);
+    put(row, "encuesta_slug", i.encuestaSlug);
+    put(row, "satisfaccion_servicios", i.satisfaccionServicios);
+    put(row, "utilidad_comunicacion", i.utilidadComunicacion);
+    put(row, "que_mejorarias", i.queMejorarias);
+    put(row, "temas_prioritarios", i.temasPrioritarios);
+    put(row, "participacion_acciones", i.participacionAcciones);
+    put(row, "canales_preferidos", i.canalesPreferidos);
+    put(row, "facilidad_portal", i.facilidadPortal);
+    put(row, "funcionalidad_sugerida", i.funcionalidadSugerida);
+    put(row, "dispositivo_principal", i.dispositivoPrincipal);
     return row;
   },
 };
