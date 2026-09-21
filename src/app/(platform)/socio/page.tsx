@@ -1,6 +1,7 @@
 import { ArrowRight, FileText, Newspaper, Video } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { CardCarousel } from "@/components/shared/card-carousel";
 import { CardCover } from "@/components/shared/card-cover";
 import { SafeImage } from "@/components/shared/safe-image";
 import { Badge } from "@/components/ui/badge";
@@ -154,10 +155,16 @@ export default async function SocioHomePage() {
           full-size cards would push the rest of the panel below several screens
           of scrolling — on a phone each card is already most of the viewport.
 
-          One highlight keeps the large card it always had. Two or more switch
-          to a compact grid, which fits any number without the page growing
-          unbounded. A carousel was the other option, but it hides items behind
-          arrows and its horizontal swipe fights the page scroll on mobile. */}
+          Three layouts, by count:
+            1      → the large card it always had.
+            2-3    → a compact grid; they fit one desktop row with no controls.
+            4 or + → a carousel, so the section keeps the height of a single
+                     row however many articles get marked. Past one row the
+                     grid wraps, and each extra row pushes the rest of the
+                     panel further down.
+
+          The threshold matches `ContentCarousel` on the public site (controls
+          appear past 3), so both surfaces behave the same way. */}
       {featured.length > 0 && (
         <div className="animate-fade-in-up">
           {featured.length === 1 ? (
@@ -167,11 +174,19 @@ export default async function SocioHomePage() {
               <h2 className="mb-4 text-lg font-bold tracking-tight text-ink">
                 Destacados
               </h2>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {featured.map((item) => (
-                  <FeedCard key={item.href} item={item} highlighted />
-                ))}
-              </div>
+              {featured.length > 3 ? (
+                <CardCarousel label="destacados">
+                  {featured.map((item) => (
+                    <FeedCard key={item.href} item={item} highlighted />
+                  ))}
+                </CardCarousel>
+              ) : (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {featured.map((item) => (
+                    <FeedCard key={item.href} item={item} highlighted />
+                  ))}
+                </div>
+              )}
             </>
           )}
         </div>
@@ -281,7 +296,12 @@ function FeedCard({
   const Icon = item.icon;
   const showCover = item.tipo !== "Informe";
   return (
-    <Link href={item.href} className="group block">
+    // `h-full` on the link, not just on the Card: the Card's own `h-full` can
+    // only fill what its parent gives it, and a bare `block` link is as tall as
+    // its content. In a grid that went unnoticed because the grid stretches the
+    // link itself; on the highlights carousel the link is a flex item, so
+    // without this the cards end up ragged whenever a title wraps.
+    <Link href={item.href} className="group block h-full">
       <Card
         interactive
         className={cn(
