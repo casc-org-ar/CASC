@@ -451,7 +451,9 @@ export const solicitudMapper: EntityMapper<SolicitudAsociacion> = {
 export const encuestaMapper: EntityMapper<EncuestaRespuesta> = {
   fromRow: (r) => ({
     id: r.id as string,
-    socioId: r.socio_id as string,
+    // Null only on test answers, which belong to no member row.
+    socioId: (r.socio_id as string | null) ?? undefined,
+    esPrueba: (r.es_prueba as boolean | null) ?? false,
     encuestaSlug: r.encuesta_slug as string,
     satisfaccionServicios:
       r.satisfaccion_servicios as EncuestaRespuesta["satisfaccionServicios"],
@@ -472,7 +474,11 @@ export const encuestaMapper: EntityMapper<EncuestaRespuesta> = {
   }),
   toRow: (i) => {
     const row: Row = {};
-    put(row, "socio_id", i.socioId);
+    // Written even when absent, as an explicit null: `put` skips `undefined`,
+    // and a test answer has no socio — the column has to actually be null for
+    // the admin insert policy to accept the row.
+    if ("socioId" in i) row.socio_id = i.socioId ?? null;
+    put(row, "es_prueba", i.esPrueba);
     put(row, "encuesta_slug", i.encuestaSlug);
     put(row, "satisfaccion_servicios", i.satisfaccionServicios);
     put(row, "utilidad_comunicacion", i.utilidadComunicacion);

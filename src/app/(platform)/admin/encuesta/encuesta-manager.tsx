@@ -133,7 +133,13 @@ export function EncuestaManager({
   const [detalle, setDetalle] = useState<RespuestaConSocio | null>(null);
   const toast = useToast();
 
-  const respuestas = filas.map((f) => f.respuesta);
+  // Test answers (sent from an admin account to check the form works) are
+  // listed but never counted: they answer nothing about what CASC's members
+  // think, and a handful of them would visibly move an average taken over a
+  // few dozen real answers.
+  const reales = filas.filter((f) => !f.respuesta.esPrueba);
+  const pruebas = filas.length - reales.length;
+  const respuestas = reales.map((f) => f.respuesta);
 
   const promSatisfaccion = promedio(
     respuestas.map((r) => r.satisfaccionServicios),
@@ -141,11 +147,12 @@ export function EncuestaManager({
   const promUtilidad = promedio(respuestas.map((r) => r.utilidadComunicacion));
   const promFacilidad = promedio(respuestas.map((r) => r.facilidadPortal));
 
-  // Response rate over the invited base. Guarded against a zero base, which
-  // would otherwise read "Infinity%" on an empty instance.
+  // Response rate over the invited base — real answers only, for the same
+  // reason. Guarded against a zero base, which would otherwise read
+  // "Infinity%" on an empty instance.
   const tasa =
     sociosActivos > 0
-      ? Math.round((filas.length / sociosActivos) * 100)
+      ? Math.round((reales.length / sociosActivos) * 100)
       : null;
 
   const temas = conteo(respuestas.map((r) => r.temasPrioritarios));
@@ -176,7 +183,10 @@ export function EncuestaManager({
    * sheet built on top of it.
    */
   const exportarCsv = () => {
-    const csv = toCsv(filas, [
+    // Real answers only. The export is what CASC analyses, and a test row
+    // among them would be counted as a member's opinion by whoever opens the
+    // sheet — they have no way to tell it apart once it is out of here.
+    const csv = toCsv(reales, [
       { header: "Fecha", value: (f) => f.respuesta.createdAt.slice(0, 10) },
       { header: "Socio", value: (f) => f.socioNombre },
       { header: "Shopping", value: (f) => f.socioShopping },
@@ -230,7 +240,7 @@ export function EncuestaManager({
     <>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-ink-muted">
-          {filas.length} respuesta{filas.length === 1 ? "" : "s"}
+          {reales.length} respuesta{reales.length === 1 ? "" : "s"}
           {tasa !== null && (
             <>
               {" · "}
@@ -239,8 +249,27 @@ export function EncuestaManager({
               {sociosActivos === 1 ? "" : "s"}
             </>
           )}
+          {/* Named rather than folded into the total, so the count on screen
+              always matches what the averages were taken over. */}
+          {pruebas > 0 && (
+            <>
+              {" · "}
+              {pruebas} de prueba
+            </>
+          )}
         </p>
-        <Button variant="secondary" onClick={exportarCsv}>
+        <Button
+          variant="secondary"
+          onClick={exportarCsv}
+          // Nothing to export while every stored answer is a test — the file
+          // would come out with headers and no rows.
+          disabled={reales.length === 0}
+          title={
+            reales.length === 0
+              ? "Todavía no hay respuestas de socios para exportar."
+              : undefined
+          }
+        >
           <Download className="h-4 w-4" aria-hidden />
           Descargar CSV
         </Button>
@@ -248,7 +277,7 @@ export function EncuestaManager({
 
       {/* Headline averages: the three scale questions, one per survey block. */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Respuestas" value={filas.length} icon={Users} />
+        <StatCard label="Respuestas" value={reales.length} icon={Users} />
         <StatCard
           label="Satisfacción servicios"
           value={promSatisfaccion !== null ? `${promSatisfaccion} / 5` : "—"}
@@ -313,6 +342,12 @@ export function EncuestaManager({
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
+                  {/* Marked in the list, not filtered out of it: a test answer
+                      is still a stored row, and CASC should be able to see
+                      (and delete) the ones they left behind. */}
+                  {fila.respuesta.esPrueba && (
+                    <Badge tone="accent">Prueba</Badge>
+                  )}
                   <Badge tone="muted">
                     Servicios {fila.respuesta.satisfaccionServicios}/5
                   </Badge>

@@ -64,47 +64,46 @@ async function socioIdActual(): Promise<string | null> {
  * `socioId` is returned alongside because the submit action needs it to stamp
  * the row, and resolving it twice would ask the same question twice.
  *
- * `pendiente` drives what the panel SHOWS: the home CTA and the survey page.
- * `soloLectura` drives what it ACCEPTS. They are deliberately separate,
- * because an admin previewing the socio surface should see exactly what a
- * member sees — the socio view is there to preview the member experience, and
- * a view that hides part of it previews nothing.
+ * `pendiente` says whether the survey should be OFFERED, `esAdmin` says whose
+ * answer it would be. An admin sees exactly what a member sees — the socio
+ * view exists to preview the member experience, and a view that leaves out
+ * the survey previews nothing — and can submit too, so the form can be tried
+ * end to end before CASC sends it out. Their answer is stored as a test
+ * (`esPrueba`), because there is no member row for it to belong to.
  *
- * So an admin gets `pendiente: true` (the CTA shows, the form opens) with
- * `soloLectura: true` (the submit is closed, and the action refuses it
- * anyway). A member who already answered gets neither: they have had their
- * turn, and showing them the form again would invite an edit the platform
+ * A member who already answered gets neither the CTA nor the form: they have
+ * had their turn, and showing it again would invite an edit the platform
  * refuses.
  */
 export interface EncuestaEstado {
   /**
    * True when the survey should be OFFERED to this caller — it drives the
-   * home CTA and the survey page. Not the same as being able to answer: see
-   * `soloLectura`.
+   * home CTA and the survey page.
    */
   pendiente: boolean;
-  /** The member's `socios` row id, when they have one. */
+  /**
+   * The member's `socios` row id. Null for an admin, whose answers belong to
+   * no member and are stored as tests.
+   */
   socioId: string | null;
   /**
-   * True for a caller who may LOOK at the survey but not answer it: today,
-   * an admin. They have no `socios` row, so the insert policy would refuse
-   * their answer — read-only is the honest way to show a form that could
-   * never be submitted.
+   * True when the caller is an admin trying the form out. Their submission is
+   * recorded with `esPrueba`, so CASC's real results stay clean.
    */
-  soloLectura: boolean;
+  esAdmin: boolean;
 }
 
 export async function getEncuestaEstado(): Promise<EncuestaEstado> {
   const user = await getAuth().getCurrentUser();
-  // An admin sees the survey as a member would — CTA included — but cannot
-  // answer it. Hiding it from them would make the socio view a preview that
-  // leaves out the very thing being previewed.
+  // An admin is offered the survey like any member, and may submit it: that is
+  // the only way to check the form actually saves before it goes out. They
+  // have no `socios` row, so what they send is flagged as a test.
   if (user?.role === "admin") {
-    return { pendiente: true, socioId: null, soloLectura: true };
+    return { pendiente: true, socioId: null, esAdmin: true };
   }
 
   const socioId = await socioIdActual();
-  if (!socioId) return { pendiente: false, socioId: null, soloLectura: false };
+  if (!socioId) return { pendiente: false, socioId: null, esAdmin: false };
 
   // Under Supabase, RLS already limits this to the member's own answer. The
   // in-memory mock has no RLS and returns every row, so both filters are
@@ -115,5 +114,5 @@ export async function getEncuestaEstado(): Promise<EncuestaEstado> {
     (r) => r.socioId === socioId && r.encuestaSlug === ENCUESTA_SLUG_ACTUAL,
   );
 
-  return { pendiente: !yaRespondio, socioId, soloLectura: false };
+  return { pendiente: !yaRespondio, socioId, esAdmin: false };
 }

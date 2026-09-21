@@ -377,8 +377,22 @@ export const ESCALA_EXTREMOS: Record<
 };
 
 export interface EncuestaRespuesta extends BaseEntity {
-  /** The `socios` row that answered — not the Clerk id (see migration 0023). */
-  socioId: string;
+  /**
+   * The `socios` row that answered — not the Clerk id (see migration 0024).
+   * Undefined only on test answers (`esPrueba`), which come from an admin
+   * account and therefore from no member row at all.
+   */
+  socioId?: string;
+  /**
+   * Sent from an admin account to try the form out, not a real answer.
+   * Kept apart from the real ones everywhere it matters: the panel's averages
+   * and distributions ignore them, and the CSV marks them.
+   *
+   * An explicit flag rather than inferring it from a missing `socioId`: that
+   * would be reading a coincidence as a statement, and any future reason for
+   * a member-less answer would start hiding real data.
+   */
+  esPrueba: boolean;
   /** Which survey this answers. Defaults to `ENCUESTA_SLUG_ACTUAL`. */
   encuestaSlug: string;
 

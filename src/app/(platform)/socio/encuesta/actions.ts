@@ -38,20 +38,18 @@ export async function enviarEncuesta(formData: FormData): Promise<void> {
   // Server actions are public HTTP endpoints: whoever holds the action id can
   // POST to it. Re-checking here is what actually closes the door — hiding the
   // form after answering is a UI convenience, not a control.
-  const { pendiente, socioId, soloLectura } = await getEncuestaEstado();
+  const { pendiente, socioId, esAdmin } = await getEncuestaEstado();
 
-  if (!socioId || !pendiente) {
-    // Worth recording, and worth telling the three cases apart: an admin
-    // submitting from the preview is expected and harmless, a second submit
-    // from a member is usually a slow connection or a refreshed tab, and a
-    // submit from an account with no member row at all is the one that could
-    // be a replayed request.
+  // An admin may submit, but only as a TEST answer: they have no member row,
+  // so there is nobody for the answer to belong to. `esPrueba` is what keeps
+  // it out of CASC's real results.
+  if (!pendiente || (!socioId && !esAdmin)) {
+    // Worth recording, and worth telling the cases apart: a second submit from
+    // a member is usually a slow connection or a refreshed tab, while a submit
+    // from an account with no member row and no admin rights is the one that
+    // could be a replayed request.
     securityLog("encuesta.submit_denied", {
-      motivo: soloLectura
-        ? "vista-previa-admin"
-        : socioId
-          ? "ya-respondida"
-          : "sin-socio",
+      motivo: socioId ? "ya-respondida" : "sin-socio",
     });
     throw new EncuestaNoDisponibleError();
   }
@@ -69,12 +67,17 @@ export async function enviarEncuesta(formData: FormData): Promise<void> {
     dispositivoPrincipal: formData.get("dispositivoPrincipal"),
   });
 
-  // `socioId` comes from the row RLS just authorized, never from the form: a
-  // submitted id could name someone else's row. The insert policy would refuse
-  // it anyway, but the value should never be client-controlled to begin with.
+  // `socioId` and `esPrueba` come from the session, NEVER from the form: a
+  // submitted id could name someone else's row, and a submitted `esPrueba`
+  // would let a member file their answer as a test (or an admin file a test as
+  // real). The insert policies would refuse both, but neither value should be
+  // client-controlled to begin with.
   await getDataLayer().encuesta.create({
     ...datos,
-    socioId,
+    // `null` (no member row) becomes `undefined`, which is how the domain
+    // spells "absent"; the mapper turns it back into an explicit SQL null.
+    socioId: socioId ?? undefined,
+    esPrueba: !socioId,
     encuestaSlug: ENCUESTA_SLUG_ACTUAL,
   });
 

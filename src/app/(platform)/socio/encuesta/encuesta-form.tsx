@@ -188,17 +188,17 @@ function Bloque({
 
 export function EncuestaForm({
   /**
-   * Preview mode, for an admin looking at the survey they send to members.
-   * The controls stay usable so the form can be read and tried out, but
-   * nothing is submitted.
+   * The viewer is an admin trying the form out. They submit like anyone else,
+   * but their answer is stored as a test and never counts towards CASC's
+   * results — so the form says so, in the confirmation and in the footer.
    *
-   * This is presentation, NOT the access control: the action re-checks who is
-   * calling, and the insert policy would refuse an admin's row regardless.
-   * A disabled button is a courtesy to the person, never the lock.
+   * This is presentation, NOT the access control: the action decides who is
+   * calling and whether the answer is a test, from the session and never from
+   * this prop.
    */
-  soloLectura = false,
+  esAdmin = false,
 }: {
-  soloLectura?: boolean;
+  esAdmin?: boolean;
 }) {
   // The only piece of UI state: the free-text topic box is revealed by its
   // checkbox. Everything else is read from the form on submit.
@@ -209,24 +209,28 @@ export function EncuestaForm({
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (soloLectura) return;
     const formData = new FormData(e.currentTarget);
 
     // Answers are final once sent (there is no edit, by design), so the
     // confirmation is part of the contract with the member, not a formality.
-    if (
-      !confirm(
-        "Una vez enviada, la encuesta no se puede modificar. ¿Querés enviarla?",
-      )
-    ) {
-      return;
-    }
+    // An admin is warned about something else entirely: not that it cannot be
+    // undone, but that it will not count.
+    const aviso = esAdmin
+      ? "Se va a guardar como respuesta de prueba y no va a contar en los resultados. ¿Enviar?"
+      : "Una vez enviada, la encuesta no se puede modificar. ¿Querés enviarla?";
+    if (!confirm(aviso)) return;
 
     startTransition(async () => {
       try {
         await enviarEncuesta(formData);
-        toast.success("¡Gracias! Recibimos tus respuestas.");
-        router.push("/socio");
+        toast.success(
+          esAdmin
+            ? "Respuesta de prueba enviada. La ves en el panel de la encuesta."
+            : "¡Gracias! Recibimos tus respuestas.",
+        );
+        // An admin lands on the panel, where their test answer now shows —
+        // seeing it stored is the whole point of the exercise.
+        router.push(esAdmin ? "/admin/encuesta" : "/socio");
       } catch {
         toast.error("No se pudo enviar la encuesta. Intentá de nuevo.");
       }
@@ -344,24 +348,17 @@ export function EncuestaForm({
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="text-xs text-ink-muted">
-          {soloLectura
-            ? "Vista previa: las respuestas de una cuenta de administración no se guardan."
+          {esAdmin
+            ? "Prueba: se guarda marcada como tal y no entra en los resultados."
             : "Las respuestas no se pueden modificar una vez enviadas."}
         </p>
-        <Button
-          type="submit"
-          size="lg"
-          disabled={enviando || soloLectura}
-          // Says WHY it cannot be used. A disabled button with no explanation
-          // reads as a bug; a hover title turns it into an answer.
-          title={
-            soloLectura
-              ? "La encuesta la responden los socios. Esta cuenta es de administración."
-              : undefined
-          }
-        >
+        <Button type="submit" size="lg" disabled={enviando}>
           <Send className="h-4 w-4" aria-hidden />
-          {enviando ? "Enviando…" : "Enviar encuesta"}
+          {enviando
+            ? "Enviando…"
+            : esAdmin
+              ? "Enviar prueba"
+              : "Enviar encuesta"}
         </Button>
       </div>
     </form>

@@ -24,9 +24,7 @@ export const metadata = { title: "Encuesta" };
  *    the form again invites an edit the platform will not accept.
  */
 export default async function EncuestaPage() {
-  // `pendiente` already covers the admin, who is offered the survey like any
-  // member and only stopped at the submit — see `getEncuestaEstado`.
-  const { pendiente, soloLectura } = await getEncuestaEstado();
+  const { pendiente, esAdmin } = await getEncuestaEstado();
   if (!pendiente) redirect("/socio");
 
   return (
@@ -34,12 +32,12 @@ export default async function EncuestaPage() {
       <SectionHeading
         title="Encuesta a socios"
         subtitle={
-          soloLectura
-            ? "Así ven los socios la encuesta. Esta es una vista previa: desde una cuenta de administración no se puede responder."
+          esAdmin
+            ? "Así ven los socios la encuesta. Podés completarla y enviarla para probar el circuito: se guarda marcada como prueba y no entra en los resultados."
             : "Tres minutos para ayudarnos a mejorar los servicios de la Cámara. Tus respuestas llegan directo al equipo de la CASC."
         }
       />
-      <EncuestaForm soloLectura={soloLectura} />
+      <EncuestaForm esAdmin={esAdmin} />
     </div>
   );
 }

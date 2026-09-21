@@ -35,14 +35,19 @@ export default async function AdminEncuestaPage() {
         b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id),
     )
     .map((respuesta) => {
-      const socio = porId.get(respuesta.socioId);
+      const socio = respuesta.socioId
+        ? porId.get(respuesta.socioId)
+        : undefined;
       return {
         respuesta,
-        // A deleted member takes their answers with them (`on delete cascade`),
-        // so a missing socio should not happen. It is rendered rather than
-        // dropped: an answer that exists must be counted, and silently hiding
-        // it would make the totals disagree with the database.
-        socioNombre: socio?.nombre ?? "Socio dado de baja",
+        // Two different reasons for having no socio, and they read differently:
+        // a test answer never had one, while a real answer missing its member
+        // means the row was deleted (`on delete cascade` makes that unlikely).
+        // Either way the answer is rendered, not dropped — hiding a stored row
+        // would make the panel disagree with the database.
+        socioNombre: respuesta.esPrueba
+          ? "Prueba interna"
+          : (socio?.nombre ?? "Socio dado de baja"),
         socioShopping: socio?.shopping ?? "",
         socioEmail: socio?.email ?? "",
       };
