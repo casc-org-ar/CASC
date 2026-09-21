@@ -30,55 +30,72 @@ export class EncuestaNoDisponibleError extends Error {
 /**
  * The current member's `socios` row id, or null when there is none.
  *
- * Resolved by EMAIL, not by taking the first row.
+ * Reads the row the SAME way `getMemberAccess` does — `socios[0]`, trusting
+ * `socios_select_self` (migration 0004) to have narrowed the list to the
+ * caller's own row. Consistency matters here: the layout already used that
+ * row to let this member in, so resolving it differently could disagree with
+ * the guard that just ran.
  *
- * Under Supabase, `socios_select_self` (migration 0004) already narrows the
- * list to the caller's own row, so `socios[0]` would be right — but only
- * there. The in-memory mock has no RLS and returns every member, so the first
- * row is simply whoever the seed happens to list first. Matching on the
- * authenticated identity gives the same answer under both implementations,
- * which is the point of having one port over two adapters.
+ * An earlier version matched on the member's email instead, to cover the mock
+ * (which has no RLS and returns everyone). That traded a real problem for a
+ * worse one: under Clerk the session email and the `socios` row email come
+ * from different places, so any divergence — an alias, a different case, a
+ * `+tag` — resolved to no row and silently hid the survey from a member who
+ * could perfectly well answer it. RLS already answers "which row is yours",
+ * and asking a second, weaker question could only contradict it.
  *
- * It also settles a case RLS covers and the mock does not: an admin previewing
- * the socio surface. They have no socios row, so they resolve to null and are
- * never offered a survey they would be answering as somebody else.
- *
- * Email is the join key because it is what identifies a member before Clerk
- * links their account, and the database keeps it unique case-insensitively
- * (`socios_email_unique`, migration 0001) — so the comparison is lowercased
- * here to match.
+ * The mock is handled by the role check instead: an admin previewing the socio
+ * surface is not a member and gets no row, so they are never offered a survey
+ * they would be answering as somebody else. Under Clerk that check is
+ * redundant (an admin has no socios row at all), which is exactly what makes
+ * it safe.
  */
 async function socioIdActual(): Promise<string | null> {
   const user = await getAuth().getCurrentUser();
   if (!user || user.role !== "socio") return null;
 
   const socios = await getDataLayer().socios.list();
-  const email = user.email.trim().toLowerCase();
-  const propio = socios.find((s) => s.email.trim().toLowerCase() === email);
-  return propio?.id ?? null;
+  return socios[0]?.id ?? null;
 }
 
 /**
- * Survey state for the member viewing the panel.
+ * Survey state for whoever is viewing the panel.
  *
  * `socioId` is returned alongside because the submit action needs it to stamp
  * the row, and resolving it twice would ask the same question twice.
  *
- * An admin gets `{ pendiente: false }`: the survey is for members, and the CTA
- * has nothing to offer someone who cannot answer. Same for a member whose row
- * cannot be resolved — under Clerk they would not pass the insert policy
- * either, so offering the survey would only produce an error.
+ * `pendiente` answers one question only: may this caller still ANSWER? An
+ * admin cannot (no `socios` row, so the insert policy would refuse), and
+ * neither can a member who already did. `soloLectura` tells those two apart,
+ * because the panel treats them differently: the admin is shown the form as a
+ * preview, the member is sent back to the home.
  */
 export interface EncuestaEstado {
-  /** True when this member can still answer — drives the home CTA. */
+  /** True when this caller can still answer — drives the home CTA. */
   pendiente: boolean;
   /** The member's `socios` row id, when they have one. */
   socioId: string | null;
+  /**
+   * True for a caller who may LOOK at the survey but not answer it: today,
+   * an admin. CASC has to be able to review the form they are sending out —
+   * and read-only is the honest way to show it, since submitting would fail
+   * at the database anyway.
+   *
+   * A member who already answered is NOT this: they have had their turn, and
+   * showing them the form again would invite an edit the platform refuses.
+   */
+  soloLectura: boolean;
 }
 
 export async function getEncuestaEstado(): Promise<EncuestaEstado> {
+  const user = await getAuth().getCurrentUser();
+  // Admins preview the survey; they never answer it.
+  if (user?.role === "admin") {
+    return { pendiente: false, socioId: null, soloLectura: true };
+  }
+
   const socioId = await socioIdActual();
-  if (!socioId) return { pendiente: false, socioId: null };
+  if (!socioId) return { pendiente: false, socioId: null, soloLectura: false };
 
   // Under Supabase, RLS already limits this to the member's own answer. The
   // in-memory mock has no RLS and returns every row, so both filters are
@@ -89,5 +106,5 @@ export async function getEncuestaEstado(): Promise<EncuestaEstado> {
     (r) => r.socioId === socioId && r.encuestaSlug === ENCUESTA_SLUG_ACTUAL,
   );
 
-  return { pendiente: !yaRespondio, socioId };
+  return { pendiente: !yaRespondio, socioId, soloLectura: false };
 }

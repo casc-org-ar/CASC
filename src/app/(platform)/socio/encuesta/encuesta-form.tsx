@@ -186,7 +186,20 @@ function Bloque({
   );
 }
 
-export function EncuestaForm() {
+export function EncuestaForm({
+  /**
+   * Preview mode, for an admin looking at the survey they send to members.
+   * The controls stay usable so the form can be read and tried out, but
+   * nothing is submitted.
+   *
+   * This is presentation, NOT the access control: the action re-checks who is
+   * calling, and the insert policy would refuse an admin's row regardless.
+   * A disabled button is a courtesy to the person, never the lock.
+   */
+  soloLectura = false,
+}: {
+  soloLectura?: boolean;
+}) {
   // The only piece of UI state: the free-text topic box is revealed by its
   // checkbox. Everything else is read from the form on submit.
   const [otroActivo, setOtroActivo] = useState(false);
@@ -196,6 +209,7 @@ export function EncuestaForm() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (soloLectura) return;
     const formData = new FormData(e.currentTarget);
 
     // Answers are final once sent (there is no edit, by design), so the
@@ -330,9 +344,22 @@ export function EncuestaForm() {
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="text-xs text-ink-muted">
-          Las respuestas no se pueden modificar una vez enviadas.
+          {soloLectura
+            ? "Vista previa: las respuestas de una cuenta de administración no se guardan."
+            : "Las respuestas no se pueden modificar una vez enviadas."}
         </p>
-        <Button type="submit" size="lg" disabled={enviando}>
+        <Button
+          type="submit"
+          size="lg"
+          disabled={enviando || soloLectura}
+          // Says WHY it cannot be used. A disabled button with no explanation
+          // reads as a bug; a hover title turns it into an answer.
+          title={
+            soloLectura
+              ? "La encuesta la responden los socios. Esta cuenta es de administración."
+              : undefined
+          }
+        >
           <Send className="h-4 w-4" aria-hidden />
           {enviando ? "Enviando…" : "Enviar encuesta"}
         </Button>

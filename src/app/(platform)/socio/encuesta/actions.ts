@@ -38,14 +38,20 @@ export async function enviarEncuesta(formData: FormData): Promise<void> {
   // Server actions are public HTTP endpoints: whoever holds the action id can
   // POST to it. Re-checking here is what actually closes the door — hiding the
   // form after answering is a UI convenience, not a control.
-  const { pendiente, socioId } = await getEncuestaEstado();
+  const { pendiente, socioId, soloLectura } = await getEncuestaEstado();
 
   if (!socioId || !pendiente) {
-    // Worth recording: a submit with the survey already answered means either a
-    // double submit (a slow connection, a refreshed tab) or someone replaying
-    // the request — and the second is the one to be able to see in the logs.
+    // Worth recording, and worth telling the three cases apart: an admin
+    // submitting from the preview is expected and harmless, a second submit
+    // from a member is usually a slow connection or a refreshed tab, and a
+    // submit from an account with no member row at all is the one that could
+    // be a replayed request.
     securityLog("encuesta.submit_denied", {
-      motivo: socioId ? "ya-respondida" : "sin-socio",
+      motivo: soloLectura
+        ? "vista-previa-admin"
+        : socioId
+          ? "ya-respondida"
+          : "sin-socio",
     });
     throw new EncuestaNoDisponibleError();
   }

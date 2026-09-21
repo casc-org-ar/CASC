@@ -1,4 +1,6 @@
+import { Eye } from "lucide-react";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { ButtonLink } from "@/components/ui/button";
 import { getDataLayer } from "@/lib/data";
 import { ENCUESTA_SLUG_ACTUAL } from "@/lib/types/domain";
 import { EncuestaManager, type RespuestaConSocio } from "./encuesta-manager";
@@ -54,10 +56,21 @@ export default async function AdminEncuestaPage() {
 
   return (
     <>
-      <SectionHeading
-        title="Encuesta a socios"
-        subtitle="Respuestas recibidas y descarga de resultados"
-      />
+      {/* `SectionHeading` carries its own bottom margin, so the row does not
+          add one of its own. */}
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <SectionHeading
+          title="Encuesta a socios"
+          subtitle="Respuestas recibidas y descarga de resultados"
+        />
+        {/* The way in to the survey itself. Admins get no home CTA (they have
+            no socios row and cannot answer), so without this link there is no
+            way for CASC to look at the form they are sending out. */}
+        <ButtonLink href="/socio/encuesta" variant="secondary">
+          <Eye className="h-4 w-4" aria-hidden />
+          Ver la encuesta
+        </ButtonLink>
+      </div>
       <EncuestaManager filas={filas} sociosActivos={sociosActivos} />
     </>
   );

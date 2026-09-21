@@ -12,23 +12,32 @@ export const metadata = { title: "Encuesta" };
  * answered, the survey is over for that member, and a permanent menu item
  * would advertise a page that immediately bounces them away.
  *
- * A member who already answered is redirected to the panel home instead of
- * being shown a read-only copy of their answers. "El socio no puede modificar
- * las respuestas": showing the filled form invites an edit the platform will
- * not accept, and a disabled form is a worse way to say "this is closed" than
- * simply not being there. The home carries the thank-you message instead.
+ * Three cases:
+ *
+ *  - A member who can still answer gets the form.
+ *  - An ADMIN gets it read-only. They have no `socios` row, so the insert
+ *    policy would refuse their answer — but CASC still has to be able to
+ *    review the survey they are sending to their members, and a link that
+ *    bounces them out is no way to review anything.
+ *  - A member who already answered is sent back to the home, NOT shown their
+ *    filled-in answers. "El socio no puede modificar las respuestas": showing
+ *    the form again invites an edit the platform will not accept.
  */
 export default async function EncuestaPage() {
-  const { pendiente } = await getEncuestaEstado();
-  if (!pendiente) redirect("/socio");
+  const { pendiente, soloLectura } = await getEncuestaEstado();
+  if (!pendiente && !soloLectura) redirect("/socio");
 
   return (
     <div className="mx-auto max-w-2xl">
       <SectionHeading
         title="Encuesta a socios"
-        subtitle="Tres minutos para ayudarnos a mejorar los servicios de la Cámara. Tus respuestas llegan directo al equipo de la CASC."
+        subtitle={
+          soloLectura
+            ? "Así ven los socios la encuesta. Esta es una vista previa: desde una cuenta de administración no se puede responder."
+            : "Tres minutos para ayudarnos a mejorar los servicios de la Cámara. Tus respuestas llegan directo al equipo de la CASC."
+        }
       />
-      <EncuestaForm />
+      <EncuestaForm soloLectura={soloLectura} />
     </div>
   );
 }
