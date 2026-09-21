@@ -72,7 +72,13 @@ export async function enviarEncuesta(formData: FormData): Promise<void> {
   // would let a member file their answer as a test (or an admin file a test as
   // real). The insert policies would refuse both, but neither value should be
   // client-controlled to begin with.
-  await getDataLayer().encuesta.create({
+  // `createNoReturn`, NOT `create`: a returning insert re-reads the row it
+  // just wrote, and that read goes through the SELECT policy. An admin's test
+  // answer has `socio_id` null, which `encuesta_select_propia` cannot match,
+  // so the write succeeded and the read-back came up empty — `.single()` then
+  // threw and the form reported a failure for an answer that WAS saved.
+  // Nothing here needs the stored row, so nothing should ask for it.
+  await getDataLayer().encuesta.createNoReturn({
     ...datos,
     // `null` (no member row) becomes `undefined`, which is how the domain
     // spells "absent"; the mapper turns it back into an explicit SQL null.
