@@ -64,34 +64,43 @@ async function socioIdActual(): Promise<string | null> {
  * `socioId` is returned alongside because the submit action needs it to stamp
  * the row, and resolving it twice would ask the same question twice.
  *
- * `pendiente` answers one question only: may this caller still ANSWER? An
- * admin cannot (no `socios` row, so the insert policy would refuse), and
- * neither can a member who already did. `soloLectura` tells those two apart,
- * because the panel treats them differently: the admin is shown the form as a
- * preview, the member is sent back to the home.
+ * `pendiente` drives what the panel SHOWS: the home CTA and the survey page.
+ * `soloLectura` drives what it ACCEPTS. They are deliberately separate,
+ * because an admin previewing the socio surface should see exactly what a
+ * member sees — the socio view is there to preview the member experience, and
+ * a view that hides part of it previews nothing.
+ *
+ * So an admin gets `pendiente: true` (the CTA shows, the form opens) with
+ * `soloLectura: true` (the submit is closed, and the action refuses it
+ * anyway). A member who already answered gets neither: they have had their
+ * turn, and showing them the form again would invite an edit the platform
+ * refuses.
  */
 export interface EncuestaEstado {
-  /** True when this caller can still answer — drives the home CTA. */
+  /**
+   * True when the survey should be OFFERED to this caller — it drives the
+   * home CTA and the survey page. Not the same as being able to answer: see
+   * `soloLectura`.
+   */
   pendiente: boolean;
   /** The member's `socios` row id, when they have one. */
   socioId: string | null;
   /**
    * True for a caller who may LOOK at the survey but not answer it: today,
-   * an admin. CASC has to be able to review the form they are sending out —
-   * and read-only is the honest way to show it, since submitting would fail
-   * at the database anyway.
-   *
-   * A member who already answered is NOT this: they have had their turn, and
-   * showing them the form again would invite an edit the platform refuses.
+   * an admin. They have no `socios` row, so the insert policy would refuse
+   * their answer — read-only is the honest way to show a form that could
+   * never be submitted.
    */
   soloLectura: boolean;
 }
 
 export async function getEncuestaEstado(): Promise<EncuestaEstado> {
   const user = await getAuth().getCurrentUser();
-  // Admins preview the survey; they never answer it.
+  // An admin sees the survey as a member would — CTA included — but cannot
+  // answer it. Hiding it from them would make the socio view a preview that
+  // leaves out the very thing being previewed.
   if (user?.role === "admin") {
-    return { pendiente: false, socioId: null, soloLectura: true };
+    return { pendiente: true, socioId: null, soloLectura: true };
   }
 
   const socioId = await socioIdActual();

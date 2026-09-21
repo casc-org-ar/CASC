@@ -147,7 +147,12 @@ export default async function SocioHomePage() {
       {/* Survey invitation. Sits right under the greeting — above the feed, so
           it is seen, but inside the home rather than as a section of its own.
           It disappears for good once answered (`pendiente` is derived from the
-          stored answer, so there is no flag to reset or expire). */}
+          stored answer, so there is no flag to reset or expire).
+
+          An admin previewing the socio surface sees it too, unchanged: this
+          view exists to show what a member sees, and the banner is part of
+          that. What they cannot do is submit — the form says so and the action
+          refuses it. */}
       {encuesta.pendiente && <EncuestaCta />}
 
       {/* Featured highlights. The layout follows the count instead of being

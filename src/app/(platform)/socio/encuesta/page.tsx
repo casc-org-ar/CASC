@@ -24,8 +24,10 @@ export const metadata = { title: "Encuesta" };
  *    the form again invites an edit the platform will not accept.
  */
 export default async function EncuestaPage() {
+  // `pendiente` already covers the admin, who is offered the survey like any
+  // member and only stopped at the submit — see `getEncuestaEstado`.
   const { pendiente, soloLectura } = await getEncuestaEstado();
-  if (!pendiente && !soloLectura) redirect("/socio");
+  if (!pendiente) redirect("/socio");
 
   return (
     <div className="mx-auto max-w-2xl">
