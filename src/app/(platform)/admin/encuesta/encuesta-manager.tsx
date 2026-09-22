@@ -1,7 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { Download, MessageSquareText, Star, Users } from "lucide-react";
+import { useState, useTransition } from "react";
+import {
+  Download,
+  MessageSquareText,
+  Star,
+  Trash2,
+  Users,
+} from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatCard } from "@/components/shared/stat-card";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +21,7 @@ import {
   PARTICIPACION_LABEL,
   type EncuestaRespuesta,
 } from "@/lib/types/domain";
+import { deleteRespuestaPrueba } from "./actions";
 
 /** One answer joined with the member who sent it (joined on the server). */
 export interface RespuestaConSocio {
@@ -131,7 +138,37 @@ export function EncuestaManager({
   sociosActivos: number;
 }) {
   const [detalle, setDetalle] = useState<RespuestaConSocio | null>(null);
+  const [borrando, startTransition] = useTransition();
   const toast = useToast();
+
+  /**
+   * Delete a test answer, after confirming. The warning names the date so the
+   * admin can tell which row they are about to remove — with several test runs
+   * the list shows nothing else to distinguish them — and says plainly that it
+   * cannot be undone, because it cannot.
+   */
+  const eliminarPrueba = (fila: RespuestaConSocio) => {
+    const fecha = new Date(fila.respuesta.createdAt).toLocaleString("es-AR");
+    if (
+      !confirm(
+        `Vas a eliminar la respuesta de prueba del ${fecha}. Esta acción no se puede deshacer. ¿Continuar?`,
+      )
+    ) {
+      return;
+    }
+    startTransition(async () => {
+      try {
+        await deleteRespuestaPrueba(fila.respuesta.id);
+        toast.success("Respuesta de prueba eliminada.");
+        // Close the detail modal if it was showing the row just removed.
+        setDetalle((actual) =>
+          actual?.respuesta.id === fila.respuesta.id ? null : actual,
+        );
+      } catch {
+        toast.error("No se pudo eliminar la respuesta.");
+      }
+    });
+  };
 
   // Test answers (sent from an admin account to check the form works) are
   // listed but never counted: they answer nothing about what CASC's members
@@ -322,12 +359,19 @@ export function EncuestaManager({
           <CardTitle>Respuestas individuales</CardTitle>
         </div>
         <ul className="divide-y divide-border">
+          {/* The row's open-detail area and the delete button are SIBLINGS,
+              not nested: a button inside a button is invalid HTML, and the
+              click would be ambiguous. The delete control only exists on test
+              rows, so most rows are just the clickable area. */}
           {filas.map((fila) => (
-            <li key={fila.respuesta.id}>
+            <li
+              key={fila.respuesta.id}
+              className="flex items-center gap-2 pr-3 transition-colors hover:bg-surface"
+            >
               <button
                 type="button"
                 onClick={() => setDetalle(fila)}
-                className="flex w-full flex-wrap items-center justify-between gap-3 p-5 text-left transition-colors hover:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+                className="flex min-w-0 flex-1 flex-wrap items-center justify-between gap-3 p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
               >
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-ink">
@@ -356,6 +400,22 @@ export function EncuestaManager({
                   </Badge>
                 </div>
               </button>
+
+              {/* Only on test rows. A member's answer has no delete button by
+                  design: they cannot answer again (the survey is once-only),
+                  so an accidental click would destroy a record for good. */}
+              {fila.respuesta.esPrueba && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => eliminarPrueba(fila)}
+                  disabled={borrando}
+                  aria-label="Eliminar respuesta de prueba"
+                  className="shrink-0 text-red-600 hover:bg-red-50"
+                >
+                  <Trash2 className="h-4 w-4" aria-hidden />
+                </Button>
+              )}
             </li>
           ))}
         </ul>
