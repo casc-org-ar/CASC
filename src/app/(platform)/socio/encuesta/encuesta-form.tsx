@@ -346,13 +346,25 @@ export function EncuestaForm({
         />
       </Bloque>
 
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      {/* Stacks on a phone, sits on one row from `sm` up. `flex-wrap` alone
+          wrapped the button onto its own line but left it content-width,
+          which on a narrow screen reads as a small, easy-to-miss target for
+          the action that ends the whole form. */}
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs text-ink-muted">
           {esAdmin
             ? "Prueba: se guarda marcada como tal y no entra en los resultados."
             : "Las respuestas no se pueden modificar una vez enviadas."}
         </p>
-        <Button type="submit" size="lg" disabled={enviando}>
+        {/* Full width on a phone, natural width from `sm` up, where the row
+            has the note beside it. `shrink-0` keeps the label from wrapping
+            once they share the line. */}
+        <Button
+          type="submit"
+          size="lg"
+          disabled={enviando}
+          className="w-full sm:w-auto sm:shrink-0"
+        >
           <Send className="h-4 w-4" aria-hidden />
           {enviando
             ? "Enviando…"
