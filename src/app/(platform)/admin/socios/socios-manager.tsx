@@ -3,6 +3,7 @@
 import { CheckCircle2, Plus, Send } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { DataTable, type Column } from "@/components/shared/data-table";
+import { SearchInput } from "@/components/shared/search-input";
 import { Badge, InvitationBadge, StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/field";
@@ -18,11 +19,29 @@ const CATEGORIA_LABEL = Object.fromEntries(
   SOCIO_CATEGORIAS.map((c) => [c.value, c.label]),
 ) as Record<SocioCategoria, string>;
 
+/**
+ * Case- and accent-insensitive form of a string, for searching.
+ * Same shape as `normalizeText` in the public asociados directory: a search
+ * that misses "Martín" because it was typed "martin" is one an admin stops
+ * trusting after the first surprise.
+ */
+function normalizar(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .trim();
+}
+
 /** Client manager: generic table + create/edit modal + delete, over the mock repo. */
 export function SociosManager({ socios }: { socios: Socio[] }) {
   const [editing, setEditing] = useState<Socio | null>(null);
   const [creating, setCreating] = useState(false);
   const [shoppingFilter, setShoppingFilter] = useState("Todos");
+  const [categoriaFilter, setCategoriaFilter] = useState<
+    SocioCategoria | "Todas"
+  >("Todas");
+  const [query, setQuery] = useState("");
   // Admin notification: set after an alta or a resend so the admin sees the
   // invitation went out (and where to check for it).
   const [notice, setNotice] = useState<string | null>(null);
@@ -72,14 +91,17 @@ export function SociosManager({ socios }: { socios: Socio[] }) {
     {
       header: "Invitación",
       cell: (s) => (
-        <div className="flex items-center gap-2">
+        /* The badge and the resend link stay side by side instead of the link
+           dropping under it: with seven columns this cell is narrow enough to
+           wrap, and a stray "Reenviar" below reads as a separate row. */
+        <div className="flex items-center gap-2 whitespace-nowrap">
           <InvitationBadge status={s.invitacionStatus} />
           {s.invitacionStatus !== "aceptada" && (
             <button
               type="button"
               onClick={() => onResend(s)}
               disabled={pending}
-              className="inline-flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:underline disabled:opacity-50"
+              className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-primary transition-colors hover:underline disabled:opacity-50"
             >
               <Send className="h-3 w-3" />
               Reenviar
@@ -90,10 +112,32 @@ export function SociosManager({ socios }: { socios: Socio[] }) {
     },
   ];
 
-  const visibles =
-    shoppingFilter === "Todos"
-      ? socios
-      : socios.filter((s) => s.shopping === shoppingFilter);
+  /**
+   * The three filters combine (AND), and the search runs over the fields an
+   * admin actually looks someone up by: their name, their company, and their
+   * email. Accent- and case-insensitive, because "Martín" typed as "martin"
+   * should still find him — an exact-match search is one an admin quietly
+   * stops trusting.
+   */
+  const visibles = useMemo(() => {
+    const term = normalizar(query);
+    return socios.filter((s) => {
+      if (shoppingFilter !== "Todos" && s.shopping !== shoppingFilter) {
+        return false;
+      }
+      if (categoriaFilter !== "Todas" && s.categoria !== categoriaFilter) {
+        return false;
+      }
+      if (!term) return true;
+      return [s.nombre, s.shopping, s.email].some((campo) =>
+        normalizar(campo).includes(term),
+      );
+    });
+  }, [socios, shoppingFilter, categoriaFilter, query]);
+
+  /** True when anything is narrowing the list — drives the empty message. */
+  const filtrando =
+    shoppingFilter !== "Todos" || categoriaFilter !== "Todas" || query !== "";
 
   const closeModal = () => {
     setCreating(false);
@@ -144,11 +188,38 @@ export function SociosManager({ socios }: { socios: Socio[] }) {
         </div>
       )}
 
-      <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+      <div className="mb-4 flex flex-wrap items-end gap-3">
+        <label className="flex flex-1 basis-64 flex-col gap-1">
+          <span className="text-xs font-medium text-ink-muted">Buscar</span>
+          <SearchInput
+            value={query}
+            onChange={setQuery}
+            placeholder="Nombre, empresa o email"
+          />
+        </label>
+
+        {/* Type of associate. Options come from the shared taxonomy, so a new
+            category appears here without touching this file. */}
         <label className="flex flex-col gap-1">
-          <span className="text-xs font-medium text-ink-muted">
-            Filtrar por shopping
-          </span>
+          <span className="text-xs font-medium text-ink-muted">Tipo</span>
+          <Select
+            value={categoriaFilter}
+            onChange={(e) =>
+              setCategoriaFilter(e.target.value as SocioCategoria | "Todas")
+            }
+            className="min-w-44"
+          >
+            <option value="Todas">Todos los tipos</option>
+            {SOCIO_CATEGORIAS.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </Select>
+        </label>
+
+        <label className="flex flex-col gap-1">
+          <span className="text-xs font-medium text-ink-muted">Empresa</span>
           <Select
             value={shoppingFilter}
             onChange={(e) => setShoppingFilter(e.target.value)}
@@ -156,16 +227,27 @@ export function SociosManager({ socios }: { socios: Socio[] }) {
           >
             {shoppings.map((sh) => (
               <option key={sh} value={sh}>
-                {sh === "Todos" ? "Todos los shoppings" : sh}
+                {sh === "Todos" ? "Todas las empresas" : sh}
               </option>
             ))}
           </Select>
         </label>
-        <Button onClick={() => setCreating(true)}>
+
+        <Button onClick={() => setCreating(true)} className="shrink-0">
           <Plus className="h-4 w-4" />
           Nuevo socio
         </Button>
       </div>
+
+      {/* Result count. With three filters combining it stops being obvious how
+          much of the list is showing, and "no results" is easier to read as a
+          number than inferred from an empty table. */}
+      {filtrando && (
+        <p className="mb-3 text-sm text-ink-muted">
+          {visibles.length} de {socios.length} socio
+          {socios.length === 1 ? "" : "s"}
+        </p>
+      )}
 
       <DataTable
         rows={visibles}
@@ -173,10 +255,13 @@ export function SociosManager({ socios }: { socios: Socio[] }) {
         rowLabel={(s) => s.nombre}
         onEdit={setEditing}
         onDelete={onDelete}
+        // Tells apart "nothing loaded" from "nothing matches": the first is a
+        // state of the data, the second of the filters — and only the second
+        // is fixed by clearing them.
         emptyMessage={
-          shoppingFilter === "Todos"
-            ? "Todavía no hay socios cargados."
-            : `No hay socios en ${shoppingFilter}.`
+          filtrando
+            ? "Ningún socio coincide con la búsqueda."
+            : "Todavía no hay socios cargados."
         }
       />
 

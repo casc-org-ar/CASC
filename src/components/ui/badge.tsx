@@ -18,7 +18,14 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+        // `whitespace-nowrap`: a badge is a pill, and a two-word label wrapping
+        // inside it breaks the shape — the rounded background stretches over two
+        // lines with the text crammed against the padding. It showed up in the
+        // socios table, where seven columns squeeze "Shopping center" and
+        // "Invitación enviada" until they wrap. The label stays on one line and
+        // the column widens instead, which the table's `overflow-x-auto`
+        // already handles.
+        "inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium",
         tones[tone],
         className,
       )}
