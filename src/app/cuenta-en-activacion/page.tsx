@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Clock } from "lucide-react";
 import { SignOutCta } from "@/app/cuenta-inactiva/sign-out-cta";
+import { ReintentarCta } from "./reintentar-cta";
 
 export const metadata: Metadata = {
   title: "Activando tu cuenta — CASC",
@@ -16,7 +17,13 @@ export const metadata: Metadata = {
  * invitation and the `user.created` webhook landing. Reusing the inactive
  * screen here told active members their access "was disabled" and sent them to
  * support over a state that usually resolves in seconds — so this page says
- * what is actually happening and invites them to retry.
+ * what is actually happening and gets them in as soon as it does.
+ *
+ * It used to say "actualizá la página" and offer only a sign-out button, which
+ * was a dead end: reloading this URL re-renders this page, because the socio
+ * layout sends an unlinked member right back here. `ReintentarCta` navigates to
+ * /socio instead — the route whose guard re-runs the check — and does it on a
+ * timer, so the usual few-second wait resolves without anyone doing anything.
  */
 export default function CuentaEnActivacionPage() {
   return (
@@ -39,13 +46,19 @@ export default function CuentaEnActivacionPage() {
       </h1>
       <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink-muted">
         Tu registro se completó correctamente y estamos terminando de vincularlo
-        con tu perfil de socio. Esto suele demorar unos segundos: actualizá la
-        página para volver a intentar. Si el acceso no se habilita, comunicate
-        con la Cámara Argentina de Shopping Centers.
+        con tu perfil de socio. Esto suele demorar unos segundos y reintentamos
+        solos. Si el acceso no se habilita, comunicate con la Cámara Argentina
+        de Shopping Centers.
       </p>
 
       <div className="mt-8">
-        <SignOutCta />
+        <ReintentarCta />
+      </div>
+
+      {/* Signing out is the secondary way out, so it reads as a link rather
+          than a second button competing with "Entrar al portal". */}
+      <div className="mt-6">
+        <SignOutCta variant="ghost" size="sm" />
       </div>
     </main>
   );
