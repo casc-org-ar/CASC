@@ -28,34 +28,39 @@ export class EncuestaNoDisponibleError extends Error {
  */
 
 /**
- * The current member's `socios` row id, or null when there is none.
+ * The current caller's own `socios` row id, or null when they have none.
  *
- * Reads the row the SAME way `getMemberAccess` does — `socios[0]`, trusting
- * `socios_select_self` (migration 0004) to have narrowed the list to the
- * caller's own row. Consistency matters here: the layout already used that
- * row to let this member in, so resolving it differently could disagree with
- * the guard that just ran.
+ * Matched on `clerk_user_id`, which is the identity the session actually
+ * carries — NOT `socios[0]`, and NOT the Clerk role.
  *
- * An earlier version matched on the member's email instead, to cover the mock
- * (which has no RLS and returns everyone). That traded a real problem for a
- * worse one: under Clerk the session email and the `socios` row email come
- * from different places, so any divergence — an alias, a different case, a
- * `+tag` — resolved to no row and silently hid the survey from a member who
- * could perfectly well answer it. RLS already answers "which row is yours",
- * and asking a second, weaker question could only contradict it.
+ * Both of those were wrong, for opposite reasons:
  *
- * The mock is handled by the role check instead: an admin previewing the socio
- * surface is not a member and gets no row, so they are never offered a survey
- * they would be answering as somebody else. Under Clerk that check is
- * redundant (an admin has no socios row at all), which is exactly what makes
- * it safe.
+ *  - `socios[0]` assumes RLS returned exactly one row. True for a member
+ *    (`socios_select_self` narrows it to their own), but an admin also has
+ *    `socios_admin_all` and gets EVERY row — so the first one is whoever the
+ *    table happens to list first, not them.
+ *  - Requiring `role === "socio"` assumed an admin never has a member row.
+ *    That turned out to be false: CASC staff who also represent a shopping
+ *    are loaded as socios AND hold an admin account, and they were refused
+ *    the survey while their own member row sat there, active and linked.
+ *
+ * Matching the row to the signed-in Clerk user answers the real question —
+ * "is there a member row that belongs to whoever is asking?" — and gives the
+ * same answer however many rows RLS hands back. It also settles the mock,
+ * which has no RLS and returns everyone.
+ *
+ * Inactive rows are excluded: a member given de baja is already bounced from
+ * the panel by `getMemberAccess`, and the survey must not outlive that.
  */
 async function socioIdActual(): Promise<string | null> {
   const user = await getAuth().getCurrentUser();
-  if (!user || user.role !== "socio") return null;
+  if (!user) return null;
 
   const socios = await getDataLayer().socios.list();
-  return socios[0]?.id ?? null;
+  const propio = socios.find(
+    (s) => s.clerkUserId === user.id && s.estado === "activo",
+  );
+  return propio?.id ?? null;
 }
 
 /**
@@ -64,12 +69,16 @@ async function socioIdActual(): Promise<string | null> {
  * `socioId` is returned alongside because the submit action needs it to stamp
  * the row, and resolving it twice would ask the same question twice.
  *
- * `pendiente` says whether the survey should be OFFERED, `esAdmin` says whose
- * answer it would be. An admin sees exactly what a member sees — the socio
- * view exists to preview the member experience, and a view that leaves out
- * the survey previews nothing — and can submit too, so the form can be tried
- * end to end before CASC sends it out. Their answer is stored as a test
- * (`esPrueba`), because there is no member row for it to belong to.
+ * `pendiente` says whether the survey should be OFFERED, `socioId` says whose
+ * answer it would be. What decides that is HAVING A MEMBER ROW, not the Clerk
+ * role: several CASC staff also represent a shopping, so they hold an admin
+ * account and a `socios` row at once. Their answer is a real member's answer
+ * and must count as one.
+ *
+ * Someone with no member row — an admin who is only staff — is still offered
+ * the survey, and may submit it: it is the only way to check the form saves
+ * before it goes out. Those submissions are flagged `esPrueba` and stay out
+ * of CASC's results.
  *
  * A member who already answered gets neither the CTA nor the form: they have
  * had their turn, and showing it again would invite an edit the platform
@@ -82,28 +91,31 @@ export interface EncuestaEstado {
    */
   pendiente: boolean;
   /**
-   * The member's `socios` row id. Null for an admin, whose answers belong to
-   * no member and are stored as tests.
+   * The caller's own `socios` row id, when they have one. Null for an account
+   * with no member row, whose answers are stored as tests.
    */
   socioId: string | null;
   /**
-   * True when the caller is an admin trying the form out. Their submission is
-   * recorded with `esPrueba`, so CASC's real results stay clean.
+   * True when the answer would be a TEST — the caller has no member row to
+   * attribute it to. Named for what it does, not for the role: an admin who
+   * is also a socio answers for real, and this is false for them.
    */
   esAdmin: boolean;
 }
 
 export async function getEncuestaEstado(): Promise<EncuestaEstado> {
-  const user = await getAuth().getCurrentUser();
-  // An admin is offered the survey like any member, and may submit it: that is
-  // the only way to check the form actually saves before it goes out. They
-  // have no `socios` row, so what they send is flagged as a test.
-  if (user?.role === "admin") {
-    return { pendiente: true, socioId: null, esAdmin: true };
-  }
-
+  // The member row is resolved FIRST, before the role is even considered:
+  // checking the role first refused the survey to CASC staff who are also
+  // socios, while their own active, linked row sat right there.
   const socioId = await socioIdActual();
-  if (!socioId) return { pendiente: false, socioId: null, esAdmin: false };
+
+  if (!socioId) {
+    const user = await getAuth().getCurrentUser();
+    // No member row. An admin still gets the form (to try it end to end); its
+    // submission is recorded as a test. Anyone else is offered nothing.
+    const esAdmin = user?.role === "admin";
+    return { pendiente: esAdmin, socioId: null, esAdmin };
+  }
 
   // Under Supabase, RLS already limits this to the member's own answer. The
   // in-memory mock has no RLS and returns every row, so both filters are
