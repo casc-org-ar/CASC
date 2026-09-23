@@ -13,6 +13,7 @@ import type {
   Candidato,
   ConsultaContacto,
   EncuestaRespuesta,
+  EncuestaTextos,
   Hotel,
   Informe,
   Newsletter,
@@ -77,6 +78,28 @@ export type SocioRepository = ContentRepository<Socio>;
 export type EncuestaRepository = ContentRepository<EncuestaRespuesta>;
 
 /**
+ * The survey's editable wording.
+ *
+ * Its own port, not a `ContentRepository`: there is at most ONE row per survey
+ * and it is addressed by slug, not by a generated id. Forcing it into the CRUD
+ * contract would mean exposing `create`/`remove`/`getById` that nothing can
+ * sensibly call — and an id-shaped API invites a second row per survey, which
+ * is exactly the state the primary key forbids.
+ *
+ * `get` returns null when CASC has never edited the wording; callers fall back
+ * to `ENCUESTA_TEXTOS_ORIGINALES`. `save` is an upsert for the same reason:
+ * the first edit creates the row, later ones replace it.
+ */
+export interface EncuestaTextosRepository {
+  get(slug: string): Promise<EncuestaTextos | null>;
+  save(
+    slug: string,
+    textos: EncuestaTextos,
+    editadoPor?: string,
+  ): Promise<void>;
+}
+
+/**
  * The full data layer surface. Consumers ask for this bundle and never
  * construct concrete repositories themselves.
  */
@@ -93,4 +116,5 @@ export interface DataLayer {
   consultas: ConsultaRepository;
   socios: SocioRepository;
   encuesta: EncuestaRepository;
+  encuestaTextos: EncuestaTextosRepository;
 }

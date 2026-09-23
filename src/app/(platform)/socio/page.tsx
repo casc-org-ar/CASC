@@ -10,6 +10,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getAuth } from "@/lib/auth";
 import { getDataLayer } from "@/lib/data";
 import { getEncuestaEstado } from "@/lib/data/encuesta-estado";
+import { getEncuestaTextos } from "@/lib/data/encuesta-textos";
 import { byVisibilidad, onlyPublished } from "@/lib/data/published";
 import { cn, formatDate } from "@/lib/utils";
 import { EncuestaCta } from "./encuesta-cta";
@@ -50,13 +51,15 @@ export default async function SocioHomePage() {
   // The survey state rides along with the feed queries instead of being awaited
   // after them: it is an independent read, and running it in sequence would add
   // its round-trip to how long the home takes to render.
-  const [user, webinars, informes, noticias, encuesta] = await Promise.all([
-    getAuth().getCurrentUser(),
-    data.webinars.list(),
-    data.informes.list(),
-    data.blog.list(),
-    getEncuestaEstado(),
-  ]);
+  const [user, webinars, informes, noticias, encuesta, encuestaTextos] =
+    await Promise.all([
+      getAuth().getCurrentUser(),
+      data.webinars.list(),
+      data.informes.list(),
+      data.blog.list(),
+      getEncuestaEstado(),
+      getEncuestaTextos(),
+    ]);
 
   const noticiasFeed: FeedItem[] = byVisibilidad(
     onlyPublished(noticias),
@@ -153,7 +156,12 @@ export default async function SocioHomePage() {
           view exists to show what a member sees, and the banner is part of
           that. What they cannot do is submit — the form says so and the action
           refuses it. */}
-      {encuesta.pendiente && <EncuestaCta />}
+      {encuesta.pendiente && (
+        <EncuestaCta
+          titulo={encuestaTextos.ctaTitulo}
+          descripcion={encuestaTextos.ctaDescripcion}
+        />
+      )}
 
       {/* Featured highlights. The layout follows the count instead of being
           fixed: the team can mark as many articles as they want, and stacking

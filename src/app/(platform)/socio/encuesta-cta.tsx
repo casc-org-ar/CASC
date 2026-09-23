@@ -16,7 +16,14 @@ import { ButtonLink } from "@/components/ui/button";
  * does say is how long it takes and that it is answered once — the two things
  * that actually decide whether someone starts it now or puts it off.
  */
-export function EncuestaCta() {
+export function EncuestaCta({
+  /** Heading and body, editable by CASC from the admin panel. */
+  titulo,
+  descripcion,
+}: {
+  titulo: string;
+  descripcion: string;
+}) {
   return (
     <section
       aria-labelledby="encuesta-cta-titulo"
@@ -33,12 +40,9 @@ export function EncuestaCta() {
               id="encuesta-cta-titulo"
               className="text-base font-bold tracking-tight text-ink"
             >
-              Queremos escucharte
+              {titulo}
             </h2>
-            <p className="mt-1 text-sm text-ink-muted">
-              Respondé la encuesta a socios y ayudanos a mejorar los servicios
-              de la Cámara. Son 3 minutos y se completa una sola vez.
-            </p>
+            <p className="mt-1 text-sm text-ink-muted">{descripcion}</p>
           </div>
         </div>
         <ButtonLink href="/socio/encuesta" className="shrink-0">

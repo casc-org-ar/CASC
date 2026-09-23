@@ -6,6 +6,7 @@ import {
   getEncuestaEstado,
 } from "@/lib/data/encuesta-estado";
 import { getDataLayer } from "@/lib/data";
+import { getEncuestaTextos } from "@/lib/data/encuesta-textos";
 import { securityLog } from "@/lib/security/security-log";
 import { ENCUESTA_SLUG_ACTUAL } from "@/lib/types/domain";
 import {
@@ -54,14 +55,25 @@ export async function enviarEncuesta(formData: FormData): Promise<void> {
     throw new EncuestaNoDisponibleError();
   }
 
+  // The wording in force right now. Read on the server, not taken from the
+  // form: it decides which options are acceptable AND is stored alongside the
+  // answer, so it must be the version the server can vouch for.
+  const textos = await getEncuestaTextos();
+
   const datos = encuestaSchema.parse({
     satisfaccionServicios: formData.get("satisfaccionServicios"),
     utilidadComunicacion: formData.get("utilidadComunicacion"),
     queMejorarias: formData.get("queMejorarias") ?? "",
     // Multi-choice fields post one entry per ticked box; `getAll` collects them.
-    temasPrioritarios: construirTemas(formData),
+    temasPrioritarios: construirTemas(formData, textos.temasOpciones),
     participacionAcciones: formData.get("participacionAcciones"),
-    canalesPreferidos: formData.getAll("canalesPreferidos").map(String),
+    // Filtered against the offered channels for the same reason the topics
+    // are: the list is editable, so it cannot live in the schema, but an
+    // unoffered value must still not reach the database.
+    canalesPreferidos: formData
+      .getAll("canalesPreferidos")
+      .map(String)
+      .filter((c) => textos.canalesOpciones.includes(c)),
     facilidadPortal: formData.get("facilidadPortal"),
     funcionalidadSugerida: formData.get("funcionalidadSugerida") ?? "",
     dispositivoPrincipal: formData.get("dispositivoPrincipal"),
@@ -85,6 +97,10 @@ export async function enviarEncuesta(formData: FormData): Promise<void> {
     socioId: socioId ?? undefined,
     esPrueba: !socioId,
     encuestaSlug: ENCUESTA_SLUG_ACTUAL,
+    // The wording this member just read, stored with their answer. CASC can
+    // reword a question tomorrow; without this, today's answer would be shown
+    // and exported under a question its author never saw.
+    textos,
   });
 
   // The home CTA reads the answer state, so it has to be re-rendered — this is

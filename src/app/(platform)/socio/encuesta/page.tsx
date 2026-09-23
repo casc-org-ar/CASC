@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { getEncuestaEstado } from "@/lib/data/encuesta-estado";
+import { getEncuestaTextos } from "@/lib/data/encuesta-textos";
 import { EncuestaForm } from "./encuesta-form";
 
 export const metadata = { title: "Encuesta" };
@@ -24,20 +25,26 @@ export const metadata = { title: "Encuesta" };
  *    the form again invites an edit the platform will not accept.
  */
 export default async function EncuestaPage() {
-  const { pendiente, esAdmin } = await getEncuestaEstado();
+  const [{ pendiente, esAdmin }, textos] = await Promise.all([
+    getEncuestaEstado(),
+    getEncuestaTextos(),
+  ]);
   if (!pendiente) redirect("/socio");
 
   return (
     <div className="mx-auto max-w-2xl">
       <SectionHeading
-        title="Encuesta a socios"
+        title={textos.titulo}
         subtitle={
+          // The admin's subtitle explains the preview instead of CASC's own
+          // wording: what they need to know here is that their submission
+          // will not count, which no editable text should be able to hide.
           esAdmin
             ? "Así ven los socios la encuesta. Podés completarla y enviarla para probar el circuito: se guarda marcada como prueba y no entra en los resultados."
-            : "Tres minutos para ayudarnos a mejorar los servicios de la Cámara. Tus respuestas llegan directo al equipo de la CASC."
+            : textos.subtitulo
         }
       />
-      <EncuestaForm esAdmin={esAdmin} />
+      <EncuestaForm textos={textos} esAdmin={esAdmin} />
     </div>
   );
 }

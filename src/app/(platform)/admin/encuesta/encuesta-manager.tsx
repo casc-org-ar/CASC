@@ -21,6 +21,7 @@ import {
   PARTICIPACION_LABEL,
   type EncuestaRespuesta,
 } from "@/lib/types/domain";
+import { textosDeRespuesta } from "@/lib/data/encuesta-textos-shared";
 import { deleteRespuestaPrueba } from "./actions";
 
 /** One answer joined with the member who sent it (joined on the server). */
@@ -465,10 +466,14 @@ export function EncuestaManager({
               </Dato>
             </div>
 
+            {/* The open answers are shown under the wording THIS member read,
+                not today's. CASC can reword a question after the fact, and
+                reading someone's comment under a question they never saw
+                misattributes what they said. */}
             <div className="space-y-4 border-t border-border pt-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                  ¿Qué mejorarías?
+                  {textosDeRespuesta(detalle.respuesta.textos).queMejorarias}
                 </p>
                 {detalle.respuesta.queMejorarias ? (
                   <p className="mt-1 whitespace-pre-wrap text-sm leading-6 text-ink">
@@ -482,7 +487,10 @@ export function EncuestaManager({
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                  ¿Qué funcionalidad agregarías?
+                  {
+                    textosDeRespuesta(detalle.respuesta.textos)
+                      .funcionalidadSugerida
+                  }
                 </p>
                 {detalle.respuesta.funcionalidadSugerida ? (
                   <p className="mt-1 whitespace-pre-wrap text-sm leading-6 text-ink">

@@ -9,11 +9,9 @@ import { Label, Textarea } from "@/components/ui/field";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import {
-  CANALES_NOVEDADES,
   DISPOSITIVO_LABEL,
-  ESCALA_EXTREMOS,
   PARTICIPACION_LABEL,
-  TEMAS_PRIORITARIOS,
+  type EncuestaTextos,
 } from "@/lib/types/domain";
 import { CAMPO_TEMA_OTRO } from "@/lib/validation/encuesta-schema";
 import { enviarEncuesta } from "./actions";
@@ -188,6 +186,13 @@ function Bloque({
 
 export function EncuestaForm({
   /**
+   * The wording to render — what CASC has saved, or the original texts. It
+   * comes from the server so the form shows the same version the submitted
+   * answer will be stamped with; resolving it here could drift between what
+   * the member read and what gets stored.
+   */
+  textos,
+  /**
    * The viewer is an admin trying the form out. They submit like anyone else,
    * but their answer is stored as a test and never counts towards CASC's
    * results — so the form says so, in the confirmation and in the footer.
@@ -198,6 +203,7 @@ export function EncuestaForm({
    */
   esAdmin = false,
 }: {
+  textos: EncuestaTextos;
   esAdmin?: boolean;
 }) {
   // The only piece of UI state: the free-text topic box is revealed by its
@@ -242,17 +248,20 @@ export function EncuestaForm({
       <Bloque titulo="Sobre la CASC">
         <EscalaField
           name="satisfaccionServicios"
-          label="¿Qué tan satisfecho/a estás con los servicios de la CASC?"
-          extremos={ESCALA_EXTREMOS.satisfaccion}
+          label={textos.satisfaccionServicios}
+          extremos={{
+            min: textos.satisfaccionMin,
+            max: textos.satisfaccionMax,
+          }}
         />
         <EscalaField
           name="utilidadComunicacion"
-          label="¿Qué tan útil te resulta la información/comunicación que recibís de la Cámara?"
-          extremos={ESCALA_EXTREMOS.utilidad}
+          label={textos.utilidadComunicacion}
+          extremos={{ min: textos.utilidadMin, max: textos.utilidadMax }}
         />
         <div>
           <Label htmlFor="queMejorarias">
-            ¿Qué mejorarías?{" "}
+            {textos.queMejorarias}{" "}
             <span className="font-normal text-ink-muted">(opcional)</span>
           </Label>
           <Textarea
@@ -267,10 +276,10 @@ export function EncuestaForm({
       <Bloque titulo="Prioridades y participación">
         <fieldset>
           <legend className="mb-1.5 block text-sm font-medium text-ink">
-            ¿Qué temas te gustaría que la CASC priorice este año?
+            {textos.temasPrioritarios}
           </legend>
           <div className="flex flex-wrap gap-2">
-            {TEMAS_PRIORITARIOS.map((tema) => (
+            {textos.temasOpciones.map((tema) => (
               <OpcionMultiple key={tema} name="temasPrioritarios" value={tema}>
                 {tema}
               </OpcionMultiple>
@@ -303,16 +312,16 @@ export function EncuestaForm({
 
         <OpcionUnicaField
           name="participacionAcciones"
-          label="¿Participarías de próximas acciones comerciales conjuntas?"
+          label={textos.participacionAcciones}
           opciones={PARTICIPACION_LABEL}
         />
 
         <fieldset>
           <legend className="mb-1.5 block text-sm font-medium text-ink">
-            ¿Cómo preferís recibir novedades de la Cámara?
+            {textos.canalesPreferidos}
           </legend>
           <div className="flex flex-wrap gap-2">
-            {CANALES_NOVEDADES.map((canal) => (
+            {textos.canalesOpciones.map((canal) => (
               <OpcionMultiple key={canal} name="canalesPreferidos" value={canal}>
                 {canal}
               </OpcionMultiple>
@@ -324,12 +333,12 @@ export function EncuestaForm({
       <Bloque titulo="Sobre el portal">
         <EscalaField
           name="facilidadPortal"
-          label="¿Qué tan fácil es encontrar lo que buscás en el portal?"
-          extremos={ESCALA_EXTREMOS.facilidad}
+          label={textos.facilidadPortal}
+          extremos={{ min: textos.facilidadMin, max: textos.facilidadMax }}
         />
         <div>
           <Label htmlFor="funcionalidadSugerida">
-            ¿Qué funcionalidad te gustaría que se agregue?{" "}
+            {textos.funcionalidadSugerida}{" "}
             <span className="font-normal text-ink-muted">(opcional)</span>
           </Label>
           <Textarea
@@ -341,7 +350,7 @@ export function EncuestaForm({
         </div>
         <OpcionUnicaField
           name="dispositivoPrincipal"
-          label="¿Abrís el portal desde el celular o desktop, principalmente?"
+          label={textos.dispositivoPrincipal}
           opciones={DISPOSITIVO_LABEL}
         />
       </Bloque>

@@ -1,4 +1,4 @@
-import { Eye } from "lucide-react";
+import { Eye, Pencil } from "lucide-react";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { ButtonLink } from "@/components/ui/button";
 import { getDataLayer } from "@/lib/data";
@@ -71,10 +71,16 @@ export default async function AdminEncuestaPage() {
         {/* The way in to the survey itself. Admins get no home CTA (they have
             no socios row and cannot answer), so without this link there is no
             way for CASC to look at the form they are sending out. */}
-        <ButtonLink href="/socio/encuesta" variant="secondary">
-          <Eye className="h-4 w-4" aria-hidden />
-          Ver la encuesta
-        </ButtonLink>
+        <div className="flex flex-wrap gap-2">
+          <ButtonLink href="/admin/encuesta/textos" variant="secondary">
+            <Pencil className="h-4 w-4" aria-hidden />
+            Editar la encuesta
+          </ButtonLink>
+          <ButtonLink href="/socio/encuesta" variant="secondary">
+            <Eye className="h-4 w-4" aria-hidden />
+            Ver la encuesta
+          </ButtonLink>
+        </div>
       </div>
       <EncuestaManager filas={filas} sociosActivos={sociosActivos} />
     </>

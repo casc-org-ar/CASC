@@ -326,30 +326,10 @@ export type ParticipacionAcciones = "si" | "no" | "depende";
 export type DispositivoPrincipal = "celular" | "desktop";
 
 /**
- * Suggested topics for "¿Qué temas te gustaría que la CASC priorice?".
- *
- * Kept as a plain list, and the column as `text[]`, because the form offers an
- * "Otro" option where the member types their own topic — an enum would reject
- * exactly the answer CASC most wants to read.
- */
-export const TEMAS_PRIORITARIOS = [
-  "Legal/SADAIC",
-  "Marketing conjunto",
-  "Capacitaciones",
-  "Networking",
-] as const;
-
-/** Channels for "¿Cómo preferís recibir novedades de la Cámara?". */
-export const CANALES_NOVEDADES = [
-  "Email",
-  "WhatsApp",
-  "Portal",
-  "Redes",
-] as const;
-
-/**
- * Labels for the closed-choice questions. Beside the types so a new option
- * cannot be added without the wording the form and the CSV both read.
+ * Labels for the closed-choice questions whose answers are ENUM COLUMNS, so
+ * their options cannot be edited — adding one would need a migration. The
+ * editable lists (topics, channels) live in `EncuestaTextos` instead, because
+ * their columns are `text[]` and take whatever CASC offers.
  */
 export const PARTICIPACION_LABEL: Record<ParticipacionAcciones, string> = {
   si: "Sí",
@@ -363,17 +343,95 @@ export const DISPOSITIVO_LABEL: Record<DispositivoPrincipal, string> = {
 };
 
 /**
- * Wording of each scale endpoint. The numbers alone ("3") tell the member
- * nothing about which end is good, and an unanchored scale is answered
- * inconsistently — which makes the average meaningless.
+ * The editable wording of the survey.
+ *
+ * The nine questions and their types are FIXED — they are typed columns on
+ * `encuesta_respuestas`. What CASC edits from the panel is how each one reads
+ * and which options the choice questions offer. Adding or removing a question
+ * is a different thing (a survey engine) and deliberately out of scope: there
+ * would be nowhere to store its answers.
+ *
+ * Stored as one document per survey (migration 0026), and copied onto each
+ * answer as it is submitted — see `EncuestaRespuesta.textos`.
  */
-export const ESCALA_EXTREMOS: Record<
-  "satisfaccion" | "utilidad" | "facilidad",
-  { min: string; max: string }
-> = {
-  satisfaccion: { min: "Nada satisfecho/a", max: "Muy satisfecho/a" },
-  utilidad: { min: "Nada útil", max: "Muy útil" },
-  facilidad: { min: "Muy difícil", max: "Muy fácil" },
+export interface EncuestaTextos {
+  /** Page heading and the line under it. */
+  titulo: string;
+  subtitulo: string;
+  /** The home banner that invites members to answer. */
+  ctaTitulo: string;
+  ctaDescripcion: string;
+
+  // Eje 1 — Satisfacción general
+  satisfaccionServicios: string;
+  satisfaccionMin: string;
+  satisfaccionMax: string;
+  utilidadComunicacion: string;
+  utilidadMin: string;
+  utilidadMax: string;
+  queMejorarias: string;
+
+  // Eje 2 — Prioridades y participación
+  temasPrioritarios: string;
+  /** Offered topics. The form always adds a free-text "Otro" beside them. */
+  temasOpciones: string[];
+  participacionAcciones: string;
+  canalesPreferidos: string;
+  /** Offered channels. */
+  canalesOpciones: string[];
+
+  // Eje 3 — Portal
+  facilidadPortal: string;
+  facilidadMin: string;
+  facilidadMax: string;
+  funcionalidadSugerida: string;
+  dispositivoPrincipal: string;
+}
+
+/**
+ * The survey as it was originally worded.
+ *
+ * Two jobs: it seeds `encuesta_textos` on first edit, and it stands in for
+ * answers stored before the texts became editable — those carry no snapshot,
+ * and this is the wording their authors actually read. Changing these strings
+ * would therefore rewrite history; edit from the admin panel instead.
+ */
+export const ENCUESTA_TEXTOS_ORIGINALES: EncuestaTextos = {
+  titulo: "Encuesta a socios",
+  subtitulo:
+    "Tres minutos para ayudarnos a mejorar los servicios de la Cámara. Tus respuestas llegan directo al equipo de la CASC.",
+  ctaTitulo: "Queremos escucharte",
+  ctaDescripcion:
+    "Respondé la encuesta a socios y ayudanos a mejorar los servicios de la Cámara. Son 3 minutos y se completa una sola vez.",
+
+  satisfaccionServicios:
+    "¿Qué tan satisfecho/a estás con los servicios de la CASC?",
+  satisfaccionMin: "Nada satisfecho/a",
+  satisfaccionMax: "Muy satisfecho/a",
+  utilidadComunicacion:
+    "¿Qué tan útil te resulta la información/comunicación que recibís de la Cámara?",
+  utilidadMin: "Nada útil",
+  utilidadMax: "Muy útil",
+  queMejorarias: "¿Qué mejorarías?",
+
+  temasPrioritarios: "¿Qué temas te gustaría que la CASC priorice este año?",
+  temasOpciones: [
+    "Legal/SADAIC",
+    "Marketing conjunto",
+    "Capacitaciones",
+    "Networking",
+  ],
+  participacionAcciones:
+    "¿Participarías de próximas acciones comerciales conjuntas?",
+  canalesPreferidos: "¿Cómo preferís recibir novedades de la Cámara?",
+  canalesOpciones: ["Email", "WhatsApp", "Portal", "Redes"],
+
+  facilidadPortal: "¿Qué tan fácil es encontrar lo que buscás en el portal?",
+  facilidadMin: "Muy difícil",
+  facilidadMax: "Muy fácil",
+  funcionalidadSugerida: "¿Qué funcionalidad te gustaría que se agregue?",
+  dispositivoPrincipal:
+    "¿Abrís el portal desde el celular o desktop, principalmente?",
 };
 
 export interface EncuestaRespuesta extends BaseEntity {
@@ -395,6 +453,18 @@ export interface EncuestaRespuesta extends BaseEntity {
   esPrueba: boolean;
   /** Which survey this answers. Defaults to `ENCUESTA_SLUG_ACTUAL`. */
   encuestaSlug: string;
+  /**
+   * The wording this member actually read, copied in as they submitted.
+   *
+   * CASC can reword a question after people have answered it. Without this,
+   * an old answer would be shown — and exported — under a question its author
+   * never saw, which is putting words in their mouth. The snapshot keeps every
+   * answer readable against the text it was given.
+   *
+   * Undefined on answers stored before the texts became editable (migration
+   * 0026); those correspond to `ENCUESTA_TEXTOS_ORIGINALES`.
+   */
+  textos?: EncuestaTextos;
 
   // Eje 1 — Satisfacción general
   satisfaccionServicios: EscalaRespuesta;
@@ -403,10 +473,10 @@ export interface EncuestaRespuesta extends BaseEntity {
   queMejorarias?: string;
 
   // Eje 2 — Prioridades y participación
-  /** Values from `TEMAS_PRIORITARIOS`, plus any free-text "Otro". */
+  /** Values from the survey's `temasOpciones`, plus any free-text "Otro". */
   temasPrioritarios: string[];
   participacionAcciones: ParticipacionAcciones;
-  /** Values from `CANALES_NOVEDADES`; more than one is allowed. */
+  /** Values from the survey's `canalesOpciones`; more than one is allowed. */
   canalesPreferidos: string[];
 
   // Eje 3 — Portal

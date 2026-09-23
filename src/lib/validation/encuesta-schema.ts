@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  CANALES_NOVEDADES,
-  TEMAS_PRIORITARIOS,
-  type EscalaRespuesta,
-} from "@/lib/types/domain";
+import { type EscalaRespuesta } from "@/lib/types/domain";
 
 /**
  * Zod schema for the member satisfaction survey.
@@ -57,9 +53,14 @@ const abierta = z
  * `formData.getAll()` returns as an array. Each entry must be one of the
  * offered options, EXCEPT the topics question, which allows a free-text
  * "Otro" — see below.
+ *
+ * Shaped as free text here and checked against the offered list in the action:
+ * a `z.enum` would have to be built from a constant, and the options are now
+ * edited from the admin panel, so the constant would reject exactly the
+ * choices CASC just published.
  */
 const canales = z
-  .array(z.enum(CANALES_NOVEDADES))
+  .array(z.string().trim().min(1).max(LIMITS.otro))
   .min(1, "Elegí al menos un canal");
 
 /**
@@ -104,12 +105,21 @@ export const CAMPO_TEMA_OTRO = "temaOtro";
  * a literal would be noise in the export, since it names no topic. Ticking the
  * box and leaving the text empty therefore contributes nothing, which the
  * `min(1)` above turns into a visible error only if it was their sole answer.
+ *
+ * @param ofrecidas The options the form actually rendered. Passed in rather
+ * than read from a constant: CASC edits these from the panel, and filtering
+ * against a hard-coded list would silently drop every answer as soon as they
+ * did. The filter still matters — it is what stops a crafted submission from
+ * inserting a topic nobody was offered.
  */
-export function construirTemas(formData: FormData): string[] {
+export function construirTemas(
+  formData: FormData,
+  ofrecidas: readonly string[],
+): string[] {
   const elegidos = formData
     .getAll("temasPrioritarios")
     .map(String)
-    .filter((t) => (TEMAS_PRIORITARIOS as readonly string[]).includes(t));
+    .filter((t) => ofrecidas.includes(t));
   const otro = String(formData.get(CAMPO_TEMA_OTRO) ?? "").trim();
   return otro ? [...elegidos, otro] : elegidos;
 }

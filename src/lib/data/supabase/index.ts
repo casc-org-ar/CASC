@@ -9,6 +9,7 @@ import type {
   SolicitudRepository,
 } from "@/lib/data/repositories";
 import { SupabaseContentRepository } from "@/lib/data/supabase/content-repository";
+import { SupabaseEncuestaTextosRepository } from "@/lib/data/supabase/encuesta-textos-repository";
 import { createPublicSupabaseClient } from "@/lib/data/supabase/client";
 import {
   actividadMapper,
@@ -63,6 +64,8 @@ export const supabaseDataLayer: DataLayer = {
     "encuesta_respuestas",
     encuestaMapper,
   ),
+  // One row per survey, keyed by slug — not the generic id-addressed repo.
+  encuestaTextos: new SupabaseEncuestaTextosRepository(),
 };
 
 /**

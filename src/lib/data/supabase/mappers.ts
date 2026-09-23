@@ -5,6 +5,7 @@ import type {
   Candidato,
   ConsultaContacto,
   EncuestaRespuesta,
+  EncuestaTextos,
   Hotel,
   Informe,
   Newsletter,
@@ -455,6 +456,9 @@ export const encuestaMapper: EntityMapper<EncuestaRespuesta> = {
     socioId: (r.socio_id as string | null) ?? undefined,
     esPrueba: (r.es_prueba as boolean | null) ?? false,
     encuestaSlug: r.encuesta_slug as string,
+    // Null on answers stored before the texts became editable (0026); the
+    // panel resolves those against the original wording.
+    textos: (r.textos as EncuestaTextos | null) ?? undefined,
     satisfaccionServicios:
       r.satisfaccion_servicios as EncuestaRespuesta["satisfaccionServicios"],
     utilidadComunicacion:
@@ -480,6 +484,8 @@ export const encuestaMapper: EntityMapper<EncuestaRespuesta> = {
     if ("socioId" in i) row.socio_id = i.socioId ?? null;
     put(row, "es_prueba", i.esPrueba);
     put(row, "encuesta_slug", i.encuestaSlug);
+    // jsonb column; the driver serializes the document as-is.
+    put(row, "textos", i.textos);
     put(row, "satisfaccion_servicios", i.satisfaccionServicios);
     put(row, "utilidad_comunicacion", i.utilidadComunicacion);
     put(row, "que_mejorarias", i.queMejorarias);
