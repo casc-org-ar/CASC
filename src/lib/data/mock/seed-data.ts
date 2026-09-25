@@ -66,6 +66,13 @@ export const webinars: Webinar[] = [
   },
 ];
 
+/**
+ * Reports are seeded with DIFFERENT audiences on purpose: sector data reserved
+ * for shoppings, and one report open to everyone. A seed where every report
+ * shares an audience would render the filter invisible during development —
+ * the listing would look identical whichever member is signed in, and a broken
+ * filter would pass unnoticed.
+ */
 export const informes: Informe[] = [
   {
     id: "inf-1",
@@ -75,6 +82,7 @@ export const informes: Informe[] = [
     categoria: "Estadísticas",
     archivoUrl: "/mock/afluencia-2025.pdf",
     fecha: iso(2026, 2, 15),
+    categorias: ["shopping"],
     status: "publicado",
     createdAt: iso(2026, 2, 15),
     updatedAt: iso(2026, 2, 15),
@@ -87,6 +95,7 @@ export const informes: Informe[] = [
     categoria: "Ventas",
     archivoUrl: "/mock/ventas-q1-2026.pdf",
     fecha: iso(2026, 4, 30),
+    categorias: ["shopping", "retailer"],
     status: "publicado",
     createdAt: iso(2026, 4, 30),
     updatedAt: iso(2026, 4, 30),
@@ -99,6 +108,7 @@ export const informes: Informe[] = [
     categoria: "Sustentabilidad",
     archivoUrl: "/mock/sustentabilidad-2026.pdf",
     fecha: iso(2026, 6, 10),
+    categorias: ["shopping", "proveedor", "retailer"],
     status: "borrador",
     createdAt: iso(2026, 6, 5),
     updatedAt: iso(2026, 6, 5),

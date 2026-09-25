@@ -1,4 +1,8 @@
-import type { PublicationStatus, Visibilidad } from "@/lib/types/domain";
+import type {
+  PublicationStatus,
+  SocioCategoria,
+  Visibilidad,
+} from "@/lib/types/domain";
 
 /**
  * Keep only published items. The socio side is read-only and must never
@@ -22,6 +26,31 @@ export function byVisibilidad<T extends { visibilidad: Visibilidad }>(
   return items.filter(
     (item) => item.visibilidad === audience || item.visibilidad === "ambos",
   );
+}
+
+/**
+ * Keep only the items a member of `categoria` may see.
+ *
+ * Each report declares its own audience (`Informe.categorias`, migration
+ * 0027), so this is what makes the Informes section show different things to a
+ * shopping centre and to a provider.
+ *
+ * An UNDEFINED category is denied everything, never granted it. That state
+ * should not occur — the socio layout redirects members whose row is not
+ * linked yet — so reaching here without one means something unexpected
+ * happened, and an unexpected state must not be the one that opens the door.
+ * This mirrors `visibleFor` in navigation.ts on purpose.
+ *
+ * An admin previewing the socio surface passes `undefined` too, but they reach
+ * the listing through their own path (`requireCategoria` lets them through),
+ * so callers hand them every item rather than calling this.
+ */
+export function byCategoria<T extends { categorias: SocioCategoria[] }>(
+  items: T[],
+  categoria: SocioCategoria | undefined,
+): T[] {
+  if (!categoria) return [];
+  return items.filter((item) => item.categorias.includes(categoria));
 }
 
 /**

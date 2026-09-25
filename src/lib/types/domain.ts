@@ -108,10 +108,21 @@ export interface Webinar extends BaseEntity {
 export interface Informe extends BaseEntity {
   titulo: string;
   descripcion: string;
+  /** Free-text tag ("Estadísticas", "Investigación de mercados"). */
   categoria: string;
   archivoUrl: string; // PDF URL (Vercel Blob later)
   portadaUrl?: string; // cover image for the listing card
   fecha: string;
+  /**
+   * Which member categories may see this report. Chosen per report from the
+   * admin panel — the section used to be reserved for shopping centers as a
+   * whole, so opening one report to providers meant opening all of them.
+   *
+   * NOT the same as `categoria` above, which is an editorial tag: this is the
+   * audience. An empty list means nobody sees it, which is how a report is
+   * taken out of circulation without unpublishing it.
+   */
+  categorias: SocioCategoria[];
   status: PublicationStatus;
 }
 

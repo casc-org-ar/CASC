@@ -164,6 +164,9 @@ export const informeMapper: EntityMapper<Informe> = {
     archivoUrl: r.archivo_url as string,
     portadaUrl: (r.portada_url as string | null) ?? undefined,
     fecha: r.fecha as string,
+    // `socio_categoria[]`; null only if the column predates migration 0027,
+    // which the backfill there rules out — the fallback is belt and braces.
+    categorias: (r.categorias as Informe["categorias"] | null) ?? [],
     status: r.status as Informe["status"],
     createdAt: r.created_at as string,
     updatedAt: r.updated_at as string,
@@ -176,6 +179,7 @@ export const informeMapper: EntityMapper<Informe> = {
     put(row, "archivo_url", i.archivoUrl);
     put(row, "portada_url", i.portadaUrl);
     put(row, "fecha", i.fecha);
+    put(row, "categorias", i.categorias);
     put(row, "status", i.status);
     return row;
   },

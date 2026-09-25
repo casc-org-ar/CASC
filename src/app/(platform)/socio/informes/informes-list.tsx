@@ -18,7 +18,18 @@ import type { Informe } from "@/lib/types/domain";
 import { formatDate } from "@/lib/utils";
 
 /** Read-only informes grid with text search + category filter (same pattern as noticias/webinars). */
-export function InformesList({ informes }: { informes: Informe[] }) {
+export function InformesList({
+  informes,
+  /**
+   * True when CASC has published reports but none of them is meant for this
+   * member's category. Decided on the server, which is the only side that can
+   * see the reports this member may not — the list arrives already filtered.
+   */
+  hayInformesReservados = false,
+}: {
+  informes: Informe[];
+  hayInformesReservados?: boolean;
+}) {
   const [category, setCategory] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const categories = useMemo(() => deriveCategories(informes), [informes]);
@@ -44,7 +55,20 @@ export function InformesList({ informes }: { informes: Informe[] }) {
   };
 
   if (informes.length === 0) {
-    return <EmptyState message="No hay informes publicados por el momento." />;
+    // Two different situations reach here and they must not read the same:
+    // CASC has published nothing, or nothing published is meant for this
+    // member's category. Telling a provider "no hay informes publicados" when
+    // there are seven would be false, and would have them ask CASC about
+    // reports that exist and are simply not for them.
+    return (
+      <EmptyState
+        message={
+          hayInformesReservados
+            ? "Por ahora no hay informes disponibles para tu tipo de socio. La Cámara publica material por sector y este espacio se irá completando."
+            : "No hay informes publicados por el momento."
+        }
+      />
+    );
   }
 
   return (

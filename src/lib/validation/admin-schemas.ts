@@ -94,6 +94,15 @@ export const informeSchema = z.object({
   archivoUrl: reqUrl,
   portadaUrl: optUrl,
   fecha,
+  /**
+   * Which member categories see this report.
+   *
+   * An EMPTY list is valid: it means nobody sees it, which is how CASC takes a
+   * report out of circulation without unpublishing it. Requiring at least one
+   * would force them to delete or unpublish instead, both of which lose more
+   * than they meant to.
+   */
+  categorias: z.array(z.enum(["shopping", "proveedor", "retailer"])).default([]),
   status,
 });
 

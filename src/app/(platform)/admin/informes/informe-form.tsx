@@ -5,9 +5,19 @@ import { Button } from "@/components/ui/button";
 import { FormField, Input, Select, Textarea } from "@/components/ui/field";
 import { FileOrLinkField } from "@/components/ui/file-or-link-field";
 import { useToast } from "@/components/ui/toast";
-import { todayInBuenosAires } from "@/lib/utils";
-import type { Informe } from "@/lib/types/domain";
+import { cn, todayInBuenosAires } from "@/lib/utils";
+import { SOCIO_CATEGORIAS, type Informe } from "@/lib/types/domain";
 import { createInforme, updateInforme } from "./actions";
+
+/**
+ * Audience a NEW report starts with.
+ *
+ * Shopping centers only, matching what the section did before reports carried
+ * their own audience: the reports CASC publishes are sector statistics, and a
+ * new one reaching providers because nobody ticked a box is the failure worth
+ * avoiding. Opening it is one click; un-showing something is not.
+ */
+const CATEGORIAS_POR_DEFECTO = ["shopping"] as const;
 
 interface InformeFormProps {
   informe?: Informe;
@@ -19,6 +29,12 @@ export function InformeForm({ informe, onDone }: InformeFormProps) {
   const [archivoUrl, setArchivoUrl] = useState(informe?.archivoUrl ?? "");
   const [portadaUrl, setPortadaUrl] = useState(informe?.portadaUrl ?? "");
   const toast = useToast();
+
+  // An existing report keeps whatever it has, INCLUDING an empty list — that
+  // is a deliberate "nobody sees this", and replacing it with the default
+  // would silently republish it to shoppings on the next save.
+  const categoriasIniciales: readonly string[] =
+    informe?.categorias ?? CATEGORIAS_POR_DEFECTO;
 
   const action = (formData: FormData) =>
     startTransition(async () => {
@@ -100,6 +116,39 @@ export function InformeForm({ informe, onDone }: InformeFormProps) {
           uploadLabel="Subir imagen de portada"
           linkPlaceholder="https://ejemplo.com/portada.jpg"
         />
+      </FormField>
+
+      {/* Who sees this report. A group of checkboxes, not a multi-select:
+          there are three options, they are all worth seeing at once, and a
+          multi-select hides what is NOT ticked behind a scroll — which is the
+          half that matters when deciding who to leave out. */}
+      <FormField label="¿Qué socios lo ven?">
+        <div className="flex flex-wrap gap-2">
+          {SOCIO_CATEGORIAS.map((c) => (
+            <label
+              key={c.value}
+              className={cn(
+                "cursor-pointer rounded-lg border border-border bg-white px-4 py-2.5 text-sm text-ink transition-colors",
+                "hover:border-accent",
+                "has-checked:border-primary has-checked:bg-primary has-checked:font-semibold has-checked:text-white",
+                "has-focus-visible:ring-2 has-focus-visible:ring-primary has-focus-visible:ring-offset-2",
+              )}
+            >
+              <input
+                type="checkbox"
+                name="categorias"
+                value={c.value}
+                defaultChecked={categoriasIniciales.includes(c.value)}
+                className="sr-only"
+              />
+              {c.label}
+            </label>
+          ))}
+        </div>
+        <p className="mt-1.5 text-xs text-ink-muted">
+          Sin ninguna marcada, el informe no lo ve ningún socio. Sirve para
+          sacarlo de circulación sin despublicarlo.
+        </p>
       </FormField>
 
       <FormField label="Estado" htmlFor="status">

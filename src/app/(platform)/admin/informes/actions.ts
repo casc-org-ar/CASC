@@ -19,6 +19,9 @@ function parseInformeForm(formData: FormData) {
     archivoUrl: formData.get("archivoUrl") ?? "",
     portadaUrl: formData.get("portadaUrl") ?? "",
     fecha: formData.get("fecha") ?? "",
+    // Checkboxes post one entry per ticked box; none ticked posts nothing,
+    // which `getAll` turns into the empty list the schema accepts.
+    categorias: formData.getAll("categorias").map(String),
     status: formData.get("status") ?? "borrador",
   });
 }

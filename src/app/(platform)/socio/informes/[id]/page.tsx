@@ -6,7 +6,6 @@ import { getDataLayer } from "@/lib/data";
 import { signedUrl } from "@/lib/data/supabase/storage";
 import { clerkEnabled } from "@/lib/auth/flag";
 import { requireCategoria } from "@/lib/auth/member-status";
-import { INFORMES_CATEGORIAS } from "@/lib/platform/navigation";
 import { formatDate } from "@/lib/utils";
 
 /** How long the informe PDF stays viewable — enough to read it in one sitting. */
@@ -42,15 +41,18 @@ export default async function InformeDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // Before reading the informe and before minting the signed PDF URL: a
-  // shared link must not hand a restricted category the file, and a guard that
-  // runs after the URL is signed has already given away the thing it protects.
-  await requireCategoria(INFORMES_CATEGORIAS);
-
   const { id } = await params;
   const informe = await getDataLayer().informes.getById(id);
 
   if (!informe || informe.status !== "publicado") notFound();
+
+  // The audience check runs AFTER reading the report — each one carries its
+  // own (migration 0027), so there is nothing to check until it is loaded —
+  // and BEFORE minting the signed PDF URL. That order is the actual lock: a
+  // guard that runs after the URL is signed has already handed over the thing
+  // it protects, and a shared link must not give a restricted category the
+  // file.
+  await requireCategoria(informe.categorias);
 
   const pdfUrl = await resolvePdfUrl(informe.archivoUrl);
 

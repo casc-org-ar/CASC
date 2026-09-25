@@ -40,11 +40,20 @@ export interface NavItem {
 /** Only shopping centers: sector data CASC reserves for its member malls. */
 const SOLO_SHOPPINGS = ["shopping"] as const;
 
-/**
- * Categories allowed into Informes. Exported so the page guard and the sidebar
- * enforce the very same rule — if this list changes, both follow at once.
+/*
+ * Informes no longer carries a `categorias` restriction here.
+ *
+ * The section used to be reserved for shopping centers as a whole, which meant
+ * opening a single report to providers required opening every one. Each report
+ * now declares its own audience (`Informe.categorias`, migration 0027), so the
+ * section is open and the LISTING is what filters.
+ *
+ * A member with no report assigned to their category sees the section with an
+ * explanation rather than an empty grid. Hiding the menu entry for them was
+ * the alternative, and it was worse: the sidebar would differ between members
+ * for a reason none of them can see, and it would flip back and forth as CASC
+ * changes a single report's audience.
  */
-export const INFORMES_CATEGORIAS = SOLO_SHOPPINGS;
 
 /** Estadísticas: external Oracle APEX dashboard, opened in a new tab. */
 const ESTADISTICAS: NavItem = {
@@ -85,12 +94,9 @@ const NAV: Record<UserRole, NavItem[]> = {
     { label: "Inicio", href: "/socio", icon: Home },
     { label: "Actividades", href: "/socio/actividades", icon: CalendarDays },
     { label: "Webinars", href: "/socio/webinars", icon: Video },
-    {
-      label: "Informes",
-      href: "/socio/informes",
-      icon: FileText,
-      categorias: SOLO_SHOPPINGS,
-    },
+    // Open to every category: each report declares its own audience, and the
+    // listing shows only what this member may see.
+    { label: "Informes", href: "/socio/informes", icon: FileText },
     { label: "Noticias", href: "/socio/noticias", icon: Newspaper },
     { label: "Newsletter", href: "/socio/newsletter", icon: Mail },
     { label: "Beneficios", href: "/socio/beneficios", icon: BadgePercent },
