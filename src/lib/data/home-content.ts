@@ -153,11 +153,6 @@ export interface Sponsor {
 
 export const sponsors: Sponsor[] = [
   {
-    name: "City Center",
-    logo: "/assets/sponsors/citycenter.webp",
-    url: "https://www.citycenter-rosario.com.ar",
-  },
-  {
     name: "Nuova Suite",
     logo: "/assets/sponsors/nuova-site.webp",
     url: "https://www.nuovasuite.com",
@@ -171,11 +166,6 @@ export const sponsors: Sponsor[] = [
     name: "Wiki Biz",
     logo: "/assets/sponsors/wiki-biz.webp",
     url: "https://wikibiz.us/",
-  },
-  {
-    name: "Pullman",
-    logo: "/assets/sponsors/pullman.webp",
-    url: "https://pullman.accor.com/es.html",
   },
 ];
 

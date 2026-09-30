@@ -294,16 +294,6 @@ export const asociados: Asociado[] = [
     "contacto": "Gabriela Zamora – gzamora@cinemacenter.com.ar"
   },
   {
-    "slug": "city-center-rosario",
-    "name": "City Center Rosario",
-    "category": "Proveedores de servicios",
-    "logo": "/assets/asociados/logos/city-center-rosario.webp",
-    "web": "www.citycenter-rosario.com.ar",
-    "actividad": "Complejo de Entretenimientos conformado por Hotel 5 estrellas de la cadena Accor, Spa, Casino, Centro de Convenciones y diferentes espacios gastronómicos. Emplazado en la ciudad de Rosario, Pcia. de Santa Fe, su acceso se ubica sobre el ingreso sur de la ciudad, llegando por la Autopista desde Buenos Aires.",
-    "rubro": "Hotelería, eventos",
-    "direccion": "Bv. Oroño y Av. Circunvalación - Rosario - Pcia. de Santa Fe"
-  },
-  {
     "slug": "clash",
     "name": "Clash",
     "category": "Proveedores de servicios",
@@ -618,18 +608,6 @@ export const asociados: Asociado[] = [
     "inauguracion": "3 de diciembre de 1992",
     "visitas": "695.387",
     "locales": "162"
-  },
-  {
-    "slug": "negozona",
-    "name": "Negozona",
-    "category": "Proveedores de servicios",
-    "rubro": "Consultoría y management",
-    "logo": "/assets/asociados/logos/negozona.webp",
-    "direccion": "Carlos Pelegrini 781 - Piso 7 - CABA",
-    "telefono": "+54 9 11 3641 7771",
-    "contacto": "Francisco Bastard – fbastard@negozona.com",
-    "web": "www.negozona.com",
-    "actividad": "NEGOZONA genera un ámbito adecuado y exclusivamente pensado para el encuentro de vendedores, compradores, potenciales inversores, brokers, comercializadores de fondos de comercios, franquiciantes, franquiciados y todos aquellos que tengan interés en identificar y analizar oportunidades de negocios. Procura brindarles las mejores condiciones para encontrar en NegoZona las alternativas, información y soporte que los ayuden y les hagan posible la concreción de transacciones de compraventa de negocios y franquicias."
   },
   {
     "slug": "neverland",
