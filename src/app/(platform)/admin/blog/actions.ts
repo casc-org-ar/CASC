@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { ZodError } from "zod";
 import { requireRole } from "@/lib/auth/guard";
 import { getDataLayer } from "@/lib/data";
 import { blogSchema } from "@/lib/validation/admin-schemas";
@@ -82,19 +83,83 @@ function revalidateArticleViews(): void {
   revalidatePath("/socio/noticias", "layout"); // socio detail pages [slug]
 }
 
-export async function createBlogPost(formData: FormData): Promise<void> {
+/**
+ * Make `base` unique among the existing posts by appending `-2`, `-3`, … The
+ * `slug` column is UNIQUE, so two articles whose titles slugify the same (e.g.
+ * a re-posted headline) used to fail the insert with a generic error. `ownId`
+ * excludes the post being edited, so saving it unchanged keeps its own slug.
+ */
+async function uniqueSlug(base: string, ownId?: string): Promise<string> {
+  const posts = await getDataLayer().blog.list();
+  const taken = new Set(
+    posts.filter((p) => p.id !== ownId).map((p) => p.slug),
+  );
+  if (!taken.has(base)) return base;
+  let n = 2;
+  while (taken.has(`${base}-${n}`)) n++;
+  return `${base}-${n}`;
+}
+
+/** Field labels for validation messages shown to the admin. */
+const FIELD_LABELS: Record<string, string> = {
+  titulo: "El título",
+  slug: "El slug",
+  bajada: "La bajada",
+  cuerpo: "El cuerpo",
+  portadaUrl: "El link de la portada",
+  imagenes: "Las imágenes",
+  videoUrl: "El link del video",
+  autor: "El autor",
+  tags: "Los tags",
+  fecha: "La fecha",
+};
+
+/** Turn a save failure into a message the admin can act on. */
+function saveErrorMessage(err: unknown): string {
+  if (err instanceof ZodError) {
+    const issue = err.issues[0];
+    const label = FIELD_LABELS[String(issue?.path[0])] ?? "Un campo";
+    if (issue?.code === "too_big" && typeof issue.maximum === "number") {
+      return `${label} supera el máximo de ${issue.maximum} caracteres.`;
+    }
+    return `${label} no es válido. Revisalo e intentá de nuevo.`;
+  }
+  return "No se pudo guardar el artículo. Intentá de nuevo.";
+}
+
+export type SaveBlogResult = { ok: true } | { ok: false; error: string };
+
+export async function createBlogPost(
+  formData: FormData,
+): Promise<SaveBlogResult> {
   await requireRole("admin");
-  await getDataLayer().blog.create(parseBlogForm(formData));
+  try {
+    const data = parseBlogForm(formData);
+    data.slug = await uniqueSlug(data.slug);
+    await getDataLayer().blog.create(data);
+  } catch (err) {
+    console.error("[admin/blog] create failed:", err);
+    return { ok: false, error: saveErrorMessage(err) };
+  }
   revalidateArticleViews();
+  return { ok: true };
 }
 
 export async function updateBlogPost(
   id: string,
   formData: FormData,
-): Promise<void> {
+): Promise<SaveBlogResult> {
   await requireRole("admin");
-  await getDataLayer().blog.update(id, parseBlogForm(formData));
+  try {
+    const data = parseBlogForm(formData);
+    data.slug = await uniqueSlug(data.slug, id);
+    await getDataLayer().blog.update(id, data);
+  } catch (err) {
+    console.error("[admin/blog] update failed:", err);
+    return { ok: false, error: saveErrorMessage(err) };
+  }
   revalidateArticleViews();
+  return { ok: true };
 }
 
 export async function deleteBlogPost(id: string): Promise<void> {

@@ -60,13 +60,14 @@ export function BlogForm({
   const action = (formData: FormData) =>
     startTransition(async () => {
       try {
-        if (post) {
-          await updateBlogPost(post.id, formData);
-          toast.success("Artículo actualizado.");
-        } else {
-          await createBlogPost(formData);
-          toast.success("Artículo creado.");
+        const result = post
+          ? await updateBlogPost(post.id, formData)
+          : await createBlogPost(formData);
+        if (!result.ok) {
+          toast.error(result.error);
+          return;
         }
+        toast.success(post ? "Artículo actualizado." : "Artículo creado.");
         onDone();
       } catch {
         toast.error("No se pudo guardar el artículo. Intentá de nuevo.");
