@@ -72,7 +72,7 @@ const objetivos = [
 ];
 
 // PDF alojado en nuestro propio sitio (antes apuntaba al dominio viejo).
-const PROPUESTA_PDF = "/assets/banners/Propuesta_valor_CASC_23_12_25.pdf";
+const PROPUESTA_PDF = "/assets/banners/Propuesta_valor_CASC_oct_2026.pdf";
 
 export default function NosotrosPage() {
   return (

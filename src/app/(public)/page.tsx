@@ -59,7 +59,7 @@ const heroSlides = [
     tablet: "/assets/banners/banner-2-2.webp",
     mobile: "/assets/banners/banner-2-3.webp",
     alt: "Propuesta de valor CASC",
-    href: "/assets/banners/Propuesta_valor_CASC_23_12_25.pdf",
+    href: "/assets/banners/Propuesta_valor_CASC_oct_2026.pdf",
   },
   {
     desktop: "/assets/banners/banner-naranja.jpg",
