@@ -153,6 +153,11 @@ export interface Sponsor {
 
 export const sponsors: Sponsor[] = [
   {
+    name: "Naranja X",
+    logo: "/assets/sponsors/naranja-x.webp",
+    url: "https://www.naranjax.com",
+  },
+  {
     name: "Nuova Suite",
     logo: "/assets/sponsors/nuova-site.webp",
     url: "https://www.nuovasuite.com",
