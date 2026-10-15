@@ -318,6 +318,16 @@ export const asociados: Asociado[] = [
     "locales": "130"
   },
   {
+    "slug": "dalvian-mall",
+    "name": "Dalvian Mall",
+    "category": "Shopping Centers",
+    "logo": "/assets/asociados/logos/dalvian-mall.webp",
+    "direccion": "Cerro Cristo 96, Ciudad de Mendoza, Mendoza",
+    "telefono": "+54 9 2612 70-3594",
+    "inauguracion": "28 de marzo de 2026",
+    "locales": "33"
+  },
+  {
     "slug": "del-parque-outlet",
     "name": "Del Parque Outlet",
     "category": "Shopping Centers",
