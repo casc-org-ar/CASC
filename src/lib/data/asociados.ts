@@ -323,7 +323,7 @@ export const asociados: Asociado[] = [
     "category": "Shopping Centers",
     "logo": "/assets/asociados/logos/dalvian-mall.webp",
     "direccion": "Cerro Cristo 96, Ciudad de Mendoza, Mendoza",
-    "telefono": "+54 9 2612 70-3594",
+    "telefono": "+54 9 261 270-3594",
     "web": "dalvianmall.dalviansa.com",
     "inauguracion": "28 de marzo de 2026",
     "locales": "33"
