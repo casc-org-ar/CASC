@@ -910,6 +910,18 @@ export const asociados: Asociado[] = [
     "locales": "67"
   },
   {
+    "slug": "patio-alvear-shopping",
+    "name": "Patio Alvear Shopping",
+    "category": "Shopping Centers",
+    "logo": "/assets/asociados/logos/patio-alvear-shopping.webp",
+    "direccion": "Av. Libertador Gral. San Martín 1826, San Juan, San Juan",
+    "telefono": "(0264) 426-5817",
+    "web": "www.instagram.com/patioalvearshopping",
+    "inauguracion": "8 de diciembre de 2008",
+    "visitas": "86.000",
+    "locales": "51"
+  },
+  {
     "slug": "patio-bullrich",
     "name": "Patio Bullrich",
     "category": "Shopping Centers",
