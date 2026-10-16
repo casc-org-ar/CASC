@@ -51,6 +51,10 @@ const associateCategoryRedirects = [
  *    later hardening step.
  *  - Supabase (data): connect-src to the project host for queries + realtime
  *    (wss). img-src covers Storage-served images.
+ *  - Google Tag Manager (CASC analytics): script-src loads gtm.js; connect-src
+ *    lets GTM/GA4 send hits; frame-src covers the <noscript> fallback iframe.
+ *    Tags added later in GTM that load scripts from other origins (Meta pixel,
+ *    Hotjar, etc.) need their origin added here too, or the CSP blocks them.
  *  - YouTube: frame-src for the institutional video embed (nocookie domain).
  *  - Images: `https:` so admin-pasted external content images (SafeImage) load;
  *    `data:` for inline/base64 assets.
@@ -71,12 +75,12 @@ const scriptEval = process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : "
 
 const csp = [
   `default-src 'self'`,
-  `script-src 'self' 'unsafe-inline'${scriptEval} ${clerkFapi} https://*.protect.clerk.com https://challenges.cloudflare.com https://www.google.com https://www.gstatic.com`,
+  `script-src 'self' 'unsafe-inline'${scriptEval} ${clerkFapi} https://*.protect.clerk.com https://challenges.cloudflare.com https://www.google.com https://www.gstatic.com https://*.googletagmanager.com`,
   `style-src 'self' 'unsafe-inline'`,
   `img-src 'self' data: https:`,
   `font-src 'self' data:`,
-  `connect-src 'self' ${clerkFapi} https://*.protect.clerk.com ${supabaseHost} wss://${supabaseHost.replace(/^https?:\/\//, "")} https://www.google.com`,
-  `frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com https://*.protect.clerk.com https://www.google.com https://drive.google.com ${supabaseHost}`,
+  `connect-src 'self' ${clerkFapi} https://*.protect.clerk.com ${supabaseHost} wss://${supabaseHost.replace(/^https?:\/\//, "")} https://www.google.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com`,
+  `frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com https://*.protect.clerk.com https://www.google.com https://drive.google.com https://www.googletagmanager.com ${supabaseHost}`,
   `worker-src 'self' blob:`,
   // Allow the informe PDF viewer (<object>) to load PDFs from Supabase Storage;
   // everything else stays blocked (no Flash/Java/arbitrary plugins).
