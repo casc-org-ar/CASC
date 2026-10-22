@@ -63,7 +63,6 @@ const auditorsTitular: Member[] = [
 
 const auditorsAlternate: Member[] = [
   { role: "Suplente", name: "Nicolás Báez", org: "CECNOR S.A." },
-  { role: "Suplente", name: "Analía Delego", org: "Tosnak S.R.L." },
   { role: "Suplente", name: "María Laura Gregoriadis", org: "Else S.A." },
 ];
 
