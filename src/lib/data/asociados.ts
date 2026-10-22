@@ -552,18 +552,6 @@ export const asociados: Asociado[] = [
     "actividad": "Asesoramiento, planificación, desarrollo y comercialización de ecosistemas comerciales en Argentina y otros países. Desarrolla y potencia espacios estratégicos de alto impacto, adaptándose a las dinámicas del mercado y a las necesidades de cada proyecto. Su visión va más allá de la comercialización: diseña destinos y potencia negocios, asegurando que cada proyecto alcance su máximo potencial."
   },
   {
-    "slug": "la-barraca-mall",
-    "name": "La Barraca Mall",
-    "category": "Shopping Centers",
-    "logo": "/assets/asociados/logos/la-barraca-mall.webp",
-    "direccion": "Las Cañas 1833 - (5519) Guaymallén - Pcia. de Mendoza",
-    "telefono": "0261 804 2400",
-    "web": "https://www.cioffigrupo.com/labarracamall",
-    "inauguracion": "Mayo 2013",
-    "visitas": "900.000",
-    "locales": "104"
-  },
-  {
     "slug": "lubeca-tech",
     "name": "Lubeca Tech",
     "category": "Proveedores de servicios",

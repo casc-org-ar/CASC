@@ -46,7 +46,6 @@ const regionLabels: Record<RegionSlug, string> = {
 };
 
 const regionBySlug: Partial<Record<string, RegionSlug>> = {
-  "la-barraca-mall": "cuyo",
   "paseo-del-jockey": "pampeana",
   "paso-del-parana": "pampeana",
 };
