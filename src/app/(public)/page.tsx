@@ -55,6 +55,12 @@ const heroSlides = [
     alt: "CASC — 35 años de la Cámara Argentina de Shopping Centers",
   },
   {
+    desktop: "/assets/banners/banner-findeanio-web.jpg",
+    tablet: "/assets/banners/banner-findeanio-tablet.jpg",
+    mobile: "/assets/banners/banner-findeanio-mobile.jpg",
+    alt: "Encuentro de Fin de Año CASC 2026 — jueves 29 de octubre, 18 a 20 hs, CABA",
+  },
+  {
     desktop: "/assets/banners/banner-2-1.webp",
     tablet: "/assets/banners/banner-2-2.webp",
     mobile: "/assets/banners/banner-2-3.webp",
