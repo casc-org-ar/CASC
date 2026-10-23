@@ -4,13 +4,6 @@ Plataforma web de la **Cámara Argentina de Shopping Centers**. Panel interno
 privado con dos roles (**admin** = comisión, **socio** = shopping center), más
 un sitio público institucional que se desarrolla en la última etapa.
 
-## Estado actual (fase prototipo)
-
-La app corre **completa en localhost** con **auth mockeada** y **datos mock en
-memoria**. La arquitectura ya es la definitiva: las capas de auth y datos están
-detrás de interfaces intercambiables, listas para enchufar Clerk y Supabase sin
-reescribir componentes.
-
 ## Stack
 
 - **Next.js 16** (App Router) + React 19 + TypeScript
