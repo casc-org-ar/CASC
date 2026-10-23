@@ -61,6 +61,13 @@ const heroSlides = [
     alt: "Encuentro de Fin de Año CASC 2026 — jueves 29 de octubre, 18 a 20 hs, CABA",
   },
   {
+    desktop: "/assets/banners/banner-webinar-0311-web.jpg",
+    tablet: "/assets/banners/banner-webinar-0311-tablet.jpg",
+    mobile: "/assets/banners/banner-webinar-0311-mobile.jpg",
+    alt: "Webinar CASC: Del concepto al valor — martes 3 de noviembre, 11 hs. Inscripciones abiertas",
+    href: "https://forms.cloud.microsoft/r/3PXrQKY4FS",
+  },
+  {
     desktop: "/assets/banners/banner-2-1.webp",
     tablet: "/assets/banners/banner-2-2.webp",
     mobile: "/assets/banners/banner-2-3.webp",
