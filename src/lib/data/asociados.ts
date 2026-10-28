@@ -583,7 +583,7 @@ export const asociados: Asociado[] = [
     "web": "www.mcdonalds.com.ar",
     "actividad": "Arcos Dorados es el mayor operador de restaurantes de McDonald's en América Latina y el Caribe y su mayor franquiciado en el mundo.",
     "telefono": "+54 9 11 4711 2005",
-    "contacto": "Martín Leandro Ward – martin.ward@ar.mcd.com"
+    "contacto": "contactosar@mcdonalds.com.ar"
   },
   {
     "slug": "mdv-lights",
