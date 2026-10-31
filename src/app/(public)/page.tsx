@@ -216,7 +216,7 @@ export default async function HomePage() {
           {/* Video, con ancho contenido para no competir con el resto de la sección */}
           <div className="card-depth mx-auto aspect-video w-full max-w-3xl overflow-hidden rounded-2xl border border-border bg-white p-2">
             <iframe
-              src="https://www.youtube-nocookie.com/embed/tVvNHVC9a44"
+              src="https://www.youtube-nocookie.com/embed/KZJFS2FNup0"
               title="Cámara Argentina de Shopping Centers"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
