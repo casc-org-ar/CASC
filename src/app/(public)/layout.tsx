@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { SiteHeader } from "@/components/public/site-header";
 import { SiteFooter } from "@/components/public/site-footer";
+import { FooterGate } from "@/components/public/footer-gate";
 import { ScrollToTop } from "@/components/public/scroll-to-top";
 
 /**
@@ -19,7 +20,9 @@ export default function PublicLayout({
         <SiteHeader />
       </Suspense>
       <main className="flex-grow pt-20 lg:pt-24">{children}</main>
-      <SiteFooter />
+      <FooterGate>
+        <SiteFooter />
+      </FooterGate>
       <ScrollToTop />
     </div>
   );
