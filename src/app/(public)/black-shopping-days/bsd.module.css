@@ -25,7 +25,8 @@
 }
 .root * { box-sizing: border-box; }
 .root img { max-width: 100%; display: block; }
-.root h1, .root h2, .root h3, .root p { margin: 0; text-wrap: balance; }
+/* Zero-specificity reset (:where) so the class-level margins below can override it. */
+:where(.root) :where(h1, h2, h3, h4, p) { margin: 0; text-wrap: balance; }
 .root a { color: var(--paper); }
 .root a:hover { color: var(--lime); }
 .root :focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; border-radius: 6px; }
@@ -41,7 +42,7 @@
 .kicker::before { content: ""; width: 18px; height: 2px; background: currentColor; }
 .h2 {
   font-family: var(--display); font-weight: 400; text-transform: uppercase;
-  font-size: clamp(28px, 3.8vw, 50px); line-height: 1.15; margin-top: 32px;
+  font-size: clamp(28px, 3.8vw, 50px); line-height: 1.15; margin-top: 24px;
 }
 .lead { font-size: clamp(17px, 1.8vw, 20px); max-width: 60ch; margin-top: 18px; }
 
@@ -156,7 +157,7 @@
 .aboutGrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 90px); align-items: start; }
 .aboutCopy { color: #d8dacf; display: flex; flex-direction: column; gap: 18px; margin-top: 28px; line-height: 1.6; }
 .aboutStrong { font-weight: 700; color: var(--paper); }
-.closing { font-family: var(--display); font-weight: 400; font-size: min(23px, 100cqi / 25); line-height: 1.95; text-transform: uppercase; margin-top: 56px; white-space: nowrap; }
+.closing { font-family: var(--display); font-weight: 400; font-size: min(23px, 100cqi / 25); line-height: 1.95; text-transform: uppercase; margin-top: 24px; white-space: nowrap; }
 @container (max-width: 420px) { .closing { white-space: normal; font-size: 17px; } }
 .closingAccent { color: var(--lime); }
 .socials { display: flex; gap: 10px; margin-top: 28px; }
@@ -218,15 +219,18 @@
 .shopIntro { margin-top: 22px; font-size: 17px; color: #d8dacf; font-weight: 700; max-width: 521px; }
 .total { font-family: var(--display); font-weight: 400; font-size: clamp(44px, 5.4vw, 76px); line-height: 1.1; color: var(--lime); font-variant-numeric: tabular-nums; }
 .totalLabel { display: block; font-family: var(--body); font-size: 14px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 10px; }
-.regions { display: grid; gap: 30px; margin-top: 44px; }
+/* minmax(0, 1fr): without it the column grows to the belt's full width (thousands of px). */
+.regions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 44px; }
 .regionHead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
 .regionName { font-family: var(--display); font-weight: 400; font-size: clamp(17px, 1.8vw, 22px); text-transform: uppercase; line-height: 1.3; }
 .regionCount { font-family: var(--display); font-size: 10px; letter-spacing: 0.06em; color: var(--ink); padding: 4px 9px 3px; border-radius: 99px; }
 
+/* Short, symmetric edge fade so logos dissolve on both sides without dimming whole cards. */
 .strip {
+  --fade: clamp(24px, 6vw, 110px);
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
 }
 .belt { display: flex; width: max-content; animation: marquee 40s linear infinite; padding-top: 6px; padding-bottom: 6px; }
 .stripRev .belt { animation-direction: reverse; }
@@ -245,8 +249,6 @@
   a.logo:hover { transform: translateY(-4px) rotate(-1.5deg); box-shadow: 0 0 0 3px var(--lime), 0 14px 26px rgba(0, 0, 0, 0.65); }
 }
 @media (max-width: 560px) {
-  /* The edge fade darkens too much of a narrow screen: drop it on mobile. */
-  .strip { -webkit-mask-image: none; mask-image: none; }
   .logo { width: 250px; height: 156px; padding: 8px 10px; border-radius: 20px; }
   .logoImg { width: 230px; height: 140px; }
 }
