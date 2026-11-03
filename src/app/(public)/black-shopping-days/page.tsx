@@ -157,7 +157,7 @@ const FOOTER_COLUMNS = [
 ];
 
 /** Seconds each logo takes to cross the strip; keeps every row at the same visual speed. */
-const SECONDS_PER_LOGO = 5.2;
+const SECONDS_PER_LOGO = 6;
 
 function Ticker({
   words,
@@ -191,7 +191,7 @@ function LogoCard({ shop, clone }: { shop: BsdShopping; clone: boolean }) {
         src={shop.logo}
         alt={shop.name}
         fill
-        sizes="(max-width: 560px) 180px, 250px"
+        sizes="(max-width: 560px) 230px, 310px"
       />
     </span>
   ) : (
@@ -370,17 +370,15 @@ export default function BlackShoppingDaysPage() {
           style={{ bottom: 40, left: -30 }}
         />
         <div className={styles.wrap}>
-          {/* Full-width row so the title fits on one line without shrinking. */}
-          <div className={styles.aboutHead}>
-            <span className={styles.kicker} style={{ color: "var(--lime)" }}>
-              Sobre el evento
-            </span>
-            <h2 className={`${styles.h2} ${styles.aboutTitle}`}>
-              Descuentos para <RotatingWord />
-            </h2>
-          </div>
           <div className={styles.aboutGrid}>
             <div className={styles.aboutText}>
+              <span className={styles.kicker} style={{ color: "var(--lime)" }}>
+                Sobre el evento
+              </span>
+              {/* "Descuentos para" on one line, the rotating word below it. */}
+              <h2 className={`${styles.h2} ${styles.aboutTitle}`}>
+                Descuentos para <RotatingWord />
+              </h2>
               <div className={`${styles.lead} ${styles.aboutCopy}`}>
                 <p>
                   BLACK SHOPPING DAYS es una acción comercial impulsada por la
@@ -473,7 +471,7 @@ export default function BlackShoppingDaysPage() {
       </section>
 
       {/* Pilares */}
-      <div className={styles.tkw}>
+      <div className={`${styles.tkw} ${styles.tkwToPaper}`}>
         <Ticker
           words={TICKER_MID}
           tone={styles.tickerLime}
@@ -608,10 +606,7 @@ export default function BlackShoppingDaysPage() {
                 © 2026 Cámara Argentina de Shopping Centers. Todos los derechos
                 reservados.
               </span>
-              <Link
-                className={`${styles.btnGhost} ${styles.legalBtn}`}
-                href="/black-shopping-days/terminos-y-condiciones"
-              >
+              <Link href="/black-shopping-days/terminos-y-condiciones">
                 Términos y condiciones
               </Link>
             </div>
