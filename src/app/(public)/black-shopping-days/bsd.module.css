@@ -266,7 +266,7 @@
 /* landing footer */
 .foot { background: #070707; border-top: 1px solid rgba(255, 255, 255, 0.07); font-size: 14px; color: #b8bab0; }
 .footGrid {
-  display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: 32px;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px;
   padding-top: 56px; padding-bottom: 28px;
 }
 .footGrid ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
@@ -276,9 +276,8 @@
 .footLegal { grid-column: 1 / -1; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 20px; display: grid; gap: 14px; font-size: 13px; }
 .footLegal p { max-width: 80ch; }
 .footBottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-@media (max-width: 820px) {
+@media (max-width: 620px) {
   .footGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .footFirst { grid-column: 1 / -1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

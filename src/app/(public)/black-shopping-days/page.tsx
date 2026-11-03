@@ -569,19 +569,7 @@ export default function BlackShoppingDaysPage() {
       {/* Landing footer (replaces the site footer on this page, see FooterGate) */}
       <footer className={styles.foot}>
         <div className={`${styles.wrap} ${styles.footGrid}`}>
-          <div className={styles.footFirst}>
-            <Image
-              src={CASC_LOGO}
-              alt="Cámara Argentina de Shopping Centers"
-              width={96}
-              height={44}
-              style={{ height: 44, width: "auto", marginBottom: 16 }}
-            />
-            <p>
-              Representamos a los centros comerciales, retailers y proveedores
-              de la Argentina.
-            </p>
-          </div>
+          {/* No logo/description column: "Impulsado por" right above already presents CASC. */}
           {FOOTER_COLUMNS.map((col) => (
             <div key={col.title}>
               <h4 className={styles.footTitle}>{col.title}</h4>
