@@ -19,8 +19,7 @@ const STATIC_ROUTES: {
   { path: "/asociados", changeFrequency: "weekly", priority: 0.8 },
   { path: "/beneficios", changeFrequency: "weekly", priority: 0.7 },
   { path: "/actividades", changeFrequency: "weekly", priority: 0.7 },
-  { path: "/black-shopping-days", changeFrequency: "weekly", priority: 0.8 },
-  { path: "/black-shopping-days/terminos-y-condiciones", changeFrequency: "yearly", priority: 0.3 },
+  // /black-shopping-days se omite hasta que el cliente apruebe la landing.
   { path: "/noticias", changeFrequency: "daily", priority: 0.8 },
   { path: "/como-asociarse", changeFrequency: "monthly", priority: 0.9 },
   // /bolsa-de-trabajo se omite a propósito (oculta por encuadre legal).
