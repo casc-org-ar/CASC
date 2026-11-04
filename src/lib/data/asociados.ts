@@ -1099,18 +1099,6 @@ export const asociados: Asociado[] = [
     "locales": "90"
   },
   {
-    "slug": "proyeco",
-    "name": "Proyeco",
-    "category": "Proveedores de servicios",
-    "rubro": "Arquitectura, diseño e ingeniería",
-    "logo": "/assets/asociados/logos/proyeco.webp",
-    "direccion": "Arenales 1662, 6º B - CABA",
-    "telefono": "+54 9 11 2872 0244",
-    "contacto": "María Ramos Rodríguez – mramos@proyeco.es",
-    "web": "www.proyeco.es",
-    "actividad": "Soluciones integradas en Consultoría, Project Management, Ingeniería, Urbanismo, Arquitectura, Concesiones, Construction Management, Energía y Medioambiente, tanto en proyectos de Obra Civil como en Edificación."
-  },
-  {
     "slug": "puerto-plaza",
     "name": "Puerto Plaza",
     "category": "Shopping Centers",
