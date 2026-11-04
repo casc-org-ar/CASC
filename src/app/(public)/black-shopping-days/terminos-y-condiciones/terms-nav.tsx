@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useSyncExternalStore,
-} from "react";
+import { useCallback, useMemo, useRef, useSyncExternalStore } from "react";
 import styles from "./terms.module.css";
 
 export interface TermsNavGroup {
@@ -44,13 +38,20 @@ function useActiveId(ids: string[]) {
 function NavLinks({
   groups,
   active,
+  activeGroupOnly = false,
   onNavigate,
 }: {
   groups: TermsNavGroup[];
   active: string;
+  /** Lists sections only for the document being read, so the index stays short. */
+  activeGroupOnly?: boolean;
   onNavigate?: () => void;
 }) {
   const current = (id: string) => (id === active ? "location" : undefined);
+  const isOpen = (group: TermsNavGroup) =>
+    !activeGroupOnly ||
+    group.id === active ||
+    group.items.some((item) => item.id === active);
 
   return groups.map((group) => (
     <div key={group.id} className={styles.navGroup}>
@@ -62,20 +63,22 @@ function NavLinks({
       >
         {group.label}
       </a>
-      <ol className={styles.navList}>
-        {group.items.map((item) => (
-          <li key={item.id}>
-            <a
-              className={styles.navLink}
-              href={`#${item.id}`}
-              aria-current={current(item.id)}
-              onClick={onNavigate}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ol>
+      {isOpen(group) && (
+        <ol className={styles.navList}>
+          {group.items.map((item) => (
+            <li key={item.id}>
+              <a
+                className={styles.navLink}
+                href={`#${item.id}`}
+                aria-current={current(item.id)}
+                onClick={onNavigate}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   ));
 }
@@ -87,26 +90,12 @@ export function TermsNav({ groups }: { groups: TermsNavGroup[] }) {
     [groups],
   );
   const active = useActiveId(ids);
-  const sidebar = useRef<HTMLElement>(null);
   const mobile = useRef<HTMLDetailsElement>(null);
-
-  // Keeps the current entry in view when the sidebar is taller than the screen.
-  useEffect(() => {
-    const nav = sidebar.current;
-    const link = nav?.querySelector<HTMLElement>("[aria-current]");
-    if (!nav || !link) return;
-    const top = link.offsetTop;
-    const bottom = top + link.offsetHeight;
-    if (top < nav.scrollTop) nav.scrollTop = top - 12;
-    else if (bottom > nav.scrollTop + nav.clientHeight) {
-      nav.scrollTop = bottom - nav.clientHeight + 12;
-    }
-  }, [active]);
 
   return (
     <>
-      <nav ref={sidebar} className={styles.sidebar} aria-label="Índice">
-        <NavLinks groups={groups} active={active} />
+      <nav className={styles.sidebar} aria-label="Índice">
+        <NavLinks groups={groups} active={active} activeGroupOnly />
       </nav>
       <details ref={mobile} className={styles.mobileNav}>
         <summary>Índice</summary>

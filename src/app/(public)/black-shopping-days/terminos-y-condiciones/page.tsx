@@ -33,6 +33,17 @@ const GROUP_LABELS: Record<string, string> = {
   "politica-de-privacidad": "Política de privacidad",
 };
 
+/** One-line index labels, so the sidebar always fits the screen without scrolling. */
+const SECTION_LABELS: Record<string, string> = {
+  "t-1": "1. Naturaleza del evento",
+  "t-2": "2. Responsabilidad de participantes",
+  "t-3": "3. Limitación de responsabilidad",
+  "t-4": "4. Modificación por fuerza mayor",
+  "t-5": "5. Bancos y medios de pago",
+  "t-7": "7. Modificación de los términos",
+  "p-9": "9. Modificaciones a la política",
+};
+
 function buildIndex(html: string): TermsNavGroup[] {
   const groups: TermsNavGroup[] = [];
   const headings = html.matchAll(/<h([23]) id="([^"]+)">(.*?)<\/h\1>/g);
@@ -40,7 +51,7 @@ function buildIndex(html: string): TermsNavGroup[] {
     if (level === "2") {
       groups.push({ id, label: GROUP_LABELS[id] ?? label, items: [] });
     } else {
-      groups.at(-1)?.items.push({ id, label });
+      groups.at(-1)?.items.push({ id, label: SECTION_LABELS[id] ?? label });
     }
   }
   return groups;

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CountUpNumber } from "@/components/public/count-up-number";
 import { socialLinks } from "@/components/public/nav-data";
-import { Countdown, DragStrip, RotatingWord } from "./bsd-client";
+import { Countdown, RotatingWord } from "./bsd-client";
 import { bsdBody, bsdDisplay } from "./fonts";
 import {
   bsdRegions,
@@ -143,12 +143,6 @@ const FOOTER_COLUMNS = [
 /** Seconds each logo takes to cross the strip; keeps every row at the same visual speed. */
 const SECONDS_PER_LOGO = 6;
 
-/**
- * Temporary, for the client's logo review: false shows still rows you drag by
- * hand, each logo once. Set it back to true to restore the moving carousel.
- */
-const LOGOS_AUTOPLAY = false;
-
 function Ticker({
   words,
   tone,
@@ -219,35 +213,25 @@ function RegionStrip({ name }: { name: BsdRegion }) {
       <div className={`${styles.wrap} ${styles.regionHead}`}>
         <h3 className={styles.regionName}>{name}</h3>
       </div>
-      {LOGOS_AUTOPLAY ? (
-        <div className={styles.strip}>
-          <div className={styles.belt} style={{ animationDuration: duration }}>
-            {[false, true].map((clone) => (
-              <div
-                key={String(clone)}
-                className={styles.half}
-                aria-hidden={clone || undefined}
-              >
-                {row.map((shop, i) => (
-                  <LogoCard
-                    key={`${shop.name}-${i}`}
-                    shop={shop}
-                    clone={clone || i >= list.length}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
+      <div className={styles.strip}>
+        <div className={styles.belt} style={{ animationDuration: duration }}>
+          {[false, true].map((clone) => (
+            <div
+              key={String(clone)}
+              className={styles.half}
+              aria-hidden={clone || undefined}
+            >
+              {row.map((shop, i) => (
+                <LogoCard
+                  key={`${shop.name}-${i}`}
+                  shop={shop}
+                  clone={clone || i >= list.length}
+                />
+              ))}
+            </div>
+          ))}
         </div>
-      ) : (
-        <DragStrip>
-          <div className={styles.half}>
-            {list.map((shop) => (
-              <LogoCard key={shop.name} shop={shop} clone={false} />
-            ))}
-          </div>
-        </DragStrip>
-      )}
+      </div>
     </div>
   );
 }

@@ -234,14 +234,6 @@
 .belt { display: flex; width: max-content; animation: marquee 40s linear infinite; padding-top: 6px; padding-bottom: 6px; }
 .strip:hover .belt, .strip:focus-within .belt { animation-play-state: paused; }
 .half { display: flex; gap: 16px; padding-right: 16px; }
-/* Still, hand-dragged row. Inset by the fade width so the first and last logos stay fully visible. */
-.stripDrag {
-  overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain;
-  scrollbar-width: none; cursor: grab; user-select: none;
-}
-.stripDrag::-webkit-scrollbar { display: none; }
-.stripDrag:active { cursor: grabbing; }
-.stripDrag .half { width: max-content; padding: 6px var(--fade); }
 .logo {
   flex: 0 0 auto; width: 330px; height: 204px; background: #fff; border-radius: 24px;
   display: grid; place-items: center; padding: 10px 12px; text-decoration: none;

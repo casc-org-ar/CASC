@@ -43,10 +43,7 @@
 }
 
 /* Section index */
-.sidebar {
-  position: sticky; top: 120px; max-height: calc(100vh - 148px); overflow-y: auto;
-  padding-right: 8px; scrollbar-width: thin;
-}
+.sidebar { position: sticky; top: 120px; }
 .mobileNav { display: none; }
 .navGroup + .navGroup { margin-top: 28px; }
 .navGroupLink {
