@@ -1,7 +1,68 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type MouseEvent,
+  type PointerEvent,
+  type ReactNode,
+} from "react";
 import styles from "./bsd.module.css";
+
+/** Pixels the pointer must travel before a press counts as a drag, not a click. */
+const DRAG_THRESHOLD = 6;
+
+/**
+ * Horizontally scrollable logo row. Touch uses native scrolling; mouse and pen
+ * drag it by hand. A press that turned into a drag doesn't open the logo's link.
+ */
+export function DragStrip({ children }: { children: ReactNode }) {
+  const press = useRef<{ x: number; scrollLeft: number } | null>(null);
+  const dragged = useRef(false);
+
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "touch" || e.button !== 0) return;
+    press.current = { x: e.clientX, scrollLeft: e.currentTarget.scrollLeft };
+    dragged.current = false;
+  };
+
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (!press.current) return;
+    const dx = e.clientX - press.current.x;
+    if (!dragged.current && Math.abs(dx) < DRAG_THRESHOLD) return;
+    if (!dragged.current) {
+      dragged.current = true;
+      // Captured only once dragging, so plain clicks still reach the links.
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+    e.currentTarget.scrollLeft = press.current.scrollLeft - dx;
+  };
+
+  const endPress = () => {
+    press.current = null;
+  };
+
+  const onClickCapture = (e: MouseEvent<HTMLDivElement>) => {
+    if (dragged.current) e.preventDefault();
+    dragged.current = false;
+  };
+
+  return (
+    <div
+      className={`${styles.strip} ${styles.stripDrag}`}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endPress}
+      onPointerCancel={endPress}
+      onClickCapture={onClickCapture}
+      onDragStart={(e) => e.preventDefault()}
+    >
+      {children}
+    </div>
+  );
+}
 
 /** Event window, in Argentina time. */
 const EVENT_START = new Date("2026-11-27T00:00:00-03:00").getTime();
@@ -60,7 +121,14 @@ export function Countdown() {
   );
 }
 
-const ROT_WORDS = ["recorrer", "descubrir", "probar", "elegir", "compartir", "disfrutar"];
+const ROT_WORDS = [
+  "recorrer",
+  "descubrir",
+  "probar",
+  "elegir",
+  "compartir",
+  "disfrutar",
+];
 // The last slot repeats the first so the loop wraps without jumping backwards.
 const SLOTS = [...ROT_WORDS, ROT_WORDS[0]];
 
