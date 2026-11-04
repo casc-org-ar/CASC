@@ -1,0 +1,94 @@
+/* Black Shopping Days legal page: clean reading layout with a section index. */
+
+.page {
+  --black: #0d0d0d;
+  --ink: #1e1e1e;
+  --paper: #f6f7f0;
+  --lime: #c2ff03;
+  --violet: #5a3df0;
+  --line: rgba(30, 30, 30, 0.12);
+  --muted: #5d5f56;
+  --display: var(--font-bsd-display), "Arial Black", Impact, sans-serif;
+  --body: var(--font-bsd-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  letter-spacing: -0.01em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.page) { scroll-behavior: smooth; }
+}
+
+/* Header */
+.hero { background: var(--black); color: var(--paper); }
+.heroInner {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: clamp(24px, 4vw, 56px); align-items: center;
+  max-width: 1240px; margin: 0 auto; padding: clamp(40px, 5vw, 64px) 24px;
+}
+.heroLogo { width: clamp(96px, 11vw, 148px); height: auto; }
+.heroCasc { height: 56px; width: auto; }
+.back { display: inline-block; font-size: 15px; font-weight: 700; color: var(--lime); text-decoration: none; }
+.back:hover { text-decoration: underline; text-underline-offset: 3px; }
+.title {
+  margin: 18px 0 0; font-family: var(--display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(22px, 3.3vw, 42px); line-height: 1.3;
+}
+.subtitle { margin: 16px 0 0; max-width: 56ch; font-size: clamp(17px, 1.5vw, 19px); line-height: 1.5; color: #d8dacf; }
+
+/* Layout */
+.layout {
+  display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: clamp(48px, 6vw, 88px); align-items: start;
+  max-width: 1240px; margin: 0 auto; padding: clamp(40px, 5vw, 72px) 24px clamp(64px, 8vw, 110px);
+}
+
+/* Section index */
+.sidebar {
+  position: sticky; top: 120px; max-height: calc(100vh - 148px); overflow-y: auto;
+  padding-right: 8px; scrollbar-width: thin;
+}
+.mobileNav { display: none; }
+.navGroup + .navGroup { margin-top: 28px; }
+.navGroupLink {
+  display: block; font-size: 16px; font-weight: 900; line-height: 1.3; color: var(--ink); text-decoration: none;
+  padding: 2px 0 2px 14px; border-left: 3px solid transparent;
+}
+.navList { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 2px; }
+.navLink {
+  display: block; font-size: 15px; font-weight: 500; line-height: 1.35; color: var(--muted); text-decoration: none;
+  padding: 7px 0 7px 14px; border-left: 3px solid var(--line); transition: color 0.15s, border-color 0.15s;
+}
+.navLink:hover, .navGroupLink:hover { color: var(--violet); }
+.navLink[aria-current], .navGroupLink[aria-current] { color: var(--violet); border-left-color: var(--violet); font-weight: 700; }
+
+/* Text */
+.legal { max-width: 74ch; font-size: 18px; line-height: 1.7; color: #33342e; }
+.legal :global(p) { margin: 0 0 18px; }
+.legal :global(h2) {
+  margin: 0 0 24px; font-family: var(--display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(19px, 2.2vw, 26px); line-height: 1.45; color: var(--ink); text-wrap: balance;
+}
+.legal :global(h2:not(:first-child)) { margin-top: 72px; padding-top: 56px; border-top: 2px solid var(--ink); }
+.legal :global(h3) {
+  margin: 44px 0 14px; font-weight: 900; font-size: clamp(21px, 2vw, 24px); line-height: 1.3; letter-spacing: -0.02em;
+  color: var(--ink); text-wrap: balance;
+}
+.legal :global(h2), .legal :global(h3) { scroll-margin-top: 120px; }
+.legal :global(ul) { margin: 0 0 18px; padding-left: 22px; display: grid; gap: 10px; list-style: disc; }
+.legal :global(li::marker) { color: var(--violet); }
+.legal :global(strong) { color: var(--ink); }
+.legal :global(a) { color: var(--violet); text-underline-offset: 3px; text-decoration: underline; overflow-wrap: anywhere; }
+
+@media (max-width: 980px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .sidebar { display: none; }
+  .mobileNav { display: block; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 4px 18px; }
+  .mobileNav summary { cursor: pointer; font-size: 17px; font-weight: 900; padding: 12px 0; }
+  .mobileNav nav { padding: 6px 0 16px; }
+  .legal { max-width: none; font-size: 17px; }
+  .legal :global(h2), .legal :global(h3) { scroll-margin-top: 96px; }
+}
+@media (max-width: 620px) {
+  .heroInner { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .heroCasc { height: 44px; }
+}

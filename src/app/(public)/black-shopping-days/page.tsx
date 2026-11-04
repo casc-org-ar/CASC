@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Boldonse } from "next/font/google";
-import localFont from "next/font/local";
 import { CountUpNumber } from "@/components/public/count-up-number";
 import { socialLinks } from "@/components/public/nav-data";
 import { Countdown, DragStrip, RotatingWord } from "./bsd-client";
-import { bsdRegions, bsdShoppings, type BsdShopping } from "./shoppings";
+import { bsdBody, bsdDisplay } from "./fonts";
+import {
+  bsdRegions,
+  shoppingsByRegion,
+  type BsdRegion,
+  type BsdShopping,
+} from "./shoppings";
 import styles from "./bsd.module.css";
 
 /**
@@ -14,26 +18,6 @@ import styles from "./bsd.module.css";
  * prototype. Copy and layout match the prototype; only the counters, the
  * participating shoppings (logos + Instagram links) and the legal link change.
  */
-
-const display = Boldonse({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-bsd-display",
-  display: "swap",
-  // Next has no metric overrides for Boldonse; skip the generated fallback.
-  adjustFontFallback: false,
-});
-
-const body = localFont({
-  src: [
-    { path: "./fonts/satoshi-400.woff2", weight: "400" },
-    { path: "./fonts/satoshi-500.woff2", weight: "500" },
-    { path: "./fonts/satoshi-700.woff2", weight: "700" },
-    { path: "./fonts/satoshi-900.woff2", weight: "900" },
-  ],
-  variable: "--font-bsd-body",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Black Shopping Days",
@@ -191,7 +175,7 @@ function Ticker({
 }
 
 function LogoCard({ shop, clone }: { shop: BsdShopping; clone: boolean }) {
-  const content = shop.logo ? (
+  const content = (
     <span className={styles.logoImg}>
       <Image
         src={shop.logo}
@@ -200,8 +184,6 @@ function LogoCard({ shop, clone }: { shop: BsdShopping; clone: boolean }) {
         sizes="(max-width: 560px) 230px, 310px"
       />
     </span>
-  ) : (
-    <span className={styles.logoName}>{shop.name}</span>
   );
 
   if (!shop.instagram) {
@@ -225,16 +207,8 @@ function LogoCard({ shop, clone }: { shop: BsdShopping; clone: boolean }) {
   );
 }
 
-function RegionStrip({
-  index,
-  name,
-  color,
-}: {
-  index: number;
-  name: string;
-  color: string;
-}) {
-  const list = bsdShoppings.filter((s) => s.region === name);
+function RegionStrip({ name }: { name: BsdRegion }) {
+  const list = shoppingsByRegion(name);
   // Short rows are repeated so the belt is always wider than the viewport.
   let row = list;
   while (row.length < 10) row = row.concat(list);
@@ -244,12 +218,9 @@ function RegionStrip({
     <div>
       <div className={`${styles.wrap} ${styles.regionHead}`}>
         <h3 className={styles.regionName}>{name}</h3>
-        <span className={styles.regionCount} style={{ background: color }}>
-          {list.length}
-        </span>
       </div>
       {LOGOS_AUTOPLAY ? (
-        <div className={`${styles.strip} ${index % 2 ? styles.stripRev : ""}`}>
+        <div className={styles.strip}>
           <div className={styles.belt} style={{ animationDuration: duration }}>
             {[false, true].map((clone) => (
               <div
@@ -283,7 +254,9 @@ function RegionStrip({
 
 export default function BlackShoppingDaysPage() {
   return (
-    <div className={`${styles.root} ${display.variable} ${body.variable}`}>
+    <div
+      className={`${styles.root} ${bsdDisplay.variable} ${bsdBody.variable}`}
+    >
       <Ticker words={TICKER_TOP} tone={styles.tickerLime} />
 
       {/* Banner */}
@@ -543,8 +516,8 @@ export default function BlackShoppingDaysPage() {
           </div>
         </div>
         <div className={styles.regions}>
-          {bsdRegions.map((r, i) => (
-            <RegionStrip key={r.name} index={i} name={r.name} color={r.color} />
+          {bsdRegions.map((region) => (
+            <RegionStrip key={region} name={region} />
           ))}
         </div>
       </section>

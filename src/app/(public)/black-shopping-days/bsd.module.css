@@ -223,7 +223,6 @@
 .regions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; margin-top: 44px; }
 .regionHead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
 .regionName { font-family: var(--display); font-weight: 400; font-size: clamp(17px, 1.8vw, 22px); text-transform: uppercase; line-height: 1.3; }
-.regionCount { font-family: var(--display); font-size: 10px; letter-spacing: 0.06em; color: var(--ink); padding: 4px 9px 3px; border-radius: 99px; }
 
 /* Short, symmetric edge fade so logos dissolve on both sides without dimming whole cards. */
 .strip {
@@ -233,7 +232,6 @@
   mask-image: linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
 }
 .belt { display: flex; width: max-content; animation: marquee 40s linear infinite; padding-top: 6px; padding-bottom: 6px; }
-.stripRev .belt { animation-direction: reverse; }
 .strip:hover .belt, .strip:focus-within .belt { animation-play-state: paused; }
 .half { display: flex; gap: 16px; padding-right: 16px; }
 /* Still, hand-dragged row. Inset by the fade width so the first and last logos stay fully visible. */
@@ -251,7 +249,6 @@
 }
 .logoImg { position: relative; width: 306px; height: 184px; }
 .logoImg img { object-fit: contain; }
-.logoName { font-family: var(--display); font-weight: 400; font-size: 17px; line-height: 1.3; text-transform: uppercase; color: var(--ink); text-align: center; }
 /* Hover lift only on real pointers: on touch screens the hover state sticks after a tap. */
 @media (hover: hover) {
   a.logo:hover { transform: translateY(-4px) rotate(-1.5deg); box-shadow: 0 0 0 3px var(--lime), 0 14px 26px rgba(0, 0, 0, 0.65); }
@@ -284,6 +281,7 @@
 .footLegal { grid-column: 1 / -1; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 20px; display: grid; gap: 14px; font-size: 13px; }
 .footLegal p { max-width: 80ch; }
 .footBottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.root .footGrid .footBottom a { font-size: 15px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; color: var(--paper); }
 @media (max-width: 620px) {
   .footGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
