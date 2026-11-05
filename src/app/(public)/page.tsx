@@ -55,13 +55,6 @@ const heroSlides = [
     alt: "CASC — 35 años de la Cámara Argentina de Shopping Centers",
   },
   {
-    desktop: "/assets/banners/banner-webinar-0311-web.jpg",
-    tablet: "/assets/banners/banner-webinar-0311-tablet.jpg",
-    mobile: "/assets/banners/banner-webinar-0311-mobile.jpg",
-    alt: "Webinar CASC: Del concepto al valor — martes 3 de noviembre, 11 hs. Inscripciones abiertas",
-    href: "https://forms.cloud.microsoft/r/3PXrQKY4FS",
-  },
-  {
     desktop: "/assets/banners/banner-2-1.webp",
     tablet: "/assets/banners/banner-2-2.webp",
     mobile: "/assets/banners/banner-2-3.webp",
