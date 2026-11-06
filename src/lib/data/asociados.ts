@@ -552,6 +552,16 @@ export const asociados: Asociado[] = [
     "actividad": "Asesoramiento, planificación, desarrollo y comercialización de ecosistemas comerciales en Argentina y otros países. Desarrolla y potencia espacios estratégicos de alto impacto, adaptándose a las dinámicas del mercado y a las necesidades de cada proyecto. Su visión va más allá de la comercialización: diseña destinos y potencia negocios, asegurando que cada proyecto alcance su máximo potencial."
   },
   {
+    "slug": "los-gallegos-shopping",
+    "name": "Los Gallegos Shopping",
+    "category": "Shopping Centers",
+    "logo": "/assets/asociados/logos/los-gallegos-shopping.webp",
+    "direccion": "Rivadavia 3050, Mar del Plata, Buenos Aires",
+    "telefono": "(0223) 499-6902",
+    "web": "www.losgallegos.com.ar",
+    "inauguracion": "16 de diciembre de 1994"
+  },
+  {
     "slug": "lubeca-tech",
     "name": "Lubeca Tech",
     "category": "Proveedores de servicios",
@@ -1039,6 +1049,16 @@ export const asociados: Asociado[] = [
     "locales": "89"
   },
   {
+    "slug": "portal-rio-cuarto",
+    "name": "Portal Río Cuarto",
+    "category": "Shopping Centers",
+    "logo": "/assets/asociados/logos/portal-rio-cuarto.webp",
+    "direccion": "Eliseo Sánchez 200, Río Cuarto, Córdoba",
+    "web": "shoppingscencosud.com.ar/riocuarto",
+    "visitas": "250.000",
+    "locales": "20"
+  },
+  {
     "slug": "portal-rosario",
     "name": "Portal Rosario",
     "category": "Shopping Centers",
@@ -1307,6 +1327,18 @@ export const asociados: Asociado[] = [
     "actividad": "Wiki Biz es una agencia de marketing integral que combina estrategia, creatividad, tecnología y ejecución para diseñar experiencias eficientes y memorables. Ofrece soluciones que van desde la planificación estratégica y la generación de contenidos hasta la gestión de campañas, desarrollo digital, activaciones, programas de fidelización e implementación de ecosistemas integrados con plataformas digitales y automatizaciones.",
     "rubro": "Soluciones tecnológicas",
     "telefono": "+54 9 11 3385 4444"
+  },
+  {
+    "slug": "wo",
+    "name": "WO",
+    "category": "Shopping Centers",
+    "logo": "/assets/asociados/logos/wo.webp",
+    "direccion": "9 de Julio 51, Villa Carlos Paz, Córdoba",
+    "telefono": "(03541) 75-3323",
+    "web": "www.wocarlospaz.com",
+    "inauguracion": "19 de diciembre de 2024",
+    "visitas": "1.300.000",
+    "locales": "135"
   },
   {
     "slug": "xperts-consultores",
