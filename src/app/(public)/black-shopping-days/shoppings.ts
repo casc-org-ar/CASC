@@ -102,6 +102,7 @@ export const bsdShoppings: BsdShopping[] = [
   { name: "TOM (Tortugas Open Mall)", region: "Buenos Aires", instagram: "https://www.instagram.com/tortugasmall", logo: `${BSD}/tom-tortugas-open-mall.webp` },
   { name: "Toscas Shopping", region: "Buenos Aires", instagram: "https://www.instagram.com/toscas_shopping", logo: `${BSD}/toscas-shopping.webp` },
   { name: "Unicenter", region: "Buenos Aires", instagram: "https://www.instagram.com/unicentershopping", logo: `${BSD}/unicenter.webp` },
+  { name: "WO", region: "Pampeana", instagram: "https://www.instagram.com/wocarlospaz.oficial", logo: `${BSD}/wo.webp` },
 ];
 
 /** Region rows, in display order. */
