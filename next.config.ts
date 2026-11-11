@@ -55,6 +55,11 @@ const associateCategoryRedirects = [
  *    lets GTM/GA4 send hits; frame-src covers the <noscript> fallback iframe.
  *    Tags added later in GTM that load scripts from other origins (Meta pixel,
  *    Hotjar, etc.) need their origin added here too, or the CSP blocks them.
+ *  - Google Ads (conversion + remarketing tags fired from GTM): see `googleAds`
+ *    below. Chrome reports these blocks as `script-src-elem`, but that's only
+ *    the directive name in the report — we don't define script-src-elem, so the
+ *    browser falls back to script-src. Do NOT add a separate script-src-elem:
+ *    it would replace script-src for every <script> and drop Clerk, reCAPTCHA…
  *  - YouTube: frame-src for the institutional video embed (nocookie domain).
  *  - Images: `https:` so admin-pasted external content images (SafeImage) load;
  *    `data:` for inline/base64 assets.
@@ -73,14 +78,30 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 // policy — where it would be a real XSS amplifier.
 const scriptEval = process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : "";
 
+/**
+ * Google Ads tag (AW-18079598692, fired from GTM): conversions, remarketing and
+ * the conversion linker. Origins per Google's CSP guide
+ * (developers.google.com/tag-platform/security/guides/csp) plus the two seen
+ * blocked in production: googleads.g.doubleclick.net/pagead/viewthroughconversion
+ * (script) and ad.doubleclick.net/ccm/s/collect (connect).
+ * img-src needs nothing: it already allows any https: origin.
+ * Google TLDs can't be wildcarded, so each country domain is listed (.com.ar).
+ */
+const googleAds = {
+  script: "https://www.googleadservices.com https://googleads.g.doubleclick.net",
+  connect:
+    "https://*.google.com https://*.google.com.ar https://*.g.doubleclick.net https://ad.doubleclick.net https://www.googleadservices.com https://pagead2.googlesyndication.com",
+  frame: "https://td.doubleclick.net",
+};
+
 const csp = [
   `default-src 'self'`,
-  `script-src 'self' 'unsafe-inline'${scriptEval} ${clerkFapi} https://*.protect.clerk.com https://challenges.cloudflare.com https://www.google.com https://www.gstatic.com https://*.googletagmanager.com`,
+  `script-src 'self' 'unsafe-inline'${scriptEval} ${clerkFapi} https://*.protect.clerk.com https://challenges.cloudflare.com https://www.google.com https://www.gstatic.com https://*.googletagmanager.com ${googleAds.script}`,
   `style-src 'self' 'unsafe-inline'`,
   `img-src 'self' data: https:`,
   `font-src 'self' data:`,
-  `connect-src 'self' ${clerkFapi} https://*.protect.clerk.com ${supabaseHost} wss://${supabaseHost.replace(/^https?:\/\//, "")} https://www.google.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com`,
-  `frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com https://*.protect.clerk.com https://www.google.com https://drive.google.com https://www.googletagmanager.com ${supabaseHost}`,
+  `connect-src 'self' ${clerkFapi} https://*.protect.clerk.com ${supabaseHost} wss://${supabaseHost.replace(/^https?:\/\//, "")} https://www.google.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com ${googleAds.connect}`,
+  `frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://challenges.cloudflare.com https://*.protect.clerk.com https://www.google.com https://drive.google.com https://www.googletagmanager.com ${googleAds.frame} ${supabaseHost}`,
   `worker-src 'self' blob:`,
   // Allow the informe PDF viewer (<object>) to load PDFs from Supabase Storage;
   // everything else stays blocked (no Flash/Java/arbitrary plugins).
